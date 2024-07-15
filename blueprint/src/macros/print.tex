@@ -8,7 +8,12 @@
 % compiler will ignore macros provided by plasTeX that make
 % sense only for the web version, such as dependency graph
 % macros.
-
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition-theorem}[theorem]{Definition-Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
 
 % Dummy macros that make sense only for web version.
 \newcommand{\lean}[1]{}
