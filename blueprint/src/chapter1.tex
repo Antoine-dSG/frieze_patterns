@@ -1,7 +1,6 @@
 \chapter{Symmetries of frieze patterns}\label{s:fp}
 \begin{definition}
 \label{def:closed-fp}
-\lean{frieze_n}
 \leanok
     Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \mathbb{R}$ is called
     a \textit{frieze pattern of width n} if, for all $(i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}$, we have
@@ -21,6 +20,7 @@ so-called \textit{glide symmetry} of frieze patterns.
 
 \begin{proposition}
 \label{prop:glide-symm}
+\lean{hasTransInvar}
 \uses{def:closed-fp, def:glide} 
 Every frieze pattern of width $n$ is $\rho_n$-invariant, i.e. satisfies 
 \[
