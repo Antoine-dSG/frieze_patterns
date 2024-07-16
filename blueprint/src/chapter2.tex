@@ -1,0 +1,23 @@
+\chapter{Classification of arithmetic frieze patterns}
+\begin{definition}
+\label{def:arith-fp}
+\uses{def:closed-fp} 
+    A frieze pattern of width $n$ is said to be \textit{arithmetic} if it takes values in $\mathbb{Z}_{>0}$. 
+\end{definition}
+
+We denote by Frieze$(n)$ the set of all arithmetic frieze patterns of width $n$. The main result in this section 
+is Conway and Coxeter's enumeration of arithmetic frieze patterns. 
+
+\begin{theorem}
+\label{thm:poly-to-fp}
+\uses{def:arith-fp}
+    Fix $n \in \mathbb{N}$. There is a set-theoretic bijection from the set of triangulations of the regular $n+3$-gon in the plane
+    and the set Frieze$(n)$. In particular we have
+    \[
+        |\text{Frieze}(n)| = C_{n+1},
+    \]
+    where $C_n = \frac{1}{n+1}\binom{2n}{n}$ is the $n^{\rm th}$ Catalan number.
+\end{theorem}
+
+The remainder of this section is dedicated to the proof of Theorem \ref{thm:poly-to-fp}. 
+

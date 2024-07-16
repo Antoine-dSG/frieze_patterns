@@ -13,15 +13,19 @@ def hasBorderTop (f: ℕ × ℤ → ℤ) :=
 def hasDiamond (f: ℕ × ℤ → ℤ) :=
   ∀ i, ∀ m, i ≥ 1 ∧ f (i,m) * f (i,m+1) = 1 + f (i+1,m) * f (i-1, m+1)
 --
--- Functions with a bottom border of 1s then 0s at the (n+1)th and (n+2)th rows
+-- Functions with a bottom border of 1s then 0s at the (n+2)nd and (n+3)rd rows
 --
 def hasBorderBot_n (f: ℕ × ℤ → ℤ) (n : ℕ):=
-  ∀ m, f (n+1,m) = 1 ∧ f (n+2,m) = 0
+  ∀ m, f (n+2,m) = 1 ∧ f (n+3,m) = 0
 --
--- Functions with a bottom border of 1s then 0s
+-- Functions with (n+2) consecutive rows consisting of positive integers
 --
-def hasBorderBot (f: ℕ × ℤ → ℤ) :=
-  ∃ n, hasBorderBot_n f n
+def pos_n (f: ℕ × ℤ → ℤ) (n : ℕ):=
+  ∀ i, ∀ m, (i ≥ 1) ∧ (n+2 ≥ i) ∧ (f (i,m) >0)
+--
+-- Definition of a frieze pattern of width n
+def frieze_n (f: ℕ × ℤ → ℤ) (n : ℕ):=
+  hasBorderTop f ∧ hasDiamond f ∧ hasBorderBot_n f n ∧ pos_n f n
 --
 -- Functions which are translation-invariant by n
 --
@@ -31,4 +35,4 @@ def transInva_n (f: ℕ × ℤ → ℤ) (n : ℕ) :=
 variable (f: ℕ × ℤ → ℤ)
 variable (n : ℕ)
 -- Translation-invariance of frieze patterns of width n
-theorem hasTransInvar (hBT : hasBorderTop f) (hD : hasDiamond f) (hBB : hasBorderBot_n f n) : transInva_n f (n+3) := by sorry
+theorem hasTransInvar (hF : frieze_n f n) : transInva_n f (n+3) := by sorry

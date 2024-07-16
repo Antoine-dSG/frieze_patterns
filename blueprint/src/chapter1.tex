@@ -1,0 +1,33 @@
+\chapter{Symmetries of frieze patterns}\label{s:fp}
+\begin{definition}
+\label{def:closed-fp}
+\lean{frieze_n}
+\leanok
+    Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \mathbb{R}$ is called
+    a \textit{frieze pattern of width n} if, for all $(i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}$, we have
+    \[
+        f(i,m) f(i,m+1) = 1 + f(i+1,m) f(i-1, m+1),
+    \]
+    where by convention we set $f(0,m) = f(n+1,m) = 1$ for all $m \in \mathbb{Z}$. 
+\end{definition}
+
+Consider the map $\rho_n: \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \{1,2,\ldots , n\} \times \mathbb{Z}$ given by
+\begin{equation}  
+\label{def:glide}
+    \rho_n(i,m) = (n+1-i, m+i+1).
+\end{equation}
+Note that $\rho_n^2 : (i,m) \mapsto (i,m+n+3)$, and therefore $\rho_n$ is bijective. The main result in this section is the 
+so-called \textit{glide symmetry} of frieze patterns. 
+
+\begin{proposition}
+\label{prop:glide-symm}
+\uses{def:closed-fp, def:glide} 
+Every frieze pattern of width $n$ is $\rho_n$-invariant, i.e. satisfies 
+\[
+    f(\rho_n(i,m)) = f(i,m), \qquad \forall (i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}.
+\]
+\end{proposition}
+The remainder of this section is dedicated to the proof of Proposition \ref{prop:glide-symm}. 
+
+
+

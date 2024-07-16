@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  15 JUL 2024 20:51
+This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  16 JUL 2024 16:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -671,39 +671,49 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 [1
 
-] (content.tex
+] (content.tex (chapter1.tex
 Chapter 1.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00107pt on input line 14.
+(Font)              scaled to size 10.00107pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00075pt on input line 14.
+(Font)              scaled to size 7.00075pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00053pt on input line 14.
+(Font)              scaled to size 5.00053pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 14.
+(Font)              scaled to size 9.99893pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 14.
+(Font)              scaled to size 6.99925pt on input line 6.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 14.
-)
+(Font)              scaled to size 4.99947pt on input line 6.
+) (chapter2.tex
 
 [1
+
+]
+Chapter 2.
+))
+
+[2
 
 ] (print.aux)
  ***********
 LaTeX2e <2024-06-01>
 L3 programming layer <2024-05-08>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `print.out' has not changed.
-(rerunfilecheck)             Checksum: 7A6E1423D7B52FD9634950F4341E1F72;537.
+(rerunfilecheck)             Checksum: F0F0CE1549C535F256F3C6B95D785591;472.
  ) 
 Here is how much of TeX's memory you used:
- 16743 strings out of 409032
- 301721 string characters out of 5762627
- 1930545 words of memory out of 5000000
- 39218 multiletter control sequences out of 15000+600000
- 563456 words of font info for 87 fonts, out of 8000000 for 9000
+ 16753 strings out of 409032
+ 301862 string characters out of 5762627
+ 1926545 words of memory out of 5000000
+ 39224 multiletter control sequences out of 15000+600000
+ 563440 words of font info for 85 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 90i,8n,116p,544b,442s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,8n,116p,544b,440s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on print.pdf (2 pages).
+Output written on print.pdf (3 pages).

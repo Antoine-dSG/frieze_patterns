@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  15 JUL 2024 20:52
+This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  16 JUL 2024 16:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -356,10 +356,109 @@ Package hyperref Info: Link coloring OFF on input line 24.
 
 
 
+Package hyperref Warning: Rerun to get /PageLabels entry.
+
+
+
 [1
 
 ]
 
-[1] (content.tex
+[1] (content.tex (chapter1.tex
 Chapter 1.
-! Undefined control se
+! Undefined control sequence.
+l.4 \lean
+         {frieze_n}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.4 \lean{frieze_
+                 n}
+? 
+! Extra }, or forgotten $.
+l.4 \lean{frieze_n}
+                   
+? 
+! Undefined control sequence.
+l.5 \leanok
+           
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.6     Fix $n \in
+                   \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb...
+
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.12 \end{definition}
+                     
+? 
+! Undefined control sequence.
+l.24 \uses
+          {def:closed-fp, def:glide}
+? 
+
+LaTeX Warning: Reference `prop:glide-symm' on page 1 undefined on input line 30
+.
+
+) (chapter2.tex
+
+[1
+
+]
+Chapter 2.
+! Undefined control sequence.
+l.4 \uses
+         {def:closed-fp}
+? 
+! Undefined control sequence.
+l.13 \uses
+          {def:arith-fp}
+? 
+
+LaTeX Warning: Reference `thm:poly-to-fp' on page 2 undefined on input line 22.
+
+
+))
+
+[2
+
+] (web.aux)
+ ***********
+LaTeX2e <2024-06-01>
+L3 programming layer <2024-05-08>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `web.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `web.out':
+(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
+(rerunfilecheck)             After:  F0F0CE1549C535F256F3C6B95D785591;472.
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 17 ({)
+### bottom level 
+Here is how much of TeX's memory you used:
+ 9078 strings out of 409032
+ 135042 string characters out of 5762627
+ 1924545 words of memory out of 5000000
+ 31637 multiletter control sequences out of 15000+600000
+ 564853 words of font info for 73 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 72i,8n,79p,542b,1010s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on web.pdf (4 pages).
