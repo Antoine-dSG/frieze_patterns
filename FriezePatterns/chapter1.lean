@@ -2,7 +2,7 @@ import Mathlib.Data.Set.Basic
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
 import Mathlib.Data.Finset.Basic
-open Nat
+-- open Nat
 
 -- Functions with a top border of 0s then 1s
 def hasBorderTop (f: ℕ × ℤ → ℤ) :=
@@ -18,7 +18,7 @@ def hasDiamond (f: ℕ × ℤ → ℤ) :=
 def hasBorderBot_n (f: ℕ × ℤ → ℤ) (n : ℕ):=
   ∀ m, f (n+2,m) = 1 ∧ f (n+3,m) = 0
 --
--- Functions with (n+2) consecutive rows consisting of positive integers
+-- Functions with first (n+2) consecutive rows consisting of positive integers
 --
 def pos_n (f: ℕ × ℤ → ℤ) (n : ℕ):=
   ∀ i, ∀ m, (i ≥ 1) ∧ (n+2 ≥ i) ∧ (f (i,m) >0)
