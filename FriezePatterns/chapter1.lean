@@ -36,3 +36,35 @@ variable (f: ℕ × ℤ → ℤ)
 variable (n : ℕ)
 -- Translation-invariance of frieze patterns of width n
 theorem hasTransInvar (hF : frieze_n f n) : transInva_n f (n+3) := by sorry
+
+
+-- import SphereEversion.Notations
+-- import SphereEversion.ToMathlib.Equivariant
+-- import SphereEversion.ToMathlib.MeasureTheory.ParametricIntervalIntegral
+
+/-!
+# Basic definitions and properties of loops
+-/
+
+
+open Set Function FiniteDimensional Int TopologicalSpace
+
+open scoped BigOperators Topology unitInterval
+
+noncomputable section
+
+variable {K X X' Y Z : Type*}
+
+-- variable [TopologicalSpace X'] [TopologicalSpace Y] [TopologicalSpace Z]
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {F : Type*} [NormedAddCommGroup F]
+  [NormedSpace ℝ F] {F' : Type*} [NormedAddCommGroup F'] [NormedSpace ℝ F']
+
+/-! ## Definition and periodicity lemmas -/
+
+
+variable (X)
+
+/-- A loop is a function with domain `ℝ` and is periodic with period 1. -/
+structure Loop where
+  toFun : ℝ → X
+  per' : ∀ t, toFun (t + 1) = toFun t
