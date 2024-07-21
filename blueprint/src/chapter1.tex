@@ -2,21 +2,71 @@
 \begin{definition}
 \label{def:closed-fp}
 \leanok
-    Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \mathbb{R}$ is called
+    Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \mathbb{Q}$ is called
     a \textit{frieze pattern of width n} if, for all $(i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}$, we have
     \[
         f(i,m) f(i,m+1) = 1 + f(i+1,m) f(i-1, m+1),
     \]
     where by convention we set $f(0,m) = f(n+1,m) = 1$ for all $m \in \mathbb{Z}$. 
 \end{definition}
+It is often convenient to also set $f(-1,m) = f(n+2,m) = 0$ for all $m \in \mathbb{Z}$. The following will be of constant use for us.
+
+\begin{lemma}
+    \label{l:continuant}
+    \uses{def:closed-fp}
+    For all $i \in \{1, \ldots , n+1\}$, we have 
+    \[
+        f(i,m) = f(1,m+i-1) f(i-1,m) - f(i-2,m).
+    \]
+\end{lemma}
+\begin{proof}
+    By induction on $i \in \{1, \ldots, n+1\}$. The claim is clear for $i =1$ and arbitrary $m \in \mathbb{Z}$. Thus suppose that the 
+    claim holds for all $j$ up
+    to (but not including) a fixed $i \in \{2, \ldots, n+1\}$, and for all $m \in \mathbb{Z}$. Then  
+\end{proof}
+
+The following corollary is sometimes referred to as the ``vertical knitting lemma''.  
+\begin{corollary}
+    \uses{l:continuant}
+    \label{l:horiztonal-knit}
+    In a frieze pattern $f$ of width $n$, the element $f(i,m)$ is a polynomial with integer coefficients in the 
+    entries $f(1,m), f(1,m+1), \ldots, f(1,m+i)$. 
+\end{corollary}
+\begin{proof}
+
+\end{proof}
 
 Consider the map $\rho_n: \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \{1,2,\ldots , n\} \times \mathbb{Z}$ given by
 \begin{equation}  
 \label{def:glide}
     \rho_n(i,m) = (n+1-i, m+i+1).
 \end{equation}
-Note that $\rho_n^2 : (i,m) \mapsto (i,m+n+3)$, and therefore $\rho_n$ is bijective. The main result in this section is the 
-so-called \textit{glide symmetry} of frieze patterns. 
+Note that $\rho_n^2 : (i,m) \mapsto (i,m+n+3)$, and therefore $\rho_n$ is bijective. The following lemma describes how 
+each diamond is affected by $\rho_n$.
+
+\begin{lemma}
+    \uses{def:glide}
+    \label{l:glide-diamond}
+    The map $\rho_n$ sends diamonds to diamonds. More precisely, we have
+    \[
+        \begin{matrix}
+            & (i,m+1) &\\
+            (i+1,m) && (i+1,m+1) \\
+                & (i+2,m)
+        \end{matrix} \longmapsto 
+        \begin{matrix}
+            & \rho_n(i+2,m) &\\
+            \rho_n(i+1,m) && \rho_n(i+1,m+1) \\
+                & \rho_n(i,m+1)
+        \end{matrix}
+    \]
+\end{lemma}
+\begin{proof}
+    It is a straightforward calculation.
+\end{proof}
+
+The following is called the 
+\textit{glide symmetry} of frieze patterns. 
 
 \begin{proposition}
 \label{prop:glide-symm}
@@ -26,6 +76,9 @@ Every frieze pattern of width $n$ is $\rho_n$-invariant, i.e. satisfies
     f(\rho_n(i,m)) = f(i,m), \qquad \forall (i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}.
 \]
 \end{proposition}
-The remainder of this section is dedicated to the proof of Proposition \ref{prop:glide-symm}. 
+\begin{proof}
+    \uses{l:glide-diamond, l:continuant, l:glide-diamond}
+
+\end{proof}
 
 
