@@ -19,12 +19,12 @@ We denote by Frieze$(n)$ the set of all arithmetic frieze patterns of width $n$.
     \uses{def:arith-fp}
     \label{l:lower-bound-crit}
     A frieze pattern $f : \{1,\ldots, n\} \times \mathbb{Z} \to \mathbb{Q}$ is arithmetic if and only if, 
-    for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \ZZ_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$.
+    for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \mathbb{Z}_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$.
 \end{lemma}
 \begin{proof}
     \uses{l:continuant, l:horiztonal-knit}
-    Suppose that $f$ is arithmetic. Then each $f(i,0$ is integral, and the claim follows from Lemma \ref{l:continuant}. 
-    Suppose now that for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \ZZ_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$. By 
+    Suppose that $f$ is arithmetic. Then each $f(i,0)$ is integral, and the claim follows from Lemma \ref{l:continuant}. 
+    Suppose now that for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \mathbb{Z}_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$. By 
     Lemma \ref{l:continuant}, $f$ takes values in $\mathbb{Z}$, and by Lemma \ref{l:horiztonal-knit}, $f$ takes values in $\mathbb{Q}_{>0}$. 
 \end{proof}
 
