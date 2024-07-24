@@ -81,5 +81,5 @@ def set_1_to_n (n : Nat) : Set Nat :=
   { i | 1 ≤ i ∧ i ≤ n }
 
 -- The class below looks a bit dubious to me
-class closedFrieze (f : ℕ × ℕ → ℚ) (n : ℕ) extends closedPattern f where
-  positive_n : ∀m, ∀ i ∈ (set_1_to_n n), f (i,m) > 0
+--class closedFrieze (f : ℕ × ℕ → ℚ) (n : ℕ) extends closedPattern f where
+ -- positive_n : ∀m, ∀ i ∈ (set_1_to_n n), f (i,m) > 0
