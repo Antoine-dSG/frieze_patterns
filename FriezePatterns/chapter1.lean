@@ -1,7 +1,7 @@
-import Mathlib.Data.Set.Basic
-import Mathlib.Algebra.Ring.Basic
+-- import Mathlib.Data.Set.Basic
+-- import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
-import Mathlib.Algebra.Group.Defs
+-- import Mathlib.Algebra.Group.Defs
 -- open Nat
 -- Second attempt at defining frieze patterns. This time we use the
 -- finite sets Fin and we consider rational valued patterns
