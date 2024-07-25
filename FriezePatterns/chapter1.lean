@@ -1,30 +1,22 @@
--- import Mathlib.Data.Set.Basic
--- import Mathlib.Algebra.Ring.Basic
+import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
--- import Mathlib.Algebra.Group.Defs
--- open Nat
--- Second attempt at defining frieze patterns. This time we use the
--- finite sets Fin and we consider rational valued patterns
 
--- The above attempt has not worked, because inductions on Fin n are a real problem
--- Here is a third attempt at a working definition
+-- Chapter 1: Field-valued patterns
+-- Section 1: Infinite patterns
 
--- Acroynms for the comments:
--- CfF: Convenient for Formalisation
-
-class pattern (f : ℕ × ℕ → ℚ) : Prop where
+class pattern (F : Type*) [Field F] (f : ℕ × ℕ → F) : Prop where
   topBordOnes : ∀ m, f (0,m) =1
   diamond : ∀ m, ∀ i,  f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
 
-class inftyFrieze (f : ℕ × ℕ → ℚ) extends pattern f where
-  positive : ∀ m, ∀ i, f (i,m) > 0
+-- In the following class, dom stands for domestic. Roughly, domestic pattern ⊆ tame pattern ⊆ pattern
+class domPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
+  non_zero : ∀ i, ∀ m, f (i,m) ≠ 0
 
--- An infinite frieze is nowhere zero
-lemma friezeNonZero (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) (m : ℕ): f (i,m) ≠ 0 := by
-  apply LT.lt.ne'
-  exact inftyFrieze.positive m i
+class tamePattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends domPattern F f where
+  -- tame condition ?
 
-lemma scaledContinuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, f (i+2,m) * f (i,m+1) = (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) := by
+-- lemma scaledContinuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, f (i+2,m) * f (i,m+1) = (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) := by
+lemma scaledContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [domPattern F f] (i : ℕ) : ∀m, f (i+2,m) * f (i,m+1) = (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) := by
   induction i with
   | zero =>
   intro m
@@ -39,9 +31,11 @@ lemma scaledContinuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, 
   | succ n ih =>
   intro m
   have h₂ : f (n+2,m+1) * f (n,m+1+1) = (f (1,m+1+n+1)*f (n+1,m+1) - f (n,m+1)) * f (n,m+2) := by exact ih (m + 1)
-  have h₃ : f (n,m+2) ≠ 0 :=  by exact friezeNonZero f n (m+2)
+  -- have h₃ : f (n,m+2) ≠ 0 :=  by exact friezeNonZero f n (m+2)
+  have h₃ : f (n,m+2) ≠ 0 :=  by exact domPattern.non_zero n (m + 2)
   have h₄ : f (n+2,m+1) = f (n+2,m+1) * f (n,m+2) * (f (n,m+2))⁻¹ := by rw [mul_inv_cancel_right₀ h₃ (f (n+2,m+1))]
-  have h₅ : f (n,m+2) * (f (n,m+2))⁻¹ = 1 := by exact Rat.mul_inv_cancel (f (n, m + 2)) h₃
+  -- have h₅ : f (n,m+2) * (f (n,m+2))⁻¹ = 1 := by exact Rat.mul_inv_cancel (f (n, m + 2)) h₃
+  have h₅ : f (n,m+2) * (f (n,m+2))⁻¹ = 1 := by exact CommGroupWithZero.mul_inv_cancel (f (n, m + 2)) h₃
   calc f (n + 1 + 2, m) * f (n + 1, m + 1) = f (n+3,m)* f (n+1, m+1) := by simp
   _= f (n+2, m) * f (n+2,m+1) - 1 := by exact Eq.symm (pattern.diamond m (n + 1))
   _= f (n+2, m) * (f (n+2,m+1) * f (n,m+2) * (f (n,m+2))⁻¹) -1 := by exact congrFun (congrArg HSub.hSub (congrArg (HMul.hMul (f (n + 2, m))) h₄)) 1  -- we need to prove that a = f (n,m+1+1) has an inverse
@@ -56,40 +50,31 @@ lemma scaledContinuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, 
   _= (f (1,m+(n+1)+1)*f (n+1+1, m) - f (n+1, m))*f (n+1,m+1) := by ring
 
 
-lemma continuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
+-- lemma continuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
+lemma continuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [domPattern F f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
   intro m
-  have h : f (i+2,m) * f (i,m+1) = (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) := by exact scaledContinuant f i m
-  have h₁ : f (i,m+1) ≠ 0 := by exact friezeNonZero f  i (m + 1)
+  have h : f (i+2,m) * f (i,m+1) = (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) := by exact scaledContinuant F f i m
+  --have h₁ : f (i,m+1) ≠ 0 := by exact friezeNonZero f  i (m + 1)
+  have h₁ : f (i,m+1) ≠ 0 := by exact domPattern.non_zero i (m + 1)
   calc f (i+2,m) = f (i+2,m) * f (i,m+1) * (f (i,m+1))⁻¹ := by rw [mul_inv_cancel_right₀ h₁ (f (i+2,m))]
   _= (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) * (f (i,m+1))⁻¹ := by rw [h]
   _= (f (1,m+i+1)*f (i+1,m) - f (i,m))* (f (i,m+1) * (f (i,m+1))⁻¹) := by ring
-  _= (f (1,m+i+1)*f (i+1,m) - f (i,m))*1 := by rw [Rat.mul_inv_cancel (f (i,m+1)) h₁]
+  --_= (f (1,m+i+1)*f (i+1,m) - f (i,m))*1 := by rw [Rat.mul_inv_cancel (f (i,m+1)) h₁]
+  _= (f (1,m+i+1)*f (i+1,m) - f (i,m))*1 := by rw [CommGroupWithZero.mul_inv_cancel (f (i,m+1)) h₁]
   _= f (1,m+i+1)*f (i+1,m) - f (i,m) := by simp
 
 
-
--- Is the following class useful ?
-class closedPattern  (f : ℕ × ℕ → ℚ) extends pattern f where
+-- Section 2: Bounded patterns
+class closedPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
   bounded: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
 
-
-
-class frieze_n (f : ℕ × ℕ → ℚ) (n : ℕ) : Prop where
-  topBordOnes : ∀ m, f (0,m) =1
-  diamond : ∀ m, ∀ i,  f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
-  positive_n : ∀ m, ∀ i, i ≤ n ∧ f (i,m) > 0
+class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
   botBordOnes_n : ∀ m, f (n, m) = 1
 
-lemma continuantFrieze (f : ℕ×ℕ → ℚ) (n : ℕ) [frieze_n f n] (i : ℕ) (h: i ≤ n) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
+class domPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
+  non_zero : ∀ i, ∀ m, i ≤ n ∧ f (i,m) ≠ 0
+
+lemma continuantFrieze (F : Type*) [Field F] (f : ℕ×ℕ → F) (n : ℕ) [domPattern_n F f n] (i : ℕ) (h: i ≤ n) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
  induction i with
  | zero => sorry
  | succ k ih => sorry
-
-
--- We now need to define arithmetic frieze patterns
-class arithFrieze_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends frieze_n f n where
-  integral : ∀ m, ∀ i, (f (i,m)).den = 1
-
--- If a frieze is arithmetic, there exists a unique map f : ℕ × ℕ → ℤ such that the two are equal
--- We need to define friezes over arbitrary fields first...
--- lemma diagTestCriteria (f : ℕ×ℕ → ℚ) (n : ℕ) [arithFrieze_n f n] (i : ℕ) (h: i ≤ n) : ∀m, f (i+1,m) ∣ (f (i,m) + f)
