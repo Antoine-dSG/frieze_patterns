@@ -13,7 +13,7 @@ import Mathlib.Tactic
 -- CfF: Convenient for Formalisation
 
 class pattern (f : ℕ × ℕ → ℚ) : Prop where
-  bordOnes : ∀ m, f (0,m) =1
+  topBordOnes : ∀ m, f (0,m) =1
   diamond : ∀ m, ∀ i,  f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
 
 class inftyFrieze (f : ℕ × ℕ → ℚ) extends pattern f where
@@ -28,8 +28,8 @@ lemma scaledContinuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, 
   induction i with
   | zero =>
   intro m
-  have h₀ : f (0,m+1) = 1 := by exact pattern.bordOnes (m+1)
-  have h₁ : f (0,m) = 1 := by exact pattern.bordOnes m
+  have h₀ : f (0,m+1) = 1 := by exact pattern.topBordOnes (m+1)
+  have h₁ : f (0,m) = 1 := by exact pattern.topBordOnes m
   rw [h₀,h₁]
   simp
   nth_rw 1 [← zero_add 1]
@@ -68,18 +68,28 @@ lemma continuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, f (i+2
 
 
 
-
-
-
+-- Is the following class useful ?
 class closedPattern  (f : ℕ × ℕ → ℚ) extends pattern f where
-  width_n: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
-
--- We need to find a way to define width as min over all exist variables
+  bounded: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
 
 
-def set_1_to_n (n : Nat) : Set Nat :=
-  { i | 1 ≤ i ∧ i ≤ n }
 
--- The class below looks a bit dubious to me
---class closedFrieze (f : ℕ × ℕ → ℚ) (n : ℕ) extends closedPattern f where
- -- positive_n : ∀m, ∀ i ∈ (set_1_to_n n), f (i,m) > 0
+class frieze_n (f : ℕ × ℕ → ℚ) (n : ℕ) : Prop where
+  topBordOnes : ∀ m, f (0,m) =1
+  diamond : ∀ m, ∀ i,  f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
+  positive_n : ∀ m, ∀ i, i ≤ n ∧ f (i,m) > 0
+  botBordOnes_n : ∀ m, f (n, m) = 1
+
+lemma continuantFrieze (f : ℕ×ℕ → ℚ) (n : ℕ) [frieze_n f n] (i : ℕ) (h: i ≤ n) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
+ induction i with
+ | zero => sorry
+ | succ k ih => sorry
+
+
+-- We now need to define arithmetic frieze patterns
+class arithFrieze_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends frieze_n f n where
+  integral : ∀ m, ∀ i, (f (i,m)).den = 1
+
+-- If a frieze is arithmetic, there exists a unique map f : ℕ × ℕ → ℤ such that the two are equal
+-- We need to define friezes over arbitrary fields first...
+-- lemma diagTestCriteria (f : ℕ×ℕ → ℚ) (n : ℕ) [arithFrieze_n f n] (i : ℕ) (h: i ≤ n) : ∀m, f (i+1,m) ∣ (f (i,m) + f)
