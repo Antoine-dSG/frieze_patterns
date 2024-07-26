@@ -1,14 +1,15 @@
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
 
--- Chapter 1: Field-valued patterns
--- Section 1: Infinite patterns
+-- Chapter 1: Background on frieze patterns
+-- Section 1: Field-valued patterns
+-- Infinite field-valued patterns
 
 class pattern (F : Type*) [Field F] (f : ℕ × ℕ → F) : Prop where
   topBordOnes : ∀ m, f (0,m) =1
   diamond : ∀ m, ∀ i,  f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
 
--- In the following class, dom stands for domestic. Roughly, domestic pattern ⊆ tame pattern ⊆ pattern
+-- In the following class, dom stands for domestic. Roughly, domesticated pattern ⊆ tame pattern ⊆ pattern
 class domPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
   non_zero : ∀ i, ∀ m, f (i,m) ≠ 0
 
@@ -51,7 +52,7 @@ lemma scaledContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [domPattern F 
 
 
 -- lemma continuant (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
-lemma continuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [domPattern F f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
+lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [domPattern F f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
   intro m
   have h : f (i+2,m) * f (i,m+1) = (f (1,m+i+1)*f (i+1,m) - f (i,m))* f (i,m+1) := by exact scaledContinuant F f i m
   --have h₁ : f (i,m+1) ≠ 0 := by exact friezeNonZero f  i (m + 1)
@@ -64,7 +65,7 @@ lemma continuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [domPattern F f] (i 
   _= f (1,m+i+1)*f (i+1,m) - f (i,m) := by simp
 
 
--- Section 2: Bounded patterns
+-- Bounded field-valued patterns
 class closedPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
   bounded: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
 

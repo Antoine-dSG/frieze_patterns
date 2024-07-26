@@ -1,37 +1,76 @@
-\chapter{Symmetries of frieze patterns}\label{s:fp}
-\begin{definition}
-\label{def:closed-fp}
-\leanok
-    Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \mathbb{Q}$ is called
-    a \textit{frieze pattern of width n} if, for all $(i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}$, we have
-    \[
-        f(i,m) f(i,m+1) = 1 + f(i+1,m) f(i-1, m+1),
-    \]
-    where by convention we set $f(0,m) = f(n+1,m) = 1$ for all $m \in \mathbb{Z}$. 
-\end{definition}
-It is often convenient to also set $f(-1,m) = f(n+2,m) = 0$ for all $m \in \mathbb{Z}$. The following will be of constant use for us.
+\chapter{Background on frieze patterns}\label{s:fp}
+\section{Field-valued patterns}
+Throughout this section, we fix an arbitrary field $F$. 
+\begin{definition}\label{def:pattern}
+    \leanok
+% We need to make use of the command \lean ...
+    An {\it infinite $F$-valued pattern} is a map $f : \mathbb{N}\times\mathbb{N} \to F$ such that 
+    
+    i) $\forall m, f(0,m) = 1$, and 
 
+    ii) $\forall i \geq 1, \forall m$, we have the ``diamond rule'' 
+    \[
+        f (i,m) f(i,m+1) = 1 + f(i+1,m) f(i-1,m+1).
+    \]
+\end{definition}
+We say that an $F$-valued pattern $f$ is {\it nowhere zero} if $f(i,m) \neq 0$, for all $i,m$.  
 \begin{lemma}
-    \label{l:continuant}
-    \uses{def:closed-fp}
-    For all $i \in \{1, \ldots , n+1\}$, we have 
+    \label{l:inftyContinuant}
+    \leanok
+    \uses{def:pattern}
+    Let $f$ be a nowhere-zero $F$-valued pattern. For all $i \geq 2$ and for all $m$, we have 
     \[
         f(i,m) = f(1,m+i-1) f(i-1,m) - f(i-2,m).
     \]
 \end{lemma}
 \begin{proof}
-    By induction on $i \in \{1, \ldots, n+1\}$. The claim is clear for $i =1$ and arbitrary $m \in \mathbb{Z}$. Thus suppose that the 
+    By induction on $i$. The claim for $i =2$ and arbitrary $m \in \mathbb{Z}$ follows by the diamond rule. Thus suppose that the 
     claim holds for all $j$ up
-    to (but not including) a fixed $i \in \{2, \ldots, n+1\}$, and for all $m \in \mathbb{Z}$. Then  
+    to (but not including) a fixed $i$, and for all $m \in \mathbb{Z}$.   
 \end{proof}
 
 The following corollary is sometimes referred to as the ``vertical knitting lemma''.  
 \begin{corollary}
-    \uses{l:continuant}
+    \uses{l:inftyContinuant}
     \label{l:horiztonal-knit}
-    In a frieze pattern $f$ of width $n$, the element $f(i,m)$ is a polynomial with integer coefficients in the 
-    entries $f(1,m), f(1,m+1), \ldots, f(1,m+i)$. 
+    In a nowhere-zero $F$-valued pattern $f$, each element $f(i,m)$ is a polynomial with integer coefficients in the 
+    entries $\ldots, f(1,-2), f(1,-1), f(1,0), f(1,1), \ldots$. 
 \end{corollary}
+\begin{proof}
+
+\end{proof}
+
+We now turn to bounded patterns. 
+\begin{definition}
+    \label{def:pattern_n}
+    \leanok
+        Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow F$ is called
+        an \textit{$F$-valued pattern of width n} if, for all $(i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}$, we have
+        \[
+            f(i,m) f(i,m+1) = 1 + f(i+1,m) f(i-1, m+1),
+        \]
+        where by convention we set $f(0,m) = f(n+1,m) = 1$ for all $m \in \mathbb{Z}$. 
+    \end{definition}
+Again, an $F$-valued pattern $f$ of width $n$ is {\it nowhere zero} if $f(i,m) \neq 0$, for all $i,m$.
+\begin{lemma}
+    \label{l:pattern_nContinuant}
+    \uses{def:pattern_n}
+    Let $f$ be a nowhere-zero $F$-valued pattern. For all $i \geq 2$ and for all $m$, we have 
+    \[
+        f(i,m) = f(1,m+i-1) f(i-1,m) - f(i-2,m).
+    \]
+\end{lemma}
+\begin{proof}
+\end{proof}
+
+\begin{proposition}
+    \label{prop:trslt-inv}
+    \uses{def:pattern_n, l:pattern_nContinuant}
+    Let $f$ be a nowhere-zero $F$-valued pattern of width $n$. Then, for all $i,m$, we have
+    \[
+        f(i,m) = f(i,m+n+3).
+    \]
+\end{proposition}
 \begin{proof}
 
 \end{proof}
@@ -41,44 +80,54 @@ Consider the map $\rho_n: \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow \
 \label{def:glide}
     \rho_n(i,m) = (n+1-i, m+i+1).
 \end{equation}
-Note that $\rho_n^2 : (i,m) \mapsto (i,m+n+3)$, and therefore $\rho_n$ is bijective. The following lemma describes how 
-each diamond is affected by $\rho_n$.
+Note that $\rho_n^2 : (i,m) \mapsto (i,m+n+3)$, and therefore $\rho_n$ is bijective. 
 
-\begin{lemma}
-    \uses{def:glide}
-    \label{l:glide-diamond}
-    The map $\rho_n$ sends diamonds to diamonds. More precisely, we have
-    \[
-        \begin{matrix}
-            & (i,m+1) &\\
-            (i+1,m) && (i+1,m+1) \\
-                & (i+2,m)
-        \end{matrix} \longmapsto 
-        \begin{matrix}
-            & \rho_n(i+2,m) &\\
-            \rho_n(i+1,m) && \rho_n(i+1,m+1) \\
-                & \rho_n(i,m+1)
-        \end{matrix}
-    \]
-\end{lemma}
-\begin{proof}
-    It is a straightforward calculation.
-\end{proof}
+The following is called the \textit{glide symmetry}. 
 
-The following is called the 
-\textit{glide symmetry} of frieze patterns. 
-
-\begin{proposition}
+\begin{corollary}
 \label{prop:glide-symm}
-\uses{def:closed-fp, def:glide} 
-Every frieze pattern of width $n$ is $\rho_n$-invariant, i.e. satisfies 
+\uses{def:glide, prop:trslt-inv} 
+Every nowhere-zero $F$-valued pattern of width $n$ is $\rho_n$-invariant, i.e. satisfies 
 \[
     f(\rho_n(i,m)) = f(i,m), \qquad \forall (i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}.
 \]
-\end{proposition}
+\end{corollary}
 \begin{proof}
-    \uses{l:glide-diamond, l:continuant, l:glide-diamond}
-
 \end{proof}
 
+\section{Frieze patterns}
+Throughout this section, we fix an arbitrary (totally ordered?) field $F$. 
 
+\section{Arithmetic frieze patterns}
+
+\iffalse
+\begin{definition}
+    \label{def:arith-fp}
+    \uses{def:closed-fp} 
+        A frieze pattern of width $n$ is said to be \textit{arithmetic} if it takes values in $\mathbb{Z}_{>0}$. 
+    \end{definition}
+    
+    We denote by Frieze$(n)$ the set of all arithmetic frieze patterns of width $n$. 
+    
+    \begin{lemma}
+        \label{l:horiztonal-knit}
+        \uses{def:closed-fp}
+        An $\mathbb{Q}_{>0}$-valued frieze pattern of width $n$ is completely determined by its
+        zeroth diagonal. Moreover, any $n$-tuple of positive rationals placed on the zeroth diagonal 
+        gives rise to a $\mathbb{Q}_{>0}$-valued frieze pattern.
+    \end{lemma}
+    
+    \begin{lemma}
+        \uses{def:arith-fp}
+        \label{l:lower-bound-crit}
+        A frieze pattern $f : \{1,\ldots, n\} \times \mathbb{Z} \to \mathbb{Q}$ is arithmetic if and only if, 
+        for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \mathbb{Z}_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$.
+    \end{lemma}
+    \begin{proof}
+        \uses{l:continuant, l:horiztonal-knit}
+        Suppose that $f$ is arithmetic. Then each $f(i,0)$ is integral, and the claim follows from Lemma \ref{l:continuant}. 
+        Suppose now that for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \mathbb{Z}_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$. By 
+        Lemma \ref{l:continuant}, $f$ takes values in $\mathbb{Z}$, and by Lemma \ref{l:horiztonal-knit}, $f$ takes values in $\mathbb{Q}_{>0}$. 
+    \end{proof}
+
+\fi

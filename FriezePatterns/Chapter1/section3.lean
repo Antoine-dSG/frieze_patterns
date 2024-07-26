@@ -1,9 +1,11 @@
-import FriezePatterns.chapter1
-import FriezePatterns.chapter2
--- Chapter 3: Arithmetic frieze patterns (i.e. "positive integral" field-valued patterns)
--- Section 1: Infinite arithmetic frieze patterns
+import FriezePatterns.Chapter1.section1
+import FriezePatterns.Chapter1.section2
 
--- Section 2: bounded arithmetic frieze patterns
+-- Chapter 1: Background on frieze patterns
+-- Section 3: Arithmetic frieze patterns (i.e. "positive integral" field-valued patterns)
+-- Infinite arithmetic frieze patterns
+
+-- Bounded arithmetic frieze patterns
 
 
 -- We now need to define arithmetic frieze patterns
