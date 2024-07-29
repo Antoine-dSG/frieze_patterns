@@ -47,12 +47,13 @@ class closedPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern
   bounded: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
 
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
-  botBordOnes_n : ∀ m, f (n, m) = 1
+  botBordOnes_n : ∀ m, f (n+1, m) = 1
   topBordOnes : ∀ m, f (0,m) =1
   diamond : ∀ m, ∀ i, f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, i ≤ n → f (i,m) ≠ 0
+  botBordZeroes : ∀ m, f (n+2,m) = 0
 
 -- Continuant property for patterns of finite width
 lemma finiteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n i: ℕ) [nzPattern_n F f n] (hi: i ≤ n) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
@@ -80,3 +81,18 @@ lemma finiteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n i: ℕ) [nz
   _= f (1, m +1 + k + 1)*f (k+2,m)*f (k + 1, m+1)* (f (k + 1, m+1))⁻¹ - f (k+1,m)*f (k + 1, m+1)* (f (k + 1, m+1))⁻¹ := by ring
   _= f (1, m +1 + k + 1)*f (k+2,m) - f (k+1,m) := by rw [mul_inv_cancel_right₀ h₂ (f (1, m +1 + k + 1)*f (k+2,m)), mul_inv_cancel_right₀ h₂ (f (k+1,m))]
   _= f (1, m + (k + 1) + 1) * f (k + 1 + 1, m) - f (k + 1, m) := by ring
+
+
+-- This is the first step in proving the glide symmetry
+lemma firstRowSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n : ℕ) [nzPattern_n F f n] : ∀ m, f (1,m+n+1) = f (n,m) := by
+  intro m
+  have h₁ : f (n+1,m) = 1 := by exact pattern_n.botBordOnes_n m
+  have h₂ : f (n+2,m) = 0 := by exact nzPattern_n.botBordZeroes m
+  have h₃ : n ≤ n := by rfl
+  calc f (1,m+n+1) =  f (1,m+n+1)*1 - 0 := by simp
+  _= f (1,m+n+1)*1 - f (n+2,m) := by rw [h₂]
+  _= f (1,m+n+1) * f (n+1,m) - f (n+2,m) := by rw [h₁]
+  _= f (1,m+n+1) * f (n+1,m) - (f (1,m+n+1)*f (n+1,m) - f (n,m)) := by rw [finiteContinuant F f n n h₃ m]
+  _= f (n,m) := by simp
+
+theorem glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n i: ℕ) [nzPattern_n F f n] (hi: i ≤ n) : ∀m, f (i,m) = f (n+1-i,m+i+1) := by sorry
