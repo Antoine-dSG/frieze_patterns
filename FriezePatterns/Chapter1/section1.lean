@@ -108,3 +108,9 @@ theorem glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern
  have h : f (1,m+n+1) = f (n,m) := by exact firstRowSymm F f n m
  exact Eq.symm h
  sorry
+
+
+-- This is a consequence of the glide symmetry
+lemma translateInvar (F : Type*) [Field F] (f : ℕ×ℕ → F) (i n: ℕ) [nzPattern_n F f n] (hi : i ≤ n+1) : ∀ m, f (i,m) = f (i,m+n+3) := by
+  intro m
+  sorry
