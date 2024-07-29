@@ -4,13 +4,12 @@ import FriezePatterns.Chapter1.section1
 -- Section 2: Frieze patterns (i.e. "positive" field-valued patterns)
 -- Infinite frieze patterns
 
-class inftyFrieze (f : ℕ × ℕ → ℚ) extends pattern ℚ f where
-  positive : ∀ m, ∀ i, f (i,m) > 0
+class inftyFrieze (F : Type*) [LinearOrderedField F] (f : ℕ × ℕ → F) extends nzPattern F f where
+positive : ∀ i, ∀ m, f (i,m) > 0
 
 -- An infinite frieze is nowhere zero
-lemma friezeNonZero (f : ℕ×ℕ → ℚ) [inftyFrieze f] (i : ℕ) (m : ℕ): f (i,m) ≠ 0 := by
-  apply LT.lt.ne'
-  exact inftyFrieze.positive m i
+lemma friezeNonZero (F : Type*) [LinearOrderedField F]  (f : ℕ×ℕ → F) [inftyFrieze F f] (i : ℕ) (m : ℕ): f (i,m) ≠ 0 := by
+  exact nzPattern.non_zero i m
 
 
 -- Bounded frieze patterns

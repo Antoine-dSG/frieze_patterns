@@ -7,7 +7,7 @@ import Mathlib.Tactic
 
 class pattern (F : Type*) [Field F] (f : ℕ × ℕ → F) : Prop where
   topBordOnes : ∀ m, f (0,m) =1
-  diamond : ∀ m, ∀ i,  f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
+  diamond : ∀ i, ∀ m,   f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
 
 -- In the following class, nz stands for nowhere-zero pattern. we have nowhere-zero patterns ⊆ tame pattern ⊆ pattern
 class nzPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
@@ -27,13 +27,13 @@ lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [nzPattern F f]
   rw [h₀.1, ← zero_add 2]
   nth_rw 1 [← zero_add 1]
   nth_rw 3 [← zero_add 1]
-  rw[mul_comm, pattern.diamond m 0, h₀.2]
+  rw[mul_comm, pattern.diamond 0 m, h₀.2]
   simp
   | succ n ih =>
   intro m
   have h : f (n + 1, m+1) ≠ 0 := by exact nzPattern.non_zero (n + 1) (m+1)
   calc f (n + 1 + 2, m) = f (n + 1 + 2, m) * f (n + 1, m+1) * (f (n + 1, m+1))⁻¹ := by rw [mul_inv_cancel_right₀ h (f (n + 1 + 2, m))]
-  _= (f (n+2,m)*f (n+2,m+1) - 1) * (f (n + 1, m+1))⁻¹ := by rw [pattern.diamond m (n+1)]
+  _= (f (n+2,m)*f (n+2,m+1) - 1) * (f (n + 1, m+1))⁻¹ := by rw [pattern.diamond]
   _= (f (n+2,m)*(f (1, m +1 + n + 1) * f (n + 1, m+1) - f (n, m+1)) - 1) * (f (n + 1, m+1))⁻¹ := by rw [ih (m+1)]
   _= (f (1, m +1 + n + 1)*f (n+2,m)* f (n + 1, m+1) - f (n+2,m)*f (n, m+1) - 1) * (f (n + 1, m+1))⁻¹ := by ring
   _= (f (1, m +1 + n + 1)*f (n+2,m)* f (n + 1, m+1) - (f (n+1,m)*f (n+1,m+1) - 1) - 1) * (f (n + 1, m+1))⁻¹ := by rw [pattern.diamond]
@@ -95,4 +95,16 @@ lemma firstRowSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n : ℕ) [nzPatte
   _= f (1,m+n+1) * f (n+1,m) - (f (1,m+n+1)*f (n+1,m) - f (n,m)) := by rw [finiteContinuant F f n n h₃ m]
   _= f (n,m) := by simp
 
-theorem glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n i: ℕ) [nzPattern_n F f n] (hi: i ≤ n) : ∀m, f (i,m) = f (n+1-i,m+i+1) := by sorry
+-- Perhaps we could write a continuant relation "going up", and use this for the induction...
+
+theorem glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n]  : ∀i, ∀m, i ≤ n+1 → f (n+1-i,m) = f (i,m+n+2-i) := by
+ apply Nat.twoStepInduction
+ intro m
+ simp
+ have h₁ : f (0,m+n+2) = 1 ∧ f (n+1,m) = 1 := by exact ⟨pattern_n.topBordOnes n (m+n+2), pattern_n.botBordOnes_n m⟩
+ rw [h₁.1,h₁.2]
+ intro m
+ simp
+ have h : f (1,m+n+1) = f (n,m) := by exact firstRowSymm F f n m
+ exact Eq.symm h
+ sorry
