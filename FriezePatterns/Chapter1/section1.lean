@@ -46,6 +46,14 @@ lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [nzPattern F f]
 class closedPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
   bounded: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
 
+-- This is an illustration of the 'rcases' tactic
+lemma test (F : Type*) [Field F] (f : ℕ × ℕ → F) [closedPattern F f] : ∃ i, ∃m, f (i,m) =1 := by
+  have h : ∃ (n : ℕ), ∀m, f (n+1,m) = 1 := by exact closedPattern.bounded
+  rcases h with ⟨w,h⟩
+  use (w+1)
+  use 0
+  exact h 0
+
 
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
   botBordOnes_n : ∀ m, f (n+1, m) = 1
@@ -91,21 +99,18 @@ lemma reverseFiniteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ
   sorry
   -- The induction should be from n downwards
 
-lemma glide0 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀m, f (0,m) = f (n+1, m+1) := by
-  intro m
-  have h₁ : f (0,m) = 1 := by exact pattern_n.topBordOnes n m
-  have h₂ : f (n+1,m+1) = 1 := by exact pattern_n.botBordOnes_n (m+1)
-  rw [h₁,h₂]
-
 lemma glide1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀m, f (1,m) = f (n, m+2) := by sorry
-  -- This is easy, to be done soon
+ -- This is easy, to be done soon. Then place back into the proof of glide symmetry
 
 --
 lemma glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, (i ≤ n+1) → ∀m, f (i,m) = f (n+1-i, m+i+1) := by
   apply Nat.twoStepInduction
   ·intro h
    simp
-   exact glide0 F f n
+   intro m
+   have h₁ : f (0,m) = 1 := by exact pattern_n.topBordOnes n m
+   have h₂ : f (n+1,m+1) = 1 := by exact pattern_n.botBordOnes_n (m+1)
+   rw [h₁,h₂]
   ·intro h m
    simp
    rw [add_assoc]
