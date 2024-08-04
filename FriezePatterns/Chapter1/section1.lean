@@ -94,6 +94,7 @@ lemma finiteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPa
   _= f (1, m + (k + 1) + 1) * f (k + 1 + 1, m) - f (k + 1, m) := by ring
 
 
+
 -- This is a finiteContinuant lemma "in the other direction"
 lemma reverseFiniteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀i, i≤n+1→∀m, f (i,m+2) = f (n,m+2)*f (i+1,m+1)-f (i+2,m) := by
   sorry
