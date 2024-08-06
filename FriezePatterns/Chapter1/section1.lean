@@ -18,8 +18,8 @@ class tamePattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends nzPattern
 
 -- The following proposition should be extended to include tame frieze patterns
 -- Continuant property of nowhere-zero infinite patterns
-lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [nzPattern F f] (i : ℕ) : ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
-  induction i with
+lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ  → F) [nzPattern F f] (i : ℕ): ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
+induction i with
   | zero =>
   intro m
   simp
@@ -39,7 +39,10 @@ lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) [nzPattern F f]
   _= (f (1, m +1 + n + 1)*f (n+2,m)* f (n + 1, m+1) - (f (n+1,m)*f (n+1,m+1) - 1) - 1) * (f (n + 1, m+1))⁻¹ := by rw [pattern.diamond]
   _= f (1, m +1 + n + 1)*f (n+2,m)*f (n + 1, m+1)* (f (n + 1, m+1))⁻¹ - f (n+1,m)*f (n + 1, m+1)* (f (n + 1, m+1))⁻¹ := by ring
   _= f (1, m +1 + n + 1)*f (n+2,m) - f (n+1,m) := by rw [mul_inv_cancel_right₀ h (f (1, m +1 + n + 1)*f (n+2,m)), mul_inv_cancel_right₀ h (f (n+1,m))]
-  _= f (1, m + (n + 1) + 1) * f (n + 1 + 1, m) - f (n + 1, m) := by ring
+  _= f (1, m + (n + 1) + 1) * f (n + 1 + 1, m) - f (n + 1, m) := by ring_nf
+
+
+
 
 -- It is not clear if the following definition is useful
 -- Bounded field-valued patterns
@@ -139,6 +142,7 @@ lemma glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n
    _= f (1,m+i+1)* f (n - i, m + (i + 1) + 1) - f (n + 1 - i, m + i + 1) := by rw [hii m]
    _= f (n, m+i+1+2)* f (n - i, m + (i + 1) + 1) - f (n + 1 - i, m + i + 1) := by rw [glide1 F f n (m+i+1)]
    _= f (n,(m+i+1)+2)* f (n - i, (m + i + 1) + 1)-f (n + 1 - i, m + i + 1) := by rw [add_assoc m]
+   _= f (n,(m+i+1)+2)*f (n +(1-1)- i, (m + i + 1) + 1) - f (n + 1 - i, m + i + 1) := by ring_nf
    _= f (n,(m+i+1)+2)*f (n - (i+1)+1, (m + i + 1) + 1) - f (n -(i+1)+2, m + i + 1) := by sorry -- This is arithmetic-in-ℕ nonsense
    _= f (n - (i+1), (m+i+1)+2) := by exact Eq.symm (reverseFiniteContinuant F f n (n - (i+1)) h'' (m+i+1))
 
