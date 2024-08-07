@@ -6,6 +6,3 @@ Most of the project will consist in formalising the pre-requisits, including:
 2) Translation-invariance of frieze patterns
 3) Classification of frieze patterns
 4) Main theorem about the sequence of largest values taken by frieze patterns
-
-
-test hello
