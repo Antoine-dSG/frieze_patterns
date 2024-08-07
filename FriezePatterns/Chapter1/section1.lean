@@ -104,7 +104,7 @@ lemma reverseFiniteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ
   -- The induction should be from n downwards
 
 lemma glide1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀m, f (1,m) = f (n, m+2) := by sorry
- -- This is easy, to be done soon. Then place back into the proof of glide symmetry
+ -- This is not so easy, to be done soon. Then place back into the proof of glide symmetry
 
 --
 lemma glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, (i ≤ n+1) → ∀m, f (i,m) = f (n+1-i, m+i+1) := by
