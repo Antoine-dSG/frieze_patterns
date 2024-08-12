@@ -94,7 +94,7 @@ lemma finiteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPa
   _= (f (1, m +1 + k + 1)*f (k+2,m)* f (k + 1, m+1) - (f (k+1,m)*f (k+1,m+1) - 1) - 1) * (f (k + 1, m+1))⁻¹ := by rw [pattern_n.diamond n m]
   _= f (1, m +1 + k + 1)*f (k+2,m)*f (k + 1, m+1)* (f (k + 1, m+1))⁻¹ - f (k+1,m)*f (k + 1, m+1)* (f (k + 1, m+1))⁻¹ := by ring
   _= f (1, m +1 + k + 1)*f (k+2,m) - f (k+1,m) := by rw [mul_inv_cancel_right₀ h₂ (f (1, m +1 + k + 1)*f (k+2,m)), mul_inv_cancel_right₀ h₂ (f (k+1,m))]
-  _= f (1, m + (k + 1) + 1) * f (k + 1 + 1, m) - f (k + 1, m) := by ring
+  _= f (1, m + (k + 1) + 1) * f (k + 1 + 1, m) - f (k + 1, m) := by ring_nf
 
 
 
@@ -106,6 +106,7 @@ lemma reverseFiniteContinuant (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ
 lemma glide1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀m, f (1,m) = f (n, m+2) := by sorry
  -- This is not so easy, to be done soon. Then place back into the proof of glide symmetry
 
+lemma sillyℕ (n i : ℕ) (h : i ≤ n+1) : n + (1-1)-i = n - (i+1)+1 := by sorry
 --
 lemma glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, (i ≤ n+1) → ∀m, f (i,m) = f (n+1-i, m+i+1) := by
   apply Nat.twoStepInduction
