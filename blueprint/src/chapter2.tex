@@ -1,11 +1,11 @@
 \chapter{Sequence of maxima of frieze patterns}
-In \S \ref{s:fp}, we introduced the notion of an (arithmetic) frieze pattern of width $n$, where $n$ is a positive integer.
+In \S \ref{s:fp}, we introduced the notion of an (arithmetic) frieze pattern of height $n$, where $n$ is a positive integer.
 
 In particular, we showed that 
 
-1) Each (arithmetic) frieze pattern of width $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
+1) Each (arithmetic) frieze pattern of height $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
 
-2) For each $n$ there are finitely many arithmetic frieze patterns of width $n$ (Lemma \ref{l:frieze-non-empty} and 
+2) For each $n$ there are finitely many arithmetic frieze patterns of height $n$ (Lemma \ref{l:frieze-non-empty} and 
 Proposition \ref{prop:friezeFinite}).
 
 This leads to the following two definitions.
@@ -22,7 +22,7 @@ For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-
     \label{def:un}
     \uses{def:un(f),prop:friezeFinite}
     For each $n$, there is a well-defined
-    positive integer, called the {\it maximum value} among arithmetic frieze patterns of width $n$, which we write as
+    positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, which we write as
     \[
         u_n := \max (u_n(f) : f \in  {\rm Frieze}(n)).
     \]
@@ -32,10 +32,10 @@ For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-
 We are now able to formulate and prove the main theorem of this section.
 \begin{theorem}
     \label{MainTheorem}
-    \uses{def:un}
+    \uses{def:un, l:unLB, l:unUB}
     For all $n \geq 1$, we have 
     \[
-        u_n = F_{n+2},
+        u_n = F_{n},
     \]
     where $(F_{n})_{n \in \mathbb{N}}$ is the {\it Fibonacci sequence}, i.e. the sequence recursively defined by 
     $F_0 = 0, F_1 = 1$ and the recursive formula
@@ -49,24 +49,24 @@ We break down the proof into two lemmas.
     \label{l:unLB}
     For all $n \geq 1$, we have 
     \[
-        u_n \geq F_{n+2}.
+        u_n \geq F_{n}.
     \]
 \end{lemma}
 \begin{proof}
     We construct, for each $n$, a frieze pattern containing the value $F_{n+2}$. By Lemma \ref{l:testCriteria}, 
-    it is sufficient to specify an $(n+2)$-tuple $(a_0, \ldots, a_{n+1})$ of positive integers such that $a_0 = a_{n+1} =1$ and 
+    it is sufficient to specify an $n$-tuple $(a_0, \ldots, a_{n+1})$ of positive integers such that $a_1 = a_n =1$ and 
     \begin{equation}\label{eq:divis}
-        a_i \mid a_{i-1} + a_{i+1}, \qquad i \in \{1, \ldots, n\}.
+        a_i \mid a_{i-1} + a_{i+1}, \qquad i \in \{2, \ldots, n-1\}.
     \end{equation}
-    1) If $n$ is odd, one sees by a direct computation that the $(n+2)$-tuple 
+    1) If $n$ is odd, one sees by a direct computation that the $n$-tuple 
     \[
-        (f_2,F_4, F_6, \ldots, F_{n+1}, F_{n+2}, F_n, F_{n-2}, \ldots, F_5, F_3, F_1), 
+        (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
     \]
     satisfies the conditions of \eqref{eq:divis}. 
 
-    2) If $n$ is even, the $(n+2)$-tuple 
+    2) If $n$ is even, the $n$-tuple 
     \[
-        (F_2, F_4, F_6, \ldots, F_n, F_{n+2}, F_{n+1}, F_{n-1}, \ldots, F_5, F_3,F_1),
+        (F_2, F_4, F_6, \ldots, F_{n-2}, F_{n}, F_{n-1}, F_{n-3}, \ldots, F_5, F_3,F_1),
     \]
     satisfies the conditions of \eqref{eq:divis}. 
 \end{proof}
@@ -76,20 +76,20 @@ We now turn to the reverse equality.
     \label{l:unUB}
     For all $n \geq 1$, we have 
     \[
-        u_n \leq F_{n+2}.
+        u_n \leq F_{n}.
     \]
 \end{proposition}
 \begin{proof}
     We need to show that
     \[
-        P_n : u_n \leq F_{n+2}
+        P_n : u_n \leq F_{n}
     \]
     holds for all $n \in \mathbb{N}^*$. Clearly, it suffices to show that $P_1$, $P_2$ hold and that $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$
     holds. 
     
-    $P_1$: By a direct calculation, one sees that there are only two frieze patterns of width 1, and that $u_1 = 2 = F_3$. 
+    $P_1$: It is immediate that $u_1 = 1 = F_1$. 
 
-    $P_2$: It is well-known that there are five frieze patterns of width $2$, and so by a direct computation $u_2 = 3 = F_4$. 
+    $P_2$: It is immediate that $u_2 = 1 = F_2$.  
 
     $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$: 
 \end{proof}

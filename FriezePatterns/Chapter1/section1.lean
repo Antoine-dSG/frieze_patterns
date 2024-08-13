@@ -1,6 +1,8 @@
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
 
+
+-- NEED TO CHANGE DEFINITIONS FROM WIDTH TO HEIGHT: WIDTH n <=> HEIGHT n+2
 ----------- SECTION 1 ---------
 ---- Field-valued patterns ----
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
