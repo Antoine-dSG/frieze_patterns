@@ -1,63 +1,6 @@
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
 
--- Chapter 1: Background on frieze patterns
--- Section 1: Field-valued patterns
--- Infinite field-valued patterns
-
-class pattern (F : Type*) [Field F] (f : ℕ × ℕ → F) : Prop where
-  topBordOnes : ∀ m, f (0,m) =1
-  diamond : ∀ i, ∀ m,   f (i+1,m) * f (i+1,m+1) -1= f (i+2,m)*f (i,m+1)
-
--- In the following class, nz stands for nowhere-zero pattern. we have nowhere-zero patterns ⊆ tame pattern ⊆ pattern
-class nzPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
-  non_zero : ∀ i, ∀ m, f (i,m) ≠ 0
-
-class tamePattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends nzPattern F f where
-  -- tame condition ?
-
--- The following proposition should be extended to include tame frieze patterns
--- Continuant property of nowhere-zero infinite patterns
-lemma inftyContinuant (F : Type*) [Field F] (f : ℕ×ℕ  → F) [nzPattern F f] (i : ℕ): ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
-induction i with
-  | zero =>
-  intro m
-  simp
-  have h₀ : f (0,m) = 1 ∧ f (0,m+1) = 1 := by exact ⟨pattern.topBordOnes m, pattern.topBordOnes (m + 1)⟩
-  rw [h₀.1, ← zero_add 2]
-  nth_rw 1 [← zero_add 1]
-  nth_rw 3 [← zero_add 1]
-  rw[mul_comm, pattern.diamond 0 m, h₀.2]
-  simp
-  | succ n ih =>
-  intro m
-  have h : f (n + 1, m+1) ≠ 0 := by exact nzPattern.non_zero (n + 1) (m+1)
-  calc f (n + 1 + 2, m) = f (n + 1 + 2, m) * f (n + 1, m+1) * (f (n + 1, m+1))⁻¹ := by rw [mul_inv_cancel_right₀ h (f (n + 1 + 2, m))]
-  _= (f (n+2,m)*f (n+2,m+1) - 1) * (f (n + 1, m+1))⁻¹ := by rw [pattern.diamond]
-  _= (f (n+2,m)*(f (1, m +1 + n + 1) * f (n + 1, m+1) - f (n, m+1)) - 1) * (f (n + 1, m+1))⁻¹ := by rw [ih (m+1)]
-  _= (f (1, m +1 + n + 1)*f (n+2,m)* f (n + 1, m+1) - f (n+2,m)*f (n, m+1) - 1) * (f (n + 1, m+1))⁻¹ := by ring
-  _= (f (1, m +1 + n + 1)*f (n+2,m)* f (n + 1, m+1) - (f (n+1,m)*f (n+1,m+1) - 1) - 1) * (f (n + 1, m+1))⁻¹ := by rw [pattern.diamond]
-  _= f (1, m +1 + n + 1)*f (n+2,m)*f (n + 1, m+1)* (f (n + 1, m+1))⁻¹ - f (n+1,m)*f (n + 1, m+1)* (f (n + 1, m+1))⁻¹ := by ring
-  _= f (1, m +1 + n + 1)*f (n+2,m) - f (n+1,m) := by rw [mul_inv_cancel_right₀ h (f (1, m +1 + n + 1)*f (n+2,m)), mul_inv_cancel_right₀ h (f (n+1,m))]
-  _= f (1, m + (n + 1) + 1) * f (n + 1 + 1, m) - f (n + 1, m) := by ring_nf
-
-
-
-
--- It is not clear if the following definition is useful
--- Bounded field-valued patterns
-class closedPattern (F : Type*) [Field F] (f : ℕ × ℕ → F) extends pattern F f where
-  bounded: ∃ (n : ℕ), ∀m, f (n+1,m) = 1
-
--- This is an illustration of the 'rcases' tactic
-lemma test (F : Type*) [Field F] (f : ℕ × ℕ → F) [closedPattern F f] : ∃ i, ∃m, f (i,m) =1 := by
-  have h : ∃ (n : ℕ), ∀m, f (n+1,m) = 1 := by exact closedPattern.bounded
-  rcases h with ⟨w,h⟩
-  use (w+1)
-  use 0
-  exact h 0
-
-
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
   botBordOnes_n : ∀ m, f (n+1, m) = 1
   topBordOnes : ∀ m, f (0,m) =1

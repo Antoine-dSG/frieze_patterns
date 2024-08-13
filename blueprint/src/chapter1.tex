@@ -5,7 +5,8 @@ Throughout this section, we fix an arbitrary field $F$.
 
 \begin{definition}
     \label{def:pattern_n}
-        Fix $n \in \mathbb{N}$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow F$ is called
+    \lean{pattern_n}
+        Fix $n \in \mathbb{N}^*$. A map $f : \{1,2,\ldots , n\} \times \mathbb{Z} \longrightarrow F$ is called
         an \textit{$F$-valued pattern of width n} if, for all $(i,m) \in \{1,2,\ldots , n\} \times \mathbb{Z}$, we have
         \begin{equation}\label{eq:diamond}
             f(i,m) f(i,m+1) = 1 + f(i+1,m) f(i-1, m+1),
@@ -101,7 +102,18 @@ An $F$-valued pattern $f$ of width $n$ is said to be {\it nowhere zero} if $f(i,
     \end{align*}
 \end{proof}
 
-
+\begin{corollary}
+    \label{cor:ImageFinite}
+    Let $f$ be a nowhere-zero $F$-valued pattern of width $n$. Then, ${\rm Im}(f) := \{f (i,m) : i \in \{1,\ldots, n\}, m \in \mathbb{Z}\}$ is
+    a finite set. 
+\end{corollary}
+\begin{proof}
+    Consider the finite set $\mathcal{D} = \{(i,m) : i \in \{1,n\}, m \in \{0,\ldots, n+2\}\}$. By Proposition \ref{prop:trslt-inv}, 
+    \[
+        {\rm Im}(f) = \{f (i,m) : (i,m) \in \mathcal{D}\},
+    \]
+    and the right-hand side is obviously finite. 
+\end{proof}
 
 \section{Arithmetic frieze patterns}
 Throughout this section, we consider the so-called arithmetic frieze patterns.
