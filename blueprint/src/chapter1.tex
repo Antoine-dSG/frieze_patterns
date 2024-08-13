@@ -18,6 +18,7 @@ Throughout this section, we fix an arbitrary field $F$.
 
 An $F$-valued pattern $f$ of width $n$ is said to be {\it nowhere zero} if $f(i,m) \neq 0$, for all $i \in \{1,\ldots , n\}$ and for all $m \in \mathbb{Z}$.
 \begin{lemma}
+    \lean{pattern_nContinuant1,pattern_nContinuant2}
     \label{l:pattern_nContinuant}
     \uses{def:pattern_n}
     Let $f$ be a nowhere-zero $F$-valued pattern of width $n$. For all $m$, we have 
@@ -63,7 +64,8 @@ An $F$-valued pattern $f$ of width $n$ is said to be {\it nowhere zero} if $f(i,
 \end{proof}
 
 \begin{proposition}
-    \label{prop:trslt-inv}
+    \label{prop:trsltInv}
+    \lean{trsltInv}
     \uses{def:pattern_n, l:pattern_nContinuant}
     Let $f$ be a nowhere-zero $F$-valued pattern of width $n$. Then, for all $i,m$, we have
     \[
@@ -103,12 +105,14 @@ An $F$-valued pattern $f$ of width $n$ is said to be {\it nowhere zero} if $f(i,
 \end{proof}
 
 \begin{corollary}
-    \label{cor:ImageFinite}
+    \label{cor:imageFinite}
+    \lean{imageFinite}
+    \uses{prop:trsltInv}
     Let $f$ be a nowhere-zero $F$-valued pattern of width $n$. Then, ${\rm Im}(f) := \{f (i,m) : i \in \{1,\ldots, n\}, m \in \mathbb{Z}\}$ is
     a finite set. 
 \end{corollary}
 \begin{proof}
-    Consider the finite set $\mathcal{D} = \{(i,m) : i \in \{1,n\}, m \in \{0,\ldots, n+2\}\}$. By Proposition \ref{prop:trslt-inv}, 
+    Consider the finite set $\mathcal{D} = \{(i,m) : i \in \{1,n\}, m \in \{0,\ldots, n+2\}\}$. By Proposition \ref{prop:trsltInv}, 
     \[
         {\rm Im}(f) = \{f (i,m) : (i,m) \in \mathcal{D}\},
     \]
@@ -119,8 +123,9 @@ An $F$-valued pattern $f$ of width $n$ is said to be {\it nowhere zero} if $f(i,
 Throughout this section, we consider the so-called arithmetic frieze patterns.
 
 \begin{definition}
-    \label{def:arith-fp}
-    \uses{def:closed-fp} 
+    \label{def:arith_fp}
+    \uses{def:pattern_n} 
+    \lean{arith_fp}
         A $\mathbb{Q}$-valued frieze pattern of width $n$ is said to be \textit{arithmetic} if it takes values in $\mathbb{Z}_{>0}$. 
         We denote by Frieze$(n)$ the set of arithmetic frieze patterns of width $n$. 
 \end{definition}
@@ -128,6 +133,8 @@ Throughout this section, we consider the so-called arithmetic frieze patterns.
 The following lemma will be important in what follows. 
 \begin{lemma}
     \label{l:testCriteria}
+    \uses{def:arith_fp}
+    \lean{testCriteria1,testCriteria2}
     Let $n$ be a fixed positive integer. 
 
     1) If $f$ is an arithmetic frieze pattern of width $n$, then
@@ -150,7 +157,9 @@ The following lemma will be important in what follows.
 
 It is not clear from the definitions that, for a given positive integer $n$, the set Frieze$(n)$ is non empty.
 \begin{lemma}
-    \label{l:frieze-non-empty}
+    \label{l:friezeNonEmpty}
+    \lean{friezeNonEmpty}
+    \uses{l:testCriteria}
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{lemma}
 \begin{proof}
@@ -158,38 +167,11 @@ It is not clear from the definitions that, for a given positive integer $n$, the
     that $f (i,0) = 1$ for $i \in \{1,\ldots , n\}$. 
 \end{proof}
 \begin{proposition}
-    \label{prop:frieze-finite}
+    \uses{l:testCriteria}
+    \label{prop:friezeFinite}
+    \lean{friezeFinite}
     Fix a positive integer $n$. The set Frieze$(n)$ is finite. 
 \end{proposition}
 \begin{proof}
 
 \end{proof}
-
-
-\iffalse
-
-    
-    We denote by Frieze$(n)$ the set of all arithmetic frieze patterns of width $n$. 
-    
-    \begin{lemma}
-        \label{l:horiztonal-knit}
-        \uses{def:closed-fp}
-        An $\mathbb{Q}_{>0}$-valued frieze pattern of width $n$ is completely determined by its
-        zeroth diagonal. Moreover, any $n$-tuple of positive rationals placed on the zeroth diagonal 
-        gives rise to a $\mathbb{Q}_{>0}$-valued frieze pattern.
-    \end{lemma}
-    
-    \begin{lemma}
-        \uses{def:arith-fp}
-        \label{l:lower-bound-crit}
-        A frieze pattern $f : \{1,\ldots, n\} \times \mathbb{Z} \to \mathbb{Q}$ is arithmetic if and only if, 
-        for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \mathbb{Z}_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$.
-    \end{lemma}
-    \begin{proof}
-        \uses{l:continuant, l:horiztonal-knit}
-        Suppose that $f$ is arithmetic. Then each $f(i,0)$ is integral, and the claim follows from Lemma \ref{l:continuant}. 
-        Suppose now that for all $i \in \{1, \ldots , n\}$, $f(i,0) \in \mathbb{Z}_{>0}$ and $f(i,0)$ divides $f(i-1,0) + f(i+1,0)$. By 
-        Lemma \ref{l:continuant}, $f$ takes values in $\mathbb{Z}$, and by Lemma \ref{l:horiztonal-knit}, $f$ takes values in $\mathbb{Q}_{>0}$. 
-    \end{proof}
-
-\fi

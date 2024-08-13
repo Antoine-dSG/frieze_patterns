@@ -3,22 +3,36 @@ In \S \ref{s:fp}, we introduced the notion of an (arithmetic) frieze pattern of 
 
 In particular, we showed that 
 
-1) Each (arithmetic) frieze pattern of width $n$ takes on finitely many values (Corollary \ref{cor:ImageFinite}). In 
-other words, for each $n$ and each $f \in {\rm Frieze}(n)$, there is a well-defined positive integer
+1) Each (arithmetic) frieze pattern of width $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
+
+2) For each $n$ there are finitely many arithmetic frieze patterns of width $n$ (Lemma \ref{l:frieze-non-empty} and 
+Proposition \ref{prop:friezeFinite}).
+
+This leads to the following two definitions.
+\begin{definition}
+    \label{def:un(f)}
+    \uses{cor:imageFinite}
+For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-defined positive integer
 \[
     u_n(f) := \max ( f (i,m) : (i,m)  \in \{1,\ldots,n \}\times \mathbb{Z}).
 \]
+\end{definition}
 
-2) For each $n$ there are finitely many arithmetic frieze patterns of width $n$ (Lemma \ref{l:frieze-non-empty} and 
-Proposition \ref{prop:frieze-finite}). In particular, for each $n$, there is a well-defined
-positive integer 
-\[
-    u_n := \max (u_n(f) : f \in  {\rm Frieze}(n)).
-\]
+\begin{definition}
+    \label{def:un}
+    \uses{def:un(f),prop:friezeFinite}
+    For each $n$, there is a well-defined
+    positive integer, called the {\it maximum value} among arithmetic frieze patterns of width $n$, which we write as
+    \[
+        u_n := \max (u_n(f) : f \in  {\rm Frieze}(n)).
+    \]
+\end{definition}
+
 
 We are now able to formulate and prove the main theorem of this section.
 \begin{theorem}
     \label{MainTheorem}
+    \uses{def:un}
     For all $n \geq 1$, we have 
     \[
         u_n = F_{n+2},
@@ -57,11 +71,25 @@ We break down the proof into two lemmas.
     satisfies the conditions of \eqref{eq:divis}. 
 \end{proof}
 
-We now show the reverse inequality.
-\begin{lemma}
+We now turn to the reverse equality.
+\begin{proposition}
     \label{l:unUB}
     For all $n \geq 1$, we have 
     \[
         u_n \leq F_{n+2}.
     \]
-\end{lemma}
+\end{proposition}
+\begin{proof}
+    We need to show that
+    \[
+        P_n : u_n \leq F_{n+2}
+    \]
+    holds for all $n \in \mathbb{N}^*$. Clearly, it suffices to show that $P_1$, $P_2$ hold and that $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$
+    holds. 
+    
+    $P_1$: By a direct calculation, one sees that there are only two frieze patterns of width 1, and that $u_1 = 2 = F_3$. 
+
+    $P_2$: It is well-known that there are five frieze patterns of width $2$, and so by a direct computation $u_2 = 3 = F_4$. 
+
+    $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$: 
+\end{proof}
