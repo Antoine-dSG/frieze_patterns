@@ -47,14 +47,19 @@ theorem trsltInv : 1+1=2 := by sorry
 
 lemma imageFinite : 2+2 =4 := by sorry
 
+lemma testEqualPattern : 2*3 = 6 := by sorry
+
 
 
 ------------- SECTION 2 ------------
 ---- Arithmetic frieze patterns ----
-
-class arith_fp (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
-  integral: ∀ i, ∀ m, (f (i,m)).den == 1
+class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
   positive: ∀ i, ∀ m, i ≤ n+1 → f (i,m) >0
+
+lemma positivePatternCharact : 2-1=1 := by sorry
+
+class arith_fp (f : ℕ × ℕ → ℚ) (n : ℕ) extends positivePattern_n f n where
+  integral: ∀ i, ∀ m, (f (i,m)).den == 1
 
 lemma testCriteria1 : 1+1 = 2 := by sorry
 

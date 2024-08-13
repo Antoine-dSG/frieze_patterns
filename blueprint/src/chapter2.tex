@@ -5,7 +5,7 @@ In particular, we showed that
 
 1) Each (arithmetic) frieze pattern of height $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
 
-2) For each $n$ there are finitely many arithmetic frieze patterns of height $n$ (Lemma \ref{l:frieze-non-empty} and 
+2) For each $n$ there are finitely many arithmetic frieze patterns of height $n$ (Lemma \ref{l:friezeNonEmpty} and 
 Proposition \ref{prop:friezeFinite}).
 
 This leads to the following two definitions.
@@ -39,7 +39,8 @@ For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-
 
 We are now able to formulate and prove the main theorem of this section.
 \begin{theorem}
-    \label{MainTheorem}
+    \label{mainTheorem}
+    \lean{mainTheorem}
     \uses{def:un, l:unLB, l:unUB}
     For all $n \geq 1$, we have 
     \[
@@ -50,6 +51,7 @@ We break down the proof into two lemmas.
 
 \begin{lemma}
     \label{l:unLB}
+    \lean{unLB}
     \uses{def:un,l:testCriteria, def:fib}
     For all $n \geq 1$, we have 
     \[
@@ -57,8 +59,8 @@ We break down the proof into two lemmas.
     \]
 \end{lemma}
 \begin{proof}
-    We construct, for each $n$, a frieze pattern containing the value $F_{n+2}$. By Lemma \ref{l:testCriteria}, 
-    it is sufficient to specify an $n$-tuple $(a_0, \ldots, a_{n+1})$ of positive integers such that $a_1 = a_n =1$ and 
+    We construct, for each $n$, a frieze pattern containing the value $F_{n+2}$. By Proposition \ref{prop:testCriteria}, 
+    it is sufficient to specify an $n$-tuple $(a_1, \ldots, a_n)$ of positive integers such that $a_1 = a_n =1$ and 
     \begin{equation}\label{eq:divis}
         a_i \mid a_{i-1} + a_{i+1}, \qquad i \in \{2, \ldots, n-1\}.
     \end{equation}
@@ -78,6 +80,7 @@ We break down the proof into two lemmas.
 We now turn to the reverse equality.
 \begin{proposition}
     \label{l:unUB}
+    \lean{unUB}
     \uses{def:un,l:testCriteria, def:fib}
     For all $n \geq 1$, we have 
     \[
@@ -96,5 +99,5 @@ We now turn to the reverse equality.
 
     $P_2$: It is immediate that $u_2 = 1 = F_2$.  
 
-    $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$: 
+    $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$: To be added...
 \end{proof}
