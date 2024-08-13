@@ -10,7 +10,7 @@ Proposition \ref{prop:friezeFinite}).
 
 This leads to the following two definitions.
 \begin{definition}
-    \label{def:un(f)}
+    \label{def:unf}
     \uses{cor:imageFinite}
 For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-defined positive integer
 \[
@@ -20,11 +20,19 @@ For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-
 
 \begin{definition}
     \label{def:un}
-    \uses{def:un(f),prop:friezeFinite}
+    \uses{def:unf,prop:friezeFinite,l:friezeNonEmpty}
     For each $n$, there is a well-defined
     positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, which we write as
     \[
         u_n := \max (u_n(f) : f \in  {\rm Frieze}(n)).
+    \]
+\end{definition}
+
+\begin{definition}
+    \label{def:fib}
+    The Fibonacci sequence $(F_n)_{n \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
+    \[
+        F_n = F_{n-1} + F_{n-2}.
     \]
 \end{definition}
 
@@ -35,18 +43,14 @@ We are now able to formulate and prove the main theorem of this section.
     \uses{def:un, l:unLB, l:unUB}
     For all $n \geq 1$, we have 
     \[
-        u_n = F_{n},
-    \]
-    where $(F_{n})_{n \in \mathbb{N}}$ is the {\it Fibonacci sequence}, i.e. the sequence recursively defined by 
-    $F_0 = 0, F_1 = 1$ and the recursive formula
-    \[
-        F_n = F_{n-1} + F_{n-2}.
-    \]
+        u_n = F_{n}.
+    \]    
 \end{theorem}
 We break down the proof into two lemmas. 
 
 \begin{lemma}
     \label{l:unLB}
+    \uses{def:un,l:testCriteria, def:fib}
     For all $n \geq 1$, we have 
     \[
         u_n \geq F_{n}.
@@ -74,6 +78,7 @@ We break down the proof into two lemmas.
 We now turn to the reverse equality.
 \begin{proposition}
     \label{l:unUB}
+    \uses{def:un,l:testCriteria, def:fib}
     For all $n \geq 1$, we have 
     \[
         u_n \leq F_{n}.
