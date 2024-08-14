@@ -1,4 +1,4 @@
-import FriezePatterns.Chapter1.section1
+import FriezePatterns.chapter1
 
 -- How do we define a sequence? Do we use "instances" ?
 

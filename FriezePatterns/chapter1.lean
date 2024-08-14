@@ -6,16 +6,17 @@ import Mathlib.Tactic
 ----------- SECTION 1 ---------
 ---- Field-valued patterns ----
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
-  botBordOnes_n : ∀ m, f (n+1, m) = 1
-  topBordOnes : ∀ m, f (0,m) =1
+  topBordZeros : ∀ m, f (0,m) = 0
+  topBordOnes : ∀ m, f (1,m) =1
+  botBordOnes_n : ∀ m, f (n, m) = 1
+  botBordZeros_n : ∀ m, f (n+1,m) = 0
   diamond : ∀ m, ∀ i, f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
-  non_zero : ∀ i, ∀ m, i ≤ n+1 → f (i,m) ≠ 0
-  botBordZeroes : ∀ m, f (n+2,m) = 0
+  non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
 
-lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i+2,m) = f (1,m+i+1)*f (i+1,m) - f (i,m) := by
- intro i
+lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i+2,m) = f (2,m+i)*f (i+1,m) - f (i,m) := by sorry
+/-  intro i
  induction i with
  | zero =>
  intro _ m
@@ -40,14 +41,19 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
   _= f (1, m +1 + k + 1)*f (k+2,m)*f (k + 1, m+1)* (f (k + 1, m+1))⁻¹ - f (k+1,m)*f (k + 1, m+1)* (f (k + 1, m+1))⁻¹ := by ring
   _= f (1, m +1 + k + 1)*f (k+2,m) - f (k+1,m) := by rw [mul_inv_cancel_right₀ h₂ (f (1, m +1 + k + 1)*f (k+2,m)), mul_inv_cancel_right₀ h₂ (f (k+1,m))]
   _= f (1, m + (k + 1) + 1) * f (k + 1 + 1, m) - f (k + 1, m) := by ring_nf
+-/
 
-lemma pattern_nContinuant2 : 1=1 := by sorry
+lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i,m) = f (n-1,m)*f (i+1,m-1) - f (i+2,m-2) := by sorry
 
-theorem trsltInv : 1+1=2 := by sorry
+theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by sorry
 
-lemma imageFinite : 2+2 =4 := by sorry
+-- This is surely in mathlib, in some form
+def isFiniteSet (g : ℕ×ℕ → F) : Prop :=
+  ∃ (s : Finset F), ∀ i, ∀m, g (i,m) ∈ s
 
-lemma testEqualPattern : 2*3 = 6 := by sorry
+lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : isFiniteSet f := by sorry
+
+lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] [nzPattern_n F g n] (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by sorry
 
 
 
@@ -56,14 +62,18 @@ lemma testEqualPattern : 2*3 = 6 := by sorry
 class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
   positive: ∀ i, ∀ m, i ≤ n+1 → f (i,m) >0
 
+-- Need to add a definition of PosPat(n), the set of positive patterns
+
 lemma positivePatternCharact : 2-1=1 := by sorry
 
 class arith_fp (f : ℕ × ℕ → ℚ) (n : ℕ) extends positivePattern_n f n where
   integral: ∀ i, ∀ m, (f (i,m)).den == 1
 
-lemma testCriteria1 : 1+1 = 2 := by sorry
+-- Need to add definition of Frieze(n)
 
-lemma testCriteria2 : 2*2 = 4 := by sorry
+class nDiag : Prop where
+
+lemma bijFriezeToDiag : 1+1 = 2 := by sorry
 
 lemma friezeNonEmpty : 1-1 = 0 := by sorry
 

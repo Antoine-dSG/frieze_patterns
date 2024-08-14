@@ -1,3 +1,2 @@
-import FriezePatterns.Chapter1.section1
-import FriezePatterns.Chapter1.section2
-import FriezePatterns.Chapter1.section3
+import FriezePatterns.chapter1
+import FriezePatterns.chapter2
