@@ -9,8 +9,13 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
   topBordZeros : ∀ m, f (0,m) = 0
   topBordOnes : ∀ m, f (1,m) =1
   botBordOnes_n : ∀ m, f (n, m) = 1
+<<<<<<< Updated upstream
   botBordZeros_n : ∀ i, ∀ m,  i ≥ n+1 → (f (i,m) = 0)
   diamond : ∀ i, ∀ m,  i ≤ n-1 → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
+=======
+  botBordZeros_n : ∀ m, ∀ i, i ≥ n+1 → (f (i,m) = 0)
+  diamond : ∀ m, ∀ i, i ≤ n-1 → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
+>>>>>>> Stashed changes
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
@@ -47,13 +52,10 @@ lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 
 theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by sorry
 
--- This is surely in mathlib, in some form
-def isFiniteSet (g : ℕ×ℕ → F) : Prop :=
-  ∃ (s : Finset F), ∀ i, ∀m, g (i,m) ∈ s
+lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : (Set.range f).Finite := by sorry
 
-lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : isFiniteSet f := by sorry
-
-lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
+lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := sorry
+/- Antoine: I have put the proof in comments for the moment to avoids bugs during compilation on GitHub pages
   funext ⟨i, m⟩
 
   induction m with
@@ -97,7 +99,7 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf
   --rw[hf.diamond i (k+1)]
 
 
-
+-/
 
 
 ------------- SECTION 2 ------------
@@ -105,8 +107,8 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf
 class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
   positive: ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) >0
 
-def PosPat(n) : Set (ℕ × ℕ → ℚ) := {f : ℕ × ℕ → ℚ | ∃ e : positivePattern_n f}
--- Need to add a definition of PosPat(n), the set of positive patterns
+
+-- Need to fix: def PosPat_n : Set (ℕ × ℕ → ℚ) := {f : ℕ × ℕ → ℚ | ∃ e : positivePattern_n f}
 
 
 

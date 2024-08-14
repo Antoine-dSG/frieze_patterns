@@ -175,6 +175,10 @@ is an $n$-diagonal.
 We prove a couple of key properties about $n$-diagonals. 
 \begin{lemma}
     \label{l:nDiagNonEmpty}
+<<<<<<< Updated upstream
+=======
+    \lean{nDiagNonEmpty}
+>>>>>>> Stashed changes
     \uses{def:nDiag}
     Fix a positive integer $n$. The set Diag$(n)$ is non-empty.
 \end{lemma}
@@ -191,12 +195,22 @@ We conclude this section with a discussion of upper bounds on the entries of an 
     \]
 \end{definition}
 
+<<<<<<< Updated upstream
 \begin{lemma}
     \uses{def:nDiag}
     \label{lem:nDiagReduction}
     In an $n$-diagonal $(a_1, \ldots, a_n)$, there exists an index $i \in \{2,\ldots, n-1\}$ 
     such that $a_i = a_{i-1} + a_{i+1}$.
 \end{lemma}
+=======
+\begin{proposition}
+    \uses{def:nDiag}
+    \label{prop:nDiagFinite}
+    \lean{nDiagFinite}
+    Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Diag}(n)$. 
+    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
+\end{proposition}
+>>>>>>> Stashed changes
 \begin{proof}
 
 \end{proof}
