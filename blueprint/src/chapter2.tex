@@ -1,14 +1,103 @@
-\chapter{Classification of arithmetic frieze patterns}
-\begin{theorem}
-\label{thm:poly-to-fp}
-\uses{def:arith-fp}
-    Fix $n \in \mathbb{N}$. There is a set-theoretic bijection from the set of triangulations of the regular $n+3$-gon in the plane
-    to the set Frieze$(n)$. In particular we have
+\chapter{Sequence of maxima of frieze patterns}
+In \S \ref{s:fp}, we introduced the notion of an (arithmetic) frieze pattern of height $n$, where $n$ is a positive integer.
+
+In particular, we showed that 
+
+1) Each (arithmetic) frieze pattern of height $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
+
+2) For each $n$ there are finitely many arithmetic frieze patterns of height $n$ (Lemma \ref{l:friezeNonEmpty} and 
+Proposition \ref{prop:friezeFinite}).
+
+This leads to the following two definitions.
+\begin{definition}
+    \label{def:unf}
+    \uses{cor:imageFinite}
+For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-defined positive integer
+\[
+    u_n(f) := \max ( f (i,m) : (i,m)  \in \{1,\ldots,n \}\times \mathbb{Z}).
+\]
+\end{definition}
+
+\begin{definition}
+    \label{def:un}
+    \uses{def:unf,prop:friezeFinite,l:friezeNonEmpty}
+    For each $n$, there is a well-defined
+    positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, which we write as
     \[
-        |\text{Frieze}(n)| = C_{n+1},
+        u_n := \max (u_n(f) : f \in  {\rm Frieze}(n)).
     \]
-    where $C_n = \frac{1}{n+1}\binom{2n}{n}$ is the $n^{\rm th}$ Catalan number.
+\end{definition}
+
+\begin{definition}
+    \label{def:fib}
+    The Fibonacci sequence $(F_n)_{n \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
+    \[
+        F_n = F_{n-1} + F_{n-2}.
+    \]
+\end{definition}
+
+
+We are now able to formulate and prove the main theorem of this section.
+\begin{theorem}
+    \label{mainTheorem}
+    \lean{mainTheorem}
+    \uses{def:un, l:unLB, l:unUB}
+    For all $n \geq 1$, we have 
+    \[
+        u_n = F_{n}.
+    \]    
 \end{theorem}
+We break down the proof into two lemmas. 
 
-The remainder of this section is dedicated to the proof of Theorem \ref{thm:poly-to-fp}. 
+\begin{lemma}
+    \label{l:unLB}
+    \lean{unLB}
+    \uses{def:un,l:testCriteria, def:fib}
+    For all $n \geq 1$, we have 
+    \[
+        u_n \geq F_{n}.
+    \]
+\end{lemma}
+\begin{proof}
+    We construct, for each $n$, a frieze pattern containing the value $F_{n+2}$. By Proposition \ref{prop:testCriteria}, 
+    it is sufficient to specify an $n$-tuple $(a_1, \ldots, a_n)$ of positive integers such that $a_1 = a_n =1$ and 
+    \begin{equation}\label{eq:divis}
+        a_i \mid a_{i-1} + a_{i+1}, \qquad i \in \{2, \ldots, n-1\}.
+    \end{equation}
+    1) If $n$ is odd, one sees by a direct computation that the $n$-tuple 
+    \[
+        (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
+    \]
+    satisfies the conditions of \eqref{eq:divis}. 
 
+    2) If $n$ is even, the $n$-tuple 
+    \[
+        (F_2, F_4, F_6, \ldots, F_{n-2}, F_{n}, F_{n-1}, F_{n-3}, \ldots, F_5, F_3,F_1),
+    \]
+    satisfies the conditions of \eqref{eq:divis}. 
+\end{proof}
+
+We now turn to the reverse equality.
+\begin{proposition}
+    \label{l:unUB}
+    \lean{unUB}
+    \uses{def:un,l:testCriteria, def:fib}
+    For all $n \geq 1$, we have 
+    \[
+        u_n \leq F_{n}.
+    \]
+\end{proposition}
+\begin{proof}
+    We need to show that
+    \[
+        P_n : u_n \leq F_{n}
+    \]
+    holds for all $n \in \mathbb{N}^*$. Clearly, it suffices to show that $P_1$, $P_2$ hold and that $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$
+    holds. 
+    
+    $P_1$: It is immediate that $u_1 = 1 = F_1$. 
+
+    $P_2$: It is immediate that $u_2 = 1 = F_2$.  
+
+    $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$: To be added...
+\end{proof}
