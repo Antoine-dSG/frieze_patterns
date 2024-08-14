@@ -155,7 +155,7 @@ We now turn to arithmetic frieze patterns. We begin with a preliminary definitio
 \begin{lemma}
     \label{l:positivePatternCharact}
     \lean{positivePatternCharact}
-    \uses{def:pattern_n}
+    \uses{def:pattern_n,def:positivePattern}
     The map which associates to a positive $\mathbb{Q}$-valued pattern $f$ of height $n$ the $n$-tuple 
     \[
        R_n(f) :=  (f(1,0), f (2,0), \ldots, f(n,0)),
@@ -177,7 +177,7 @@ We now turn to arithmetic frieze patterns. We begin with a preliminary definitio
 
 We now introduce an auxiliary object called an {\it $n$-diagonal}. 
 \begin{definition}
-    \label{def:n-diag}
+    \label{def:nDiag}
     Let $n$ be a positive integer. By an $n$-diagonal, we mean any $n$-tuple $(a_1,\ldots, a_n)$ of positive integers 
     such that $a_1 = a_n$ and 
     \[
@@ -190,7 +190,7 @@ We now introduce an auxiliary object called an {\it $n$-diagonal}.
 
 \begin{proposition}
     \label{prop:testCriteria}
-    \uses{def:arith_fp}
+    \uses{def:arith_fp,def:nDiag,l:positivePatternCharact}
     \lean{testCriteria1,testCriteria2}
     Let $n$ be a fixed positive integer. The map $R_n$ introduced in Lemma \ref{l:positivePatternCharact} restricts 
     to a set-theoretic bijection, which we denote $FR_n$, from ${\rm Frieze}(n)$ to ${\rm Diag}(n)$. 
