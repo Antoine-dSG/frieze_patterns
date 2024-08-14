@@ -9,8 +9,8 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
   topBordZeros : ∀ m, f (0,m) = 0
   topBordOnes : ∀ m, f (1,m) =1
   botBordOnes_n : ∀ m, f (n, m) = 1
-  botBordZeros_n : ∀ m, f (n+1,m) = 0
-  diamond : ∀ m, ∀ i, f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
+  botBordZeros_n : ∀ m, ∀ i, i ≥ n+1 → (f (i,m) = 0)
+  diamond : ∀ m,, ∀ i, 0 ≤ i → i ≤ n → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
@@ -53,7 +53,18 @@ def isFiniteSet (g : ℕ×ℕ → F) : Prop :=
 
 lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : isFiniteSet f := by sorry
 
-lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] [nzPattern_n F g n] (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by sorry
+lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] [nzPattern_n F g n] (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
+  funext ⟨i, m⟩
+
+  induction m with
+  | zero =>
+    by_cases ileqn : i ≤ n
+    exact h i ileqn
+    have key : i ≥ n+1 := by linarith
+    have f(i,0)=0 := by pattern_n.botBordZeros_n
+
+  | succ k ih =>
+
 
 
 
@@ -62,7 +73,10 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nz
 class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
   positive: ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) >0
 
+def PosPat(n) : Set (ℕ × ℕ → ℚ) := {f : ℕ × ℕ → ℚ | ∃ e : positivePattern_n f}
 -- Need to add a definition of PosPat(n), the set of positive patterns
+
+
 
 lemma positivePatternCharact : 2-1=1 := by sorry
 
