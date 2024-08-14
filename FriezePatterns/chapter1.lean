@@ -60,7 +60,7 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nz
 ------------- SECTION 2 ------------
 ---- Arithmetic frieze patterns ----
 class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
-  positive: ∀ i, ∀ m, i ≤ n+1 → f (i,m) >0
+  positive: ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) >0
 
 -- Need to add a definition of PosPat(n), the set of positive patterns
 

@@ -149,7 +149,8 @@ We now turn to arithmetic frieze patterns. We begin with a preliminary definitio
     \label{def:positivePattern}
     \lean{positivePattern_n}
     \uses{def:pattern_n}
-    A $\mathbb{Q}$-valued pattern of height $n$ is said to be positive if it takes values in $\mathbb{Q}_{>0}$.
+    A $\mathbb{Q}$-valued pattern of height $n$ is said to be positive if, for all $m \in \mathbb{Z}$ and all $i \in \{1,\ldots, n\}$, we have
+    $f (i,m) \in \mathbb{Q}_{>0}$. 
 \end{definition}
 
 
