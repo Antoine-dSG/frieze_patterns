@@ -10,7 +10,7 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
   topBordOnes : ∀ m, f (1,m) =1
   botBordOnes_n : ∀ m, f (n, m) = 1
   botBordZeros_n : ∀ m, ∀ i, i ≥ n+1 → (f (i,m) = 0)
-  diamond : ∀ m, ∀ i, 0 ≤ i → i ≤ n → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
+  diamond : ∀ m, ∀ i, i ≤ n → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
@@ -53,17 +53,26 @@ def isFiniteSet (g : ℕ×ℕ → F) : Prop :=
 
 lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : isFiniteSet f := by sorry
 
-lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] [nzPattern_n F g n] (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
+lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
   funext ⟨i, m⟩
 
   induction m with
   | zero =>
     by_cases ileqn : i ≤ n
     exact h i ileqn
-    have key : i ≥ n+1 := by linarith
-    have f(i,0)=0 := by pattern_n.botBordZeros_n
+    have this := hf.botBordZeros_n 0 i (by linarith)
+
+    --have that : g (i,0)=0 := by exact pattern_n.botBordZeros_n 0 i
+    have that := hg.botBordZeros_n 0 i (by linarith)
+    rw[this,that]
 
   | succ k ih =>
+  have h₂ : f (i+2,k) ≠ 0 := by sorry --exact nzPattern_n.non_zero (i+2) (k)
+
+  calc f(i,k+1) = f(i,k+1) * f(i+2,k) * (f(i+2,k))⁻¹ := by[mul_inv_cancel_right₀ h₂ (f (k + 1 + 2, m))]
+
+  rw[hf.diamond i (k+1)]
+
 
 
 
