@@ -1,12 +1,29 @@
 \chapter{Sequence of maxima of frieze patterns}
 In \S \ref{s:fp}, we introduced the notion of an (arithmetic) frieze pattern of height $n$, where $n$ is a positive integer.
 
-In particular, we showed that 
+In particular, we showed that each (arithmetic) frieze pattern of height $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
 
-1) Each (arithmetic) frieze pattern of height $n$ takes on finitely many values (Corollary \ref{cor:imageFinite}). 
+We now show that there are finitely many arithmetic frieze patterns of height $n$. 
+\begin{lemma}
+    \label{l:friezeNonEmpty}
+    \lean{friezeNonEmpty}
+    \uses{l:nDiagNonEmpty, prop:testCriteria}
+    Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
+\end{lemma}
+\begin{proof}
+    The proof of Lemma \ref{l:nDiagNonEmpty} showed that $(1,1,\ldots, 1)$ is an $n$-diagonal. 
+    By Proposition \ref{prop:testCriteria}, $(FR_n)^{-1}(1,1,\ldots, 1)$ is an arithmetic frieze pattern of 
+    height $n$.
+\end{proof}
+\begin{proposition}
+    \uses{prop:testCriteria}
+    \label{prop:friezeFinite}
+    \lean{friezeFinite}
+    Fix a positive integer $n$. The set Frieze$(n)$ is finite. 
+\end{proposition}
+\begin{proof}
 
-2) For each $n$ there are finitely many arithmetic frieze patterns of height $n$ (Lemma \ref{l:friezeNonEmpty} and 
-Proposition \ref{prop:friezeFinite}).
+\end{proof}
 
 This leads to the following two definitions.
 \begin{definition}
@@ -28,13 +45,7 @@ For each $n \in \mathbb{N}^*$ and each $f \in {\rm Frieze}(n)$, there is a well-
     \]
 \end{definition}
 
-\begin{definition}
-    \label{def:fib}
-    The Fibonacci sequence $(F_n)_{n \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
-    \[
-        F_n = F_{n-1} + F_{n-2}.
-    \]
-\end{definition}
+
 
 
 We are now able to formulate and prove the main theorem of this section.
@@ -77,27 +88,42 @@ We break down the proof into two lemmas.
     satisfies the conditions of \eqref{eq:divis}. 
 \end{proof}
 
-We now turn to the reverse equality.
+
+
+
+% We might need this in the future
+\iffalse
 \begin{proposition}
-    \label{l:unUB}
-    \lean{unUB}
-    \uses{def:un,l:testCriteria, def:fib}
-    For all $n \geq 1$, we have 
-    \[
-        u_n \leq F_{n}.
-    \]
+    \label{prop:testCriteria}
+    \uses{def:arith_fp,def:nDiag,l:positivePatternCharact}
+    \lean{bijFriezeToDiag}
+    Let $n$ be a fixed positive integer. The map $R_n$ introduced in Lemma \ref{l:positivePatternCharact} restricts 
+    to a set-theoretic bijection, which we denote $FR_n$, from ${\rm Frieze}(n)$ to ${\rm Diag}(n)$. 
 \end{proposition}
 \begin{proof}
-    We need to show that
+    By definition, the image of $FR_n$ lies in $(\mathbb{Z}_{>0})^n$. By Lemma \ref{l:pattern_nContinuant}, we have 
     \[
-        P_n : u_n \leq F_{n}
+        f (i+1,0) f (2,i) = f (i,0) + f (i+2, 0), \qquad \forall i \in \{0,\ldots, n-1\}.
     \]
-    holds for all $n \in \mathbb{N}^*$. Clearly, it suffices to show that $P_1$, $P_2$ hold and that $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$
-    holds. 
-    
-    $P_1$: It is immediate that $u_1 = 1 = F_1$. 
+    Since $f$ is arithmetic, $f (2,i) \in \mathbb{Z}$, and therefore the image of $FR_n$ does indeed lie in Diag$(n)$. 
+    By Lemma \ref{l:positivePatternCharact} $FR_n$ is injective. It 
+    remains to show that $FR_n$ is surjective. Consider $(a_1, \ldots, a_n) \in {\rm Diag}(n)$, and set $f = (R_n)^{-1}(a_1, \ldots, a_n)$ 
+    (c.f Lemma \ref{l:positivePatternCharact}). By the definition of $R_n$, $f$ is positive and $\mathbb{Q}$-valued; 
+    it remains to show that $f$ is integer-valued. We begin by showing that $f (2,m) \in \mathbb{Z}$ for all $m \in \mathbb{Z}$. 
+    By definition, for each 
+    $i \in \{0,\ldots, n-2\}$, there exists $c_i \in \mathbb{Z}$ such that
+    \[
+        f(i+1,0) * c_i = f (i+2,0) + f (i,0).    
+    \]
+    Using the first equation in Lemma \ref{l:pattern_nContinuant}, we deduce that $c_i = f(2,i)$ for $i =0, \ldots, n-2$. 
+    Moreover, $ f (2,n-1) = f (n-1,0) \in \mathbb{Z}$ by assumption. Thus we have proved that 
+    $f (2,m) \in \mathbb{Z}$ for $m = 0, \ldots, n-1$. To see that $f (2,n) \in \mathbb{Z}$, note from 
+    Lemma \ref{l:pattern_nContinuant} that $f (2,n) = f (n-1,1)$ can be expressed as a {\it polynomial} with 
+    integer coefficients in the variables $f (2,1), f (2,2),\ldots , f (2,n-2)$. The claim for all $m$ then follows from 
+    Proposition \ref{prop:trsltInv}. 
 
-    $P_2$: It is immediate that $u_2 = 1 = F_2$.  
-
-    $P_n \wedge P_{n+1} \Rightarrow P_{n+2}$: To be added...
+    To see how this implies that $f (i,m) \in \mathbb{Z}$ for all $i \in \{2, \ldots, n\}$, it suffices to 
+    see, again from Lemma \ref{l:pattern_nContinuant}, that every $f (i,m)$ can be expressed as a {\it polynomial} with 
+    integer coefficients in the variables $f (2,m), f (2,m+1),\ldots , f (2,m+i-2)$.
 \end{proof}
+\fi 
