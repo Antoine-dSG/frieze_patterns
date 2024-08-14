@@ -32,6 +32,7 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
   rw [ih]
   linarith
  have h₂ : f (k + 1, m+1) ≠ 0 := by exact nzPattern_n.non_zero (k + 1) (m + 1) h
+
  calc f (k + 1 + 2, m) = f (k + 1 + 2, m) * f (k + 1, m+1) * (f (k + 1, m+1))⁻¹ := by rw [mul_inv_cancel_right₀ h₂ (f (k + 1 + 2, m))]
   _= (f (k+2,m)*f (k+2,m+1) - 1) * (f (k + 1, m+1))⁻¹ := by rw [pattern_n.diamond n m (k+1)]
   _= (f (k+2,m)*(f (1, m +1 + k + 1) * f (k + 1, m+1) - f (k, m+1)) - 1) * (f (k + 1, m+1))⁻¹ := by rw [h₁]
@@ -41,7 +42,39 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
   _= f (1, m +1 + k + 1)*f (k+2,m) - f (k+1,m) := by rw [mul_inv_cancel_right₀ h₂ (f (1, m +1 + k + 1)*f (k+2,m)), mul_inv_cancel_right₀ h₂ (f (k+1,m))]
   _= f (1, m + (k + 1) + 1) * f (k + 1 + 1, m) - f (k + 1, m) := by ring_nf
 
-lemma pattern_nContinuant2 : 1=1 := by sorry
+lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (n-i,m) = f (n,m)*f (n-i+1,m-1) - f (n-i+2,m-2) := by
+ intro i
+ induction i with
+ | zero =>
+ intro _ m
+ simp
+ have hₙ : f (n+1,m-1) = 1 ∧ f (n+2,m-2) = 0 := by exact ⟨pattern_n.botBordOnes_n (m-1), nzPattern_n.botBordZeroes (m -2)⟩
+ rw[hₙ.2,hₙ.1,sub_zero,mul_one]
+ | succ k ih =>
+ intro h m
+ have a₁ : m = m - 1 + 1 := by sorry
+ have a₂ : n - k + 1 = n - (k+1) + 2 := by sorry
+ --Have a bunch of issues here due to this being defined on ℕ instead of ℤ, ask Antoine if there's a fix
+ have a₃ : n-k+1 ≤ n+1 := by sorry
+ have a₄ : n-k = n - (k+1)+1 := by sorry
+ have a₅ : k ≤ n+1 := by sorry --have k≤k+1≤ n+1, how to transitive this
+ have a₆ : m-2+1 = m-1 := by sorry
+
+
+ have h₂ : f (n - k + 1, m - 1) ≠ 0 := by exact nzPattern_n.non_zero (n-k+1) (m - 1) a₃
+
+ calc f (n - (k + 1), m) = f (n - (k + 1), m) * f (n - k + 1, m - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw [mul_inv_cancel_right₀ h₂ (f (n - (k + 1), m))]
+  _= f (n - k + 1, m - 1) * f (n - (k + 1), m) * (f (n - k + 1, m - 1))⁻¹ := by rw[mul_comm (f (n - k + 1, m - 1))]
+  _= f (n - (k + 1) + 2 , m - 1) * f (n - (k + 1), m-1+1) * (f (n - k + 1, m - 1))⁻¹ := by rw[a₂,← a₁]
+  _= (f (n - (k+1)+1,m-1) * f (n - (k+1)+1, m-1+1) - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw[pattern_n.diamond n (m-1) (n-(k+1))]
+  _= (f (n - k,m-1) * f (n - k, m) - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw[← a₁, ← a₄]
+  _= (f (n - k,m-1) * (f (n, m) * f (n - k + 1, m - 1) - f (n - k + 2, m - 2)) - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw[← ih a₅]
+  _= (f (n, m)*f (n - k,m-1)*f (n - k + 1, m - 1) - f (n - k + 2, m - 2)*f (n - k,m-1) - 1) * (f (n - k + 1, m - 1))⁻¹ := by ring
+  _= (f (n, m)*f (n - k,m-1)*f (n - k + 1, m - 1) - f (n - k + 2, m - 2)*f (n - k,(m-2)+1) - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw[a₆]
+  _= (f (n, m)*f (n - k,m-1)*f (n - k + 1, m - 1) - (f (n-k+1,m-2) * f (n-k+1,m-1)-1) - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw[← a₆,pattern_n.diamond n (m-2) (n-k)]
+  _= f (n, m)*f (n - k,m-1)*f (n - k + 1, m - 1)* (f (n - k + 1, m - 1))⁻¹  - f (n-k+1,m-2) * f (n-k+1,m-1)* (f (n - k + 1, m - 1))⁻¹  := by ring
+  _= f (n, m)*f (n - k,m-1) - f (n-k+1,m-2) := by rw [mul_inv_cancel_right₀ h₂ (f (n, m)*f (n - k,m-1)), mul_inv_cancel_right₀ h₂ (f (n-k+1,m-2))]
+
 
 theorem trsltInv : 1+1=2 := by sorry
 
