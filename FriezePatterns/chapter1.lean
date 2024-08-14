@@ -45,7 +45,51 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 
 lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i,m) = f (n-1,m)*f (i+1,m-1) - f (i+2,m-2) := by sorry
 
-theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by sorry
+theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by
+  suffices glideSymm : ∀ i, i ≤ n+1 → ∀ m, f (n+1-i, m+i) = f (i,m)
+  -- it suffices to prove glide symmetry
+  · intros i ileq m
+    have key := glideSymm i ileq m
+    have key2 := glideSymm (n+1-i) (Nat.sub_le (n+1) i) (m+i)
+    simp [Nat.sub_sub_eq_min, ileq, add_assoc] at key2
+    rw [←key, ←key2, add_assoc]
+
+  -- proof of glide symmetry
+  · intros i ileq m
+    induction' i using Nat.strong_induction_on with i ih -- strong induction on i
+    match i with
+    | 0 =>
+      simp
+      rw [@pattern_n.botBordZeros_n F _ f n _ (n+1) m (by linarith), @pattern_n.topBordZeros F _ f n _ m]
+    | 1 =>
+      simp at *
+      rw [@pattern_n.botBordOnes_n F _ f n _ (m+1), @pattern_n.topBordOnes F _ f n _ m]
+    | i+2 =>
+      simp at *
+      rw [Nat.sub_add_eq, ← add_assoc m i 2]
+      have h₁ : i ≤ n-1 := by
+        match n with
+        | 0 => linarith
+        | n+1 => linarith [Nat.add_sub_cancel n 1]
+      have h₂ : f (2,m+i) = f (n-1,m+i+2) := by sorry -- P₂
+      have h₃ : f (i+1,m) = f (n-i,m+i+1) := by
+        have := ih (i+1) (by linarith) (by linarith)
+        simp at this
+        rw [← this, add_assoc]
+      have h₄ : f (i,m) = f (n+1-i,m+i) := by
+        have := ih i (by linarith) (by linarith)
+        simp at this
+        rw [← this]
+      have h₅ : f (n-i-1,m+i+2) = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by
+        have key := pattern_nContinuant2 F f n (n-i-1) (by rw [Nat.sub_sub, add_comm i 1, ← Nat.sub_sub]; exact Nat.sub_le (n-1) i) (m+i+2)
+        rw [key]
+        rw [Nat.sub_sub n i 1, ← Nat.sub_add_comm ileq, ← Nat.sub_add_comm ileq]
+        simp
+      symm
+      calc
+        f (i+2,m) = f (2,m+i) * f (i+1,m) - f (i,m) := by rw [pattern_nContinuant1 F f n i h₁ m]
+                _ = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by rw [h₂, h₃, h₄]
+                _ = f (n-i-1,m+i+2) := by rw [h₅]
 
 lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : (Set.range f).Finite := by sorry
 
