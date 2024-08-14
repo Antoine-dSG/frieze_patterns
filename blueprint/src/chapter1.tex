@@ -9,6 +9,7 @@ Throughout this section, we fix an arbitrary field $F$.
 \begin{definition}
     \label{def:pattern_n}
     \lean{pattern_n}
+    \leanok
         Fix $n \in \mathbb{N}^*$. A map $f : \{0,1,\ldots , n,n+1\} \times \mathbb{Z} \longrightarrow F$ is called
         an \textit{$F$-valued pattern of height n} if, 
         
@@ -155,7 +156,7 @@ We now turn to arithmetic frieze patterns. We begin with a preliminary definitio
 \begin{lemma}
     \label{l:positivePatternCharact}
     \lean{positivePatternCharact}
-    \uses{def:pattern_n,def:positivePattern}
+    \uses{def:pattern_n,def:positivePattern, l:testEqualPattern}
     The map which associates to a positive $\mathbb{Q}$-valued pattern $f$ of height $n$ the $n$-tuple 
     \[
        R_n(f) :=  (f (2,0), \ldots, f(n-1,0)),
