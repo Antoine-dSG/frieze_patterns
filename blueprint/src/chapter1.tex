@@ -92,7 +92,7 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
     \]
     The proposition will then follow by observing that $\rho_n^2 : (i,m) \mapsto (i,m+n+1)$. Thus, consider the statement
     \[
-        P_i: \forall m \in \mathbb{Z}, f (i,m) = f (n+1-i,m+i+1),
+        P_i: \forall m \in \mathbb{Z}, f (i,m) = f (n+1-i,m+i),
     \]
     where $i \in \{0, \ldots, n+1\}$. To prove that $P_i$ holds for all $i$, it is sufficient to prove that $P_0, P_1$ hold, 
     and that $P_i \wedge P_{i+1} \Rightarrow P_{i+2}$. 
@@ -160,7 +160,7 @@ We now turn to arithmetic frieze patterns. We begin with a preliminary definitio
     \uses{def:pattern_n,def:positivePattern, l:testEqualPattern}
     The map which associates to a positive $\mathbb{Q}$-valued pattern $f$ of height $n$ the $n$-tuple 
     \[
-       R_n(f) :=  (f (2,0), \ldots, f(n-1,0)),
+       R_n(f) :=  (1,f (2,0), \ldots, f(n-1,0),1),
     \]
     is a set-theoretic bijection from the set of positive $\mathbb{Q}$-valued patterns of height $n$ to 
     $(\mathbb{Q}_{>0})^{n-2}$. 
@@ -174,7 +174,7 @@ We now turn to arithmetic frieze patterns. We begin with a preliminary definitio
     \uses{def:pattern_n} 
     \lean{arith_fp}
         A $\mathbb{Q}$-valued pattern of height $n$ is said to be an \textit{arithmetic frieze pattern} (of height $n$) if it takes values in $\mathbb{Z}_{>0}$. 
-        We denote by Frieze$(n)$ the set of arithmetic frieze patterns of width $n$. 
+        We denote by Frieze$(n)$ the set of arithmetic frieze patterns of height $n$. 
 \end{definition}
 
 We now introduce an auxiliary object called an {\it $n$-diagonal}. 
@@ -233,7 +233,7 @@ Via Diag$(n)$ and the map $FR_n$, one can easily show that the set Frieze$(n)$ i
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{lemma}
 \begin{proof}
-    Consider the $n$-tuple $(1,1,\ldots, 1)$ consisting entirely of $1$. It is straightforward to see that this is an 
+    Consider the $n$-tuple $(1,1,\ldots, 1)$ consisting entirely of $1$s. It is straightforward to see that this is an 
     $n$-diagonal. By Proposition \ref{prop:testCriteria}, $(FR_n)^{-1}(1,1,\ldots, 1)$ is an arithmetic frieze pattern of 
     height $n$.
 \end{proof}
