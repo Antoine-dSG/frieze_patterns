@@ -9,13 +9,8 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
   topBordZeros : ∀ m, f (0,m) = 0
   topBordOnes : ∀ m, f (1,m) =1
   botBordOnes_n : ∀ m, f (n, m) = 1
-<<<<<<< Updated upstream
   botBordZeros_n : ∀ i, ∀ m,  i ≥ n+1 → (f (i,m) = 0)
   diamond : ∀ i, ∀ m,  i ≤ n-1 → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
-=======
-  botBordZeros_n : ∀ m, ∀ i, i ≥ n+1 → (f (i,m) = 0)
-  diamond : ∀ m, ∀ i, i ≤ n-1 → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
->>>>>>> Stashed changes
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
