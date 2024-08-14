@@ -10,7 +10,7 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
   topBordOnes : ∀ m, f (1,m) =1
   botBordOnes_n : ∀ m, f (n, m) = 1
   botBordZeros_n : ∀ m, ∀ i, i ≥ n+1 → (f (i,m) = 0)
-  diamond : ∀ m,, ∀ i, 0 ≤ i → i ≤ n → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
+  diamond : ∀ m, ∀ i, 0 ≤ i → i ≤ n → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
