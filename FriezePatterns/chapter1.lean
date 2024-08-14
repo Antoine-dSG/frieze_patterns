@@ -9,8 +9,8 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
   topBordZeros : ∀ m, f (0,m) = 0
   topBordOnes : ∀ m, f (1,m) =1
   botBordOnes_n : ∀ m, f (n, m) = 1
-  botBordZeros_n : ∀ m, ∀ i, i ≥ n+1 → (f (i,m) = 0)
-  diamond : ∀ m, ∀ i, i ≤ n → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
+  botBordZeros_n : ∀ i, ∀ m,  i ≥ n+1 → (f (i,m) = 0)
+  diamond : ∀ i, ∀ m,  i ≤ n-1 → f (i+1,m) * f (i+1,m+1)-1 = f (i+2,m)*f (i,m+1)
 
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
@@ -60,18 +60,41 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf
   | zero =>
     by_cases ileqn : i ≤ n
     exact h i ileqn
-    have this := hf.botBordZeros_n 0 i (by linarith)
+    have this := hf.botBordZeros_n i 0 (by linarith)
 
     --have that : g (i,0)=0 := by exact pattern_n.botBordZeros_n 0 i
-    have that := hg.botBordZeros_n 0 i (by linarith)
+    have that := hg.botBordZeros_n i 0 (by linarith)
     rw[this,that]
 
   | succ k ih =>
-  have h₂ : f (i+2,k) ≠ 0 := by sorry --exact nzPattern_n.non_zero (i+2) (k)
+  -- assume f (i, k) = g (i, k), want to prove f (i, k + 1) = g (i, k + 1) for all i
 
-  calc f(i,k+1) = f(i,k+1) * f(i+2,k) * (f(i+2,k))⁻¹ := by[mul_inv_cancel_right₀ h₂ (f (k + 1 + 2, m))]
+  induction i with
+    | zero =>
+    have this := hf.topBordZeros (k+1)
+    have that := hg.topBordZeros (k+1)
+    rw[this,that]
+    --proved f (0, k + 1) = g (0, k + 1)
 
-  rw[hf.diamond i (k+1)]
+    | succ i' ih' =>
+    --assume f (i', k + 1) = g (i', k + 1), want to prove f (i', k + 1) = g (i', k + 1)
+
+    by_cases i_plus_one_leq_n : i' + 1 ≤ n
+    by_cases one_leq_i_plus_1 : 1 ≤ i' + 1
+
+    have i_leq_n_sub_one : i' ≤ n-1 := by sorry
+    have this : f (i', k+1) =  g (i', k+1) := by apply ih' at ih
+
+    have nz : f (i' + 1, k) ≠ 0 := by apply hf.non_zero (i'+1) k one_leq_i_plus_1 i_plus_one_leq_n
+    calc f (i' + 1, k + 1) = f (i' + 1, k + 1) * f (i' + 1, k) * (f (i' + 1, k))⁻¹ := by rw[mul_inv_cancel_right₀ nz (f (i' + 1, k + 1))]
+    _= ( f (i' + 1, k) * f (i' + 1, k + 1) - 1 + 1) * (f (i' + 1, k))⁻¹ := by ring
+    _= ( f (i'+2,k)*f (i',k+1) + 1) * (f (i' + 1, k))⁻¹ := by rw[hf.diamond i' k i_leq_n_sub_one]
+    _= ( f (i' + 2, k)*f (i',k+1) + 1) * (g (i' + 1, k))⁻¹ := by rw[ih]
+    _= ( f (i' + 2, k)*g (i',k+1) + 1) * (g (i' + 1, k))⁻¹ := by rw[ih']
+
+  --calc f(i,k+1) = f(i,k+1) * f(i+2,k) * (f(i+2,k))⁻¹ := by[mul_inv_cancel_right₀ h₂ (f (k + 1 + 2, m))]
+
+  --rw[hf.diamond i (k+1)]
 
 
 
