@@ -1,9 +1,6 @@
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
 
-
--- NEED TO CHANGE DEFINITIONS FROM WIDTH TO HEIGHT: WIDTH n <=> HEIGHT n+2
------------ SECTION 1 ---------
 ---- Field-valued patterns ----
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
   topBordZeros : ∀ m, f (0,m) = 0
@@ -117,10 +114,6 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
                 _ = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by rw [h₂, h₃, h₄]
                 _ = f (n-i-1,m+i+2) := by rw [h₅]
 
--- This is surely in mathlib, in some form
-def isFiniteSet (g : ℕ×ℕ → F) : Prop :=
-  ∃ (s : Finset F), ∀ i, ∀m, g (i,m) ∈ s
--- the definition above is no longer needed, we can use Mathlib.Data.Set.Finite
 
 lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : Finite (Set.range f) := by
 -- We use i ≤ n instead of 1 ≤ i ≤ n to simplify the induction. Lean also automatically infers that {i : ℕ | i ≤ n} is finite.
