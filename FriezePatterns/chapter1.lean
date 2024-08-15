@@ -12,6 +12,8 @@ class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop wh
 class nzPattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) extends pattern_n F f n where
   non_zero : ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) ≠ 0
 
+
+
 lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i+2,m) = f (2,m+i)*f (i+1,m) - f (i,m) := by
   intro i
   induction i with
@@ -24,7 +26,8 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
   simp
   | succ k ih =>
   intro h m
-  have h₂ : f (k + 1, m + 1) ≠ 0 := by sorry /- exact nzPattern_n.non_zero (k+1) (m+1) h -/
+  have hh : 1 ≤  k+1 := by exact Nat.le_add_left 1 k
+  have h₂ : f (k + 1, m + 1) ≠ 0 := by sorry
   have h₃ : f (k + 3, m) * f (k + 1, m + 1) = (f (k + 2, m) * f (2, m + k + 1) - f (k + 1, m)) * f (k + 1, m + 1) :=
     calc f (k + 3, m) * f (k + 1, m + 1) = f (k + (2+1), m) * f (k + 1, m + 1) := by rw [two_add_one_eq_three]
       _= f ((k + 1) + 2, m) * f (k + 1, m + 1) := by rw [Nat.add_comm 1 2, ← Nat.add_assoc]
