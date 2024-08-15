@@ -33,6 +33,8 @@ We prove a couple of key properties about $n$-diagonals.
 The following $n$-diagonals will play an important role for us.
 \begin{lemma}
     \label{l:FibDiag}
+    \lean{FibDiag}
+    \uses{def:nDiag}
     1) If $n$ is odd, the $n$-tuple 
     \[
         (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
@@ -52,6 +54,7 @@ The following $n$-diagonals will play an important role for us.
 \begin{lemma}
     \uses{def:nDiag}
     \label{lem:nDiagReduction}
+    \lean{nDiagReduction}
     In an $n$-diagonal $(a_1, \ldots, a_n)$, there exists an index $i \in \{2,\ldots, n-1\}$ 
     such that $a_i = a_{i-1} + a_{i+1}$.
 \end{lemma}
@@ -60,9 +63,9 @@ The following $n$-diagonals will play an important role for us.
 \end{proof}
 
 \begin{proposition}
-    \uses{def:nDiag}
-    \label{prop:nDiagFinite}
-    \lean{nDiagFinite}
+    \uses{def:nDiag,lem:nDiagReduction}
+    \label{prop:nDiagBounded}
+    \lean{nDiagBounded}
     Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Diag}(n)$. 
     For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
 \end{proposition}
