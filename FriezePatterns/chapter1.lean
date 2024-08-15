@@ -118,7 +118,7 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf
 
 
 lemma testEqualPattern1 (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
-  have diamond_right_eq (i' k : ℕ)(eq_top : f (i', k+1) = g (i', k+1))(eq_bot : f (i' + 2, k) = g (i' + 2, k))( eq_left : f (i' + 1, k) = g (i' + 1, k)) : f (i' + 1, k + 1)= g (i' + 1, k + 1) := by
+  have diamond_right_eq (i' k : ℕ)( eq_left : f (i' + 1, k) = g (i' + 1, k)) (eq_top : f (i', k+1) = g (i', k+1))(eq_bot : f (i' + 2, k) = g (i' + 2, k)) : f (i' + 1, k + 1)= g (i' + 1, k + 1) := by
     have one_leq_i_plus_1 : 1 ≤ i' + 1 :=
       calc 1 ≤ 0 + 1 := by simp
             _≤ i'+ 1 := Nat.succ_le_succ (Nat.zero_le i')
@@ -147,9 +147,14 @@ lemma testEqualPattern1 (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (h
     _= g (i' + 1, k + 1) := by rw[mul_inv_cancel_right₀ nzg (g (i' + 1, k + 1))]
 
     --Have proved that eq_top, eq_left, eq_bot gives equality at the right of the diamond
+    -- Aim to inductively prove these eq_top, eq_left, eq_bot
 
 
   funext ⟨i, m⟩
+
+  def P t := f (t/n, t%n)
+
+
   induction m with
   | zero =>
     by_cases ileqn : i ≤ n
@@ -160,6 +165,17 @@ lemma testEqualPattern1 (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (h
     rw[this,that]
 
   | succ k ih =>
+    induction i with
+    | zero =>
+    rw[hf.topBordZeros (k+1), hg.topBordZeros (k+1)]
+
+    | succ i' ih' =>
+    apply diamond_right_eq
+    exact ih
+    exact ih'
+
+
+
 
 
 
