@@ -96,7 +96,72 @@ intro i
 
 lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i,m) = f (n-1,m)*f (i+1,m-1) - f (i+2,m-2) := by sorry
 
-theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by sorry
+
+theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by
+  -- it suffices to prove glide symmetry
+  suffices glideSymm : ∀ i, i ≤ n+1 → ∀ m, f (n+1-i, m+i) = f (i,m)
+  · intros i ileq m
+    have key := glideSymm i ileq m
+    have key2 := glideSymm (n+1-i) (Nat.sub_le (n+1) i) (m+i)
+    simp [Nat.sub_sub_eq_min, ileq, add_assoc] at key2
+    rw [←key, ←key2, add_assoc]
+
+  -- proof of glide symmetry
+  · intros i ileq
+    induction' i using Nat.strong_induction_on with i ih -- strong induction on i
+    match i with
+    | 0 => -- P₀
+      simp
+      intro m
+      rw [@pattern_n.botBordZeros_n F _ f n _ (n+1) m (by linarith), @pattern_n.topBordZeros F _ f n _ m]
+    | 1 => -- P₁
+      simp at *
+      intro m
+      rw [@pattern_n.botBordOnes_n F _ f n _ (m+1), @pattern_n.topBordOnes F _ f n _ m]
+    | i+2 =>
+      simp at *
+      intro m
+      rw [Nat.sub_add_eq, ← add_assoc m i 2]
+      have h₁ : i ≤ n-1 := by
+        match n with
+        | 0 => linarith
+        | n+1 => linarith [Nat.add_sub_cancel n 1]
+      have h₂ : f (2,m+i) = f (n-1,m+i+2) := by -- we first prove P₂
+        have key := pattern_nContinuant2 F f n 0 (by linarith) (m+i+2)
+        simp at key
+        rw [@pattern_n.topBordZeros F _ f n _ (m+i+2), @pattern_n.topBordOnes F _ f n _ (m+i+1)] at key
+        simp at key
+        exact (sub_eq_zero.mp key.symm).symm
+      have h₃ : f (i+1,m) = f (n-i,m+i+1) := by
+        have := ih (i+1) (by linarith) (by linarith)
+        simp at this
+        rw [← this, add_assoc]
+      have h₄ : f (i,m) = f (n+1-i,m+i) := by
+        have := ih i (by linarith) (by linarith)
+        simp at this
+        rw [← this]
+      have h₅ : f (n-i-1,m+i+2) = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by
+        have key := pattern_nContinuant2 F f n (n-i-1) (by rw [Nat.sub_sub, add_comm i 1, ← Nat.sub_sub]; exact Nat.sub_le (n-1) i) (m+i+2)
+        rw [key, Nat.sub_sub n i 1, ← Nat.sub_add_comm ileq, ← Nat.sub_add_comm ileq]
+        simp
+      symm
+      calc
+        f (i+2,m) = f (2,m+i) * f (i+1,m) - f (i,m) := by rw [pattern_nContinuant1 F f n i h₁ m]
+                _ = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by rw [h₂, h₃, h₄]
+                _ = f (n-i-1,m+i+2) := by rw [h₅]
+
+lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : (Set.range f).Finite := by sorry
+
+lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := sorry
+/- Antoine: I have put the proof in comments for the moment to avoids bugs during compilation on GitHub pages
+  funext ⟨i, m⟩
+
+  induction m with
+  | zero =>
+    by_cases ileqn : i ≤ n
+    exact h i ileqn
+    have this := hf.botBordZeros_n i 0 (by linarith)
+
 
 -- This is surely in mathlib, in some form
 def isFiniteSet (g : ℕ×ℕ → F) : Prop :=
@@ -108,10 +173,12 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nz
 
 
 
+
 ------------- SECTION 2 ------------
 ---- Arithmetic frieze patterns ----
 class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
   positive: ∀ i, ∀ m, i ≤ n+1 → f (i,m) >0
+
 
 -- Need to add a definition of PosPat(n), the set of positive patterns
 
