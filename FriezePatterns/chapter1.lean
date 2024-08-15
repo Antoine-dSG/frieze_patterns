@@ -62,7 +62,7 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i,m+2) = f (n-1,m+2)*f (i+1,m+1) - f (i+2,m) := by
 
 
-suffices pattern_nContinuant2flipped : ∀ i, i ≤ n+1 → ∀m, f (n-i-1,m+2) = f (n-1,m+2)*f (n-i,m+1) - f (n-i+1,m)
+suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) = f (n-1,m+2)*f (n-i,m+1) - f (n-i+1,m)
 ·sorry
 
 ·intro i h
@@ -74,10 +74,17 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n+1 → ∀m, f (n-i-1,m+2) 
  rw[hₙ.2,hₙ.1,sub_zero,mul_one]
  | succ k ih =>
  intro m
+
+ have b₁ : k < n-1 := by linarith
+ have a₀ : 0 < (n - 1) - k := Nat.zero_lt_sub_of_lt b₁
+ have a₀' : 0 ≤ (n - 1) - (k + 1) := by linarith
+
  have a₁ : n - (k + 1) - 1 + 2 = n - k := by sorry
  have a₂ : n - (k + 1) - 1 + 1 = n - k - 1 := by sorry
  have a₃ : 1 ≤ n - (k + 1) - 1 + 2 ∧ n - (k + 1) - 1 + 2 ≤ n := by sorry
- have a₅ : k ≤ n+1 := by sorry --have k≤k+1≤ n+1, apply transitivity to this
+ have a₅ : k ≤ n-1 :=
+    calc k ≤ k+1 := by linarith
+          _≤ n-1 := by linarith
  have a₇ : n - (k + 1) - 1 ≤ n-1 := by sorry
  have a₉ : n - (k + 1) - 1 + 1 + 2 = n - k + 1 := by sorry
  have a₁₀ : n - (k + 1) - 1 + 1 ≤ n-1 := by sorry
@@ -101,7 +108,7 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n+1 → ∀m, f (n-i-1,m+2) 
   _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) - 1 + 2, m) := by rw[mul_inv_cancel_right₀ h₂ (f (n - 1, m + 2) * f (n - (k + 1), m + 1)), mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1 + 2, m))]
   _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) + 1, m) := by rw[a₁₃]
 
-  -- used a₂ a₃ a₅ a₇ a₅ a₉ a₁₀ a₁₁ a₁₂ a₁₃
+
 
   --_= f (n - (k + 1) + 2 , m - 1) * f (n - (k + 1), m-1+1) * (f (n - k + 1, m - 1))⁻¹ := by rw[a₂]
   --_= (f (n - (k+1)+1,m-1) * f (n - (k+1)+1, m-1+1) - 1) * (f (n - k + 1, m - 1))⁻¹ := by rw[pattern_n.diamond n (m-1) (n-(k+1))]
