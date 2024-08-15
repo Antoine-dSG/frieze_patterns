@@ -27,6 +27,7 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
     \lean{pattern_nContinuant1,pattern_nContinuant2}
     \label{l:pattern_nContinuant}
     \uses{def:pattern_n}
+    \leanok
     Let $f$ be a nowhere-zero $F$-valued pattern of height $n$. For all $m$, we have 
     \begin{align*}
         f(i+2,m) &= f(2,m+i) f(i+1,m) - f(i,m), \qquad i \in \{0, \ldots, n-1\} \\
@@ -73,12 +74,14 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
     \label{prop:trsltInv}
     \lean{trsltInv}
     \uses{def:pattern_n, l:pattern_nContinuant}
+    \leanok
     Let $f$ be a nowhere-zero $F$-valued pattern of height $n$. Then, for all $m \in \mathbb{Z}$ and all $i \in \{0,\ldots, n+1\}$, we have
     \[
         f(i,m) = f(i,m+n+1).
     \]
 \end{proposition}
 \begin{proof}
+    \leanok
     We prove a stronger statement, called the \textit{glide symmetry} of frieze patterns. First, consider 
     the map $\rho_n: \{0,1,\ldots , n+1\} \times \mathbb{Z} \longrightarrow \{0,1,\ldots , n+1\} \times \mathbb{Z}$ given by
     \begin{equation}  

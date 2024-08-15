@@ -9,8 +9,9 @@
 
 The following proposition is a key result connecting arithmetic frieze patterns to $n$-diagonals.
 \begin{proposition}
-    \uses{def:nDiag}
+    \uses{def:nDiag,def:arith_fp}
     \label{prop:friezeToDiag}
+    \lean{friezeToDiag}
 1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
@@ -62,7 +63,7 @@ We are now able to formulate and prove the main theorem of this section.
     \]    
 \end{theorem}
 \begin{proof}
-By Propositions \ref{prop:friezeToDiag} and \ref{prop:nDiagFinite}, $u_n \leq F_n$ for all $n$. 
+By Propositions \ref{prop:friezeToDiag} and \ref{prop:nDiagBounded}, $u_n \leq F_n$ for all $n$. 
 On the other hand, Lemma \ref{l:FibDiag} and 2) of Proposition \ref{prop:friezeToDiag} show that 
 there exists an arithmetic frieze pattern of height $n$ containing $F_n$ as a value.
 \end{proof}
