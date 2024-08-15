@@ -118,7 +118,7 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf
 
 
 lemma testEqualPattern1 (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
-  have diamond_right (i' k : ℕ)(eq_top : f (i', k+1) = g (i', k+1))(eq_bot : f (i' + 2, k) = g (i' + 2, k))( eq_left : f (i' + 1, k) = g (i' + 1, k))(nzf : f (i' + 1, k) ≠ 0) (nzg : g (i' + 1, k) ≠ 0 ) : f (i' + 1, k + 1)= g (i' + 1, k + 1) := by
+  have diamond_right_eq (i' k : ℕ)(eq_top : f (i', k+1) = g (i', k+1))(eq_bot : f (i' + 2, k) = g (i' + 2, k))( eq_left : f (i' + 1, k) = g (i' + 1, k)) : f (i' + 1, k + 1)= g (i' + 1, k + 1) := by
     have one_leq_i_plus_1 : 1 ≤ i' + 1 :=
       calc 1 ≤ 0 + 1 := by simp
             _≤ i'+ 1 := Nat.succ_le_succ (Nat.zero_le i')
@@ -130,6 +130,8 @@ lemma testEqualPattern1 (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (h
     rw[this,that]
 
     have i_plus_one_leq_n : i'+ 1 ≤ n := by linarith
+    have nzf : f (i' + 1, k) ≠ 0 := by apply hf.non_zero (i'+1) k one_leq_i_plus_1 i_plus_one_leq_n
+    have nzg : g (i' + 1, k) ≠ 0 := by apply hg.non_zero (i'+1) k one_leq_i_plus_1 i_plus_one_leq_n
 
     have i_leq_n_sub_one : i' ≤ n - 1 :=
       calc i'≤ (i'+1).pred := by simp
@@ -144,11 +146,21 @@ lemma testEqualPattern1 (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (h
     _= g (i' + 1, k + 1) *  g (i' + 1, k) * (g (i' + 1, k))⁻¹ := by ring
     _= g (i' + 1, k + 1) := by rw[mul_inv_cancel_right₀ nzg (g (i' + 1, k + 1))]
 
-
-
+    --Have proved that eq_top, eq_left, eq_bot gives equality at the right of the diamond
 
 
   funext ⟨i, m⟩
+  induction m with
+  | zero =>
+    by_cases ileqn : i ≤ n
+    exact h i ileqn
+    have this := hf.botBordZeros_n i 0 (by linarith)
+    --have that : g (i,0)=0 := by exact pattern_n.botBordZeros_n 0 i
+    have that := hg.botBordZeros_n i 0 (by linarith)
+    rw[this,that]
+
+  | succ k ih =>
+
 
 
 
