@@ -1,9 +1,6 @@
 import Mathlib.Algebra.Ring.Basic
 import Mathlib.Tactic
 
-
--- NEED TO CHANGE DEFINITIONS FROM WIDTH TO HEIGHT: WIDTH n <=> HEIGHT n+2
------------ SECTION 1 ---------
 ---- Field-valued patterns ----
 class pattern_n (F : Type*) [Field F] (f : ℕ × ℕ → F) (n : ℕ) : Prop where
   topBordZeros : ∀ m, f (0,m) = 0
@@ -139,29 +136,3 @@ lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf
 
 
 -/
-
-
-------------- SECTION 2 ------------
----- Arithmetic frieze patterns ----
-class positivePattern_n (f : ℕ × ℕ → ℚ) (n : ℕ) extends nzPattern_n ℚ f n where
-  positive: ∀ i, ∀ m, 1 ≤ i → i ≤ n → f (i,m) >0
-
-
--- Need to fix: def PosPat_n : Set (ℕ × ℕ → ℚ) := {f : ℕ × ℕ → ℚ | ∃ e : positivePattern_n f}
-
-
-
-lemma positivePatternCharact : 2-1=1 := by sorry
-
-class arith_fp (f : ℕ × ℕ → ℚ) (n : ℕ) extends positivePattern_n f n where
-  integral: ∀ i, ∀ m, (f (i,m)).den == 1
-
--- Need to add definition of Frieze(n)
-
-class nDiag : Prop where
-
-lemma bijFriezeToDiag : 1+1 = 2 := by sorry
-
-lemma friezeNonEmpty : 1-1 = 0 := by sorry
-
-theorem friezeFinite : 2^2 = 4 := by sorry

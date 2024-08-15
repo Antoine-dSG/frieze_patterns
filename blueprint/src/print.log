@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  14 AUG 2024 22:21
+This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  15 AUG 2024 10:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -373,11 +373,7 @@ LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
 (C:\Software\TeX\tex/latex/unicode-math\unicode-math-table.tex)))
 (macros/common.tex
 \c@theorem=\count315
-) (macros/print.tex) (print.aux
-
-LaTeX Warning: Label `def:fib' multiply defined.
-
-)
+) (macros/print.tex) (print.aux)
 \openout1 = `print.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
@@ -678,19 +674,19 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ] (content.tex (chapter1.tex
 Chapter 1.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00107pt on input line 6.
+(Font)              scaled to size 10.00107pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00075pt on input line 6.
+(Font)              scaled to size 7.00075pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00053pt on input line 6.
+(Font)              scaled to size 5.00053pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 6.
+(Font)              scaled to size 9.99893pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 6.
+(Font)              scaled to size 6.99925pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 6.
+(Font)              scaled to size 4.99947pt on input line 5.
 
-Overfull \hbox (16.35776pt too wide) detected at line 52
+Overfull \hbox (16.35776pt too wide) detected at line 51
 []
  []
 
@@ -699,77 +695,49 @@ Overfull \hbox (16.35776pt too wide) detected at line 52
 [1
 
 ]
-Overfull \hbox (36.13258pt too wide) detected at line 69
+Overfull \hbox (36.13258pt too wide) detected at line 68
 []
  []
 
+) (chapter2.tex
 
-
-[2]) (chapter2.tex
-
-[3]
+[2]
 Chapter 2.
+) (chapter3.tex
 
-LaTeX Warning: Reference `prop:testCriteria' on page 4 undefined on input line 
-10.
+[3
 
-
-LaTeX Warning: Reference `prop:testCriteria' on page 4 undefined on input line 
-15.
-
-
-LaTeX Warning: Reference `prop:testCriteria' on page 4 undefined on input line 
-19.
-
-
-LaTeX Warning: Reference `prop:friezeFinite' on page 4 undefined on input line 
-40.
-
-
-LaTeX Warning: Reference `l:friezeNonEmpty' on page 4 undefined on input line 4
-0.
-
-
-LaTeX Warning: Reference `l:testCriteria' on page 4 undefined on input line 66.
-
-
-
-LaTeX Warning: Reference `prop:testCriteria' on page 4 undefined on input line 
-73.
-
-
+]
+Chapter 3.
+))
 
 [4
 
-]
-
-LaTeX Warning: Reference `l:testCriteria' on page 5 undefined on input line 95.
-
-
-))
-
-[5] (print.aux)
+] (print.aux)
  ***********
 LaTeX2e <2024-06-01>
 L3 programming layer <2024-05-08>
  ***********
 
 
-LaTeX Warning: There were undefined references.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 
-LaTeX Warning: There were multiply-defined labels.
+Package rerunfilecheck Warning: File `print.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
 
-Package rerunfilecheck Info: File `print.out' has not changed.
-(rerunfilecheck)             Checksum: F8F84307309BB370E75415A1830B93A6;792.
+Package rerunfilecheck Info: Checksums for `print.out':
+(rerunfilecheck)             Before: 7A1FE726F71CA78D5E32DE18D1443812;746
+(rerunfilecheck)             After:  466846A5EF4AE3DAB56A13B882079B95;527.
  ) 
 Here is how much of TeX's memory you used:
- 16780 strings out of 409032
- 302347 string characters out of 5762627
- 1947545 words of memory out of 5000000
- 39252 multiletter control sequences out of 15000+600000
- 563440 words of font info for 85 fonts, out of 8000000 for 9000
+ 16778 strings out of 409032
+ 302298 string characters out of 5762627
+ 1946545 words of memory out of 5000000
+ 39249 multiletter control sequences out of 15000+600000
+ 563424 words of font info for 83 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  90i,8n,116p,544b,438s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on print.pdf (6 pages).
+Output written on print.pdf (5 pages).

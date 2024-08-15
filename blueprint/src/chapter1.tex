@@ -1,8 +1,7 @@
-\chapter{Background on frieze patterns}\label{s:fp}
+\chapter{Field-valued patterns}\label{s:fp}
 Throughout this document, we will study frieze patterns of finite {\it height}. This terminology (as compared to finite {\it width} or 
 finite {\it order}) is unconventional but more convenient for formalisation. For us, the height of a frieze pattern corresponds 
 to the number of rows, including the rows of ones but {\it excluding} the rows of zeros.
-\section{Field-valued patterns}
 Throughout this section, we fix an arbitrary field $F$. 
 
 
@@ -125,106 +124,6 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
     and the right-hand side is obviously finite. 
 \end{proof}
 
-
-\section{Arithmetic frieze patterns}
-We now turn to arithmetic frieze patterns. We begin with a preliminary definition.
-
-\begin{definition} 
-    \label{def:positivePattern}
-    \lean{positivePattern_n}
-    \uses{def:pattern_n}
-    A $\mathbb{Q}$-valued pattern of height $n$ is said to be positive if, for all $m \in \mathbb{Z}$ and all $i \in \{1,\ldots, n\}$, we have
-    $f (i,m) \in \mathbb{Q}_{>0}$. 
-\end{definition}
-
-
-
-\begin{definition}
-    \label{def:arith_fp}
-    \uses{def:pattern_n} 
-    \lean{arith_fp}
-        A $\mathbb{Q}$-valued pattern of height $n$ is said to be an \textit{arithmetic frieze pattern} (of height $n$) if it takes values in $\mathbb{Z}_{>0}$. 
-        We denote by Frieze$(n)$ the set of arithmetic frieze patterns of height $n$. 
-\end{definition}
-
-We now introduce an auxiliary object called an {\it $n$-diagonal}. 
-\begin{definition}
-    \label{def:nDiag}
-    \lean{nDiag}
-    Let $n$ be a positive integer. By an $n$-diagonal, we mean any $n$-tuple $(a_1,\ldots, a_n)$ of positive integers 
-    such that $a_1 = a_n$ and 
-    \[
-        a_i \mid a_{i-1} + a_{i+1}, \qquad i \in \{2, \ldots, n-1\}.
-    \]
-    We denote by ${\rm Diag}(n)$ the set of $n$-diagonals.
-\end{definition}
-
-\begin{proposition}
-    \uses{def:nDiag}
-    \label{prop:friezeToDiag}
-Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
-\[
-    (f (1,m), f (2,m), \ldots, f (n,m))
-\]
-is an $n$-diagonal.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-We prove a couple of key properties about $n$-diagonals. 
-\begin{lemma}
-    \label{l:nDiagNonEmpty}
-<<<<<<< Updated upstream
-=======
-    \lean{nDiagNonEmpty}
->>>>>>> Stashed changes
-    \uses{def:nDiag}
-    Fix a positive integer $n$. The set Diag$(n)$ is non-empty.
-\end{lemma}
-\begin{proof}
-    The $n$-tuple $(1,1,\ldots, 1)$ consisting entirely of $1$s is clearly an $n$-diagonal.
-\end{proof}
-
-We conclude this section with a discussion of upper bounds on the entries of an $n$-diagonal.
-\begin{definition}
-    \label{def:fib}
-    The Fibonacci sequence $(F_n)_{n \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
-    \[
-        F_n = F_{n-1} + F_{n-2}.
-    \]
-\end{definition}
-
-<<<<<<< Updated upstream
-\begin{lemma}
-    \uses{def:nDiag}
-    \label{lem:nDiagReduction}
-    In an $n$-diagonal $(a_1, \ldots, a_n)$, there exists an index $i \in \{2,\ldots, n-1\}$ 
-    such that $a_i = a_{i-1} + a_{i+1}$.
-\end{lemma}
-=======
-\begin{proposition}
-    \uses{def:nDiag}
-    \label{prop:nDiagFinite}
-    \lean{nDiagFinite}
-    Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Diag}(n)$. 
-    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
-\end{proposition}
->>>>>>> Stashed changes
-\begin{proof}
-
-\end{proof}
-
-\begin{proposition}
-    \uses{def:nDiag}
-    \label{prop:nDiagFinite}
-    \lean{nDiagFinite}
-    Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Diag}(n)$. 
-    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
-\end{proposition}
-\begin{proof}
-   By induction on $n$, and using Lemma \ref{lem:nDiagReduction}.
-\end{proof}
 
 
 \iffalse
