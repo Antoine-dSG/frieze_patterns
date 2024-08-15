@@ -72,6 +72,7 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
 
 lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : (Set.range f).Finite := by sorry
 
+/- We don't need this lemma anymore -/
 lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := sorry
 /- Antoine: I have put the proof in comments for the moment to avoids bugs during compilation on GitHub pages
   funext ⟨i, m⟩
