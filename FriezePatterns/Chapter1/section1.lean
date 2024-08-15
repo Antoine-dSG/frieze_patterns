@@ -57,7 +57,7 @@ lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
  --Have a bunch of issues here due to this being defined on ℕ instead of ℤ, ask Antoine if there's a fix
  have a₃ : n-k+1 ≤ n+1 := by sorry
  have a₄ : n-k = n - (k+1)+1 := by sorry
- have a₅ : k ≤ n+1 := by sorry --have k≤k+1≤ n+1, how to transitive this
+ have a₅ : k ≤ n+1 := by sorry --have k≤k+1≤ n+1, how to apply transitivity to this?
  have a₆ : m-2+1 = m-1 := by sorry
 
 
@@ -78,9 +78,28 @@ lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 
 theorem trsltInv : 1+1=2 := by sorry
 
-lemma imageFinite : 2+2 =4 := by sorry
+lemma imageFinite : 2+2 = 4 := by sorry
 
-lemma testEqualPattern : 2*3 = 6 := by sorry
+lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] [nzPattern_n F g n] (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
+  funext ⟨i, m⟩
+
+  induction m with
+  | zero =>
+
+
+  induction i with
+    | zero =>
+
+    apply h
+
+    | succ k ih =>
+
+
+  | succ k ih =>
+
+
+
+
 
 
 
