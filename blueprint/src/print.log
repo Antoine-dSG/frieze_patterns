@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  12 AUG 2024 18:34
+This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  15 AUG 2024 13:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -674,19 +674,19 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ] (content.tex (chapter1.tex
 Chapter 1.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00107pt on input line 3.
+(Font)              scaled to size 10.00107pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00075pt on input line 3.
+(Font)              scaled to size 7.00075pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00053pt on input line 3.
+(Font)              scaled to size 5.00053pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 3.
+(Font)              scaled to size 9.99893pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 3.
+(Font)              scaled to size 6.99925pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 3.
+(Font)              scaled to size 4.99947pt on input line 5.
 
-Overfull \hbox (24.13776pt too wide) detected at line 45
+Overfull \hbox (16.35776pt too wide) detected at line 51
 []
  []
 
@@ -695,20 +695,20 @@ Overfull \hbox (24.13776pt too wide) detected at line 45
 [1
 
 ]
-Overfull \hbox (18.90776pt too wide) detected at line 62
+Overfull \hbox (36.13258pt too wide) detected at line 68
 []
  []
 
+) (chapter2.tex
 
-LaTeX Warning: Reference `def:closed-fp' on page 2 undefined on input line 114.
-
-
-
-
-[2]) (chapter2.tex
-
-[3]
+[2]
 Chapter 2.
+) (chapter3.tex
+
+[3
+
+]
+Chapter 3.
 ))
 
 [4
@@ -718,20 +718,16 @@ Chapter 2.
 LaTeX2e <2024-06-01>
 L3 programming layer <2024-05-08>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `print.out' has not changed.
-(rerunfilecheck)             Checksum: F8F84307309BB370E75415A1830B93A6;792.
+(rerunfilecheck)             Checksum: 466846A5EF4AE3DAB56A13B882079B95;527.
  ) 
 Here is how much of TeX's memory you used:
- 16764 strings out of 409032
- 302097 string characters out of 5762627
+ 16777 strings out of 409032
+ 302288 string characters out of 5762627
  1946545 words of memory out of 5000000
- 39236 multiletter control sequences out of 15000+600000
- 563440 words of font info for 85 fonts, out of 8000000 for 9000
+ 39248 multiletter control sequences out of 15000+600000
+ 563424 words of font info for 83 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 90i,8n,116p,544b,475s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,8n,116p,544b,438s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on print.pdf (5 pages).

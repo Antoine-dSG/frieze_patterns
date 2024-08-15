@@ -1,0 +1,112 @@
+\chapter{Maximal values of arithmetic frieze patterns}\label{s:arith_fp}
+\begin{definition}
+    \label{def:arith_fp}
+    \uses{def:pattern_n} 
+    \lean{arith_fp}
+        A $\mathbb{Q}$-valued pattern of height $n$ is said to be an \textit{arithmetic frieze pattern} (of height $n$) if it takes values in $\mathbb{Z}_{>0}$. 
+        We denote by Frieze$(n)$ the set of arithmetic frieze patterns of height $n$. 
+\end{definition}
+
+The following proposition is a key result connecting arithmetic frieze patterns to $n$-diagonals.
+\begin{proposition}
+    \uses{def:nDiag,def:arith_fp}
+    \label{prop:friezeToDiag}
+    \lean{friezeToDiag}
+1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
+\[
+    (f (1,m), f (2,m), \ldots, f (n,m))
+\]
+is an $n$-diagonal.
+
+2) Given an $n$-diagonal $(a_1, \ldots, a_n)$, there exists a arithmetic frieze pattern $f$ of height $n$ such that
+\[
+    (f (1,0), \ldots, f (n,0)) = (a_1, \ldots, a_n).
+\]
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\begin{corollary}
+    \label{c:friezeNonEmpty}
+    \lean{friezeNonEmpty}
+    \uses{l:nDiagNonEmpty, prop:friezeToDiag}
+    Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
+\end{corollary}
+\begin{proof}
+    The proof of Lemma \ref{l:nDiagNonEmpty} showed that $(1,1,\ldots, 1)$ is an $n$-diagonal. 
+    The claim then follows from 2) of Proposition \ref{prop:friezeToDiag}.
+\end{proof}
+
+\begin{corollary}
+    \label{l:maxDefined}
+    \uses{prop:friezeToDiag}
+    For each $n$, there is a well-defined
+    positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, defined by
+    \[
+        u_n := \max ( f (i,m) : f \in  {\rm Frieze}(n), i \in \{1,\ldots, n\}, m \in \mathbb{Z}).
+    \]
+\end{corollary}
+\begin{proof}
+
+\end{proof}
+
+
+We are now able to formulate and prove the main theorem of this section.
+\begin{theorem}
+    \label{mainTheorem}
+    \lean{mainTheorem}
+    \uses{l:maxDefined}
+    For all $n \geq 1$, we have 
+    \[
+        u_n = F_{n}.
+    \]    
+\end{theorem}
+\begin{proof}
+By Propositions \ref{prop:friezeToDiag} and \ref{prop:nDiagBounded}, $u_n \leq F_n$ for all $n$. 
+On the other hand, Lemma \ref{l:FibDiag} and 2) of Proposition \ref{prop:friezeToDiag} show that 
+there exists an arithmetic frieze pattern of height $n$ containing $F_n$ as a value.
+\end{proof}
+
+
+
+
+
+
+
+% We might need this in the future
+\iffalse
+\begin{proposition}
+    \label{prop:testCriteria}
+    \uses{def:arith_fp,def:nDiag,l:positivePatternCharact}
+    \lean{bijFriezeToDiag}
+    Let $n$ be a fixed positive integer. The map $R_n$ introduced in Lemma \ref{l:positivePatternCharact} restricts 
+    to a set-theoretic bijection, which we denote $FR_n$, from ${\rm Frieze}(n)$ to ${\rm Diag}(n)$. 
+\end{proposition}
+\begin{proof}
+    By definition, the image of $FR_n$ lies in $(\mathbb{Z}_{>0})^n$. By Lemma \ref{l:pattern_nContinuant}, we have 
+    \[
+        f (i+1,0) f (2,i) = f (i,0) + f (i+2, 0), \qquad \forall i \in \{0,\ldots, n-1\}.
+    \]
+    Since $f$ is arithmetic, $f (2,i) \in \mathbb{Z}$, and therefore the image of $FR_n$ does indeed lie in Diag$(n)$. 
+    By Lemma \ref{l:positivePatternCharact} $FR_n$ is injective. It 
+    remains to show that $FR_n$ is surjective. Consider $(a_1, \ldots, a_n) \in {\rm Diag}(n)$, and set $f = (R_n)^{-1}(a_1, \ldots, a_n)$ 
+    (c.f Lemma \ref{l:positivePatternCharact}). By the definition of $R_n$, $f$ is positive and $\mathbb{Q}$-valued; 
+    it remains to show that $f$ is integer-valued. We begin by showing that $f (2,m) \in \mathbb{Z}$ for all $m \in \mathbb{Z}$. 
+    By definition, for each 
+    $i \in \{0,\ldots, n-2\}$, there exists $c_i \in \mathbb{Z}$ such that
+    \[
+        f(i+1,0) * c_i = f (i+2,0) + f (i,0).    
+    \]
+    Using the first equation in Lemma \ref{l:pattern_nContinuant}, we deduce that $c_i = f(2,i)$ for $i =0, \ldots, n-2$. 
+    Moreover, $ f (2,n-1) = f (n-1,0) \in \mathbb{Z}$ by assumption. Thus we have proved that 
+    $f (2,m) \in \mathbb{Z}$ for $m = 0, \ldots, n-1$. To see that $f (2,n) \in \mathbb{Z}$, note from 
+    Lemma \ref{l:pattern_nContinuant} that $f (2,n) = f (n-1,1)$ can be expressed as a {\it polynomial} with 
+    integer coefficients in the variables $f (2,1), f (2,2),\ldots , f (2,n-2)$. The claim for all $m$ then follows from 
+    Proposition \ref{prop:trsltInv}. 
+
+    To see how this implies that $f (i,m) \in \mathbb{Z}$ for all $i \in \{2, \ldots, n\}$, it suffices to 
+    see, again from Lemma \ref{l:pattern_nContinuant}, that every $f (i,m)$ can be expressed as a {\it polynomial} with 
+    integer coefficients in the variables $f (2,m), f (2,m+1),\ldots , f (2,m+i-2)$.
+\end{proof}
+\fi 

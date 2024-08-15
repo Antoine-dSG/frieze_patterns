@@ -1,2 +1,0 @@
-import FriezePatterns.Chapter1.section1
-import FriezePatterns.Chapter1.section2
