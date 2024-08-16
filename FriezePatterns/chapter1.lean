@@ -110,7 +110,7 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
           _≤ n - k - 1 := by rw[Nat.sub_add_eq]
 
  have a₀₁' : 2 ≤ n - k :=
-    calc 2 ≤ 2 + 0 := by simp
+    calc 2 ≤ 2 + 0 := by rw[add_zero]
           _≤ 2 + ((n - 1) - (k + 1)) := Nat.add_le_add_left (by linarith) (2)
           _≤ 2 + (n - 1) - (k + 1) := by rw[Nat.add_sub_assoc h]
           _≤ 1 + 1 + (n - 1) - (k + 1) := by simp
@@ -118,11 +118,15 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
           _≤ 1 + n - 1 - k := by rw[Nat.sub_add_eq, Nat.add_sub_of_le one_leq_n]
           _≤ n - k := by rw[Nat.add_sub_cancel_left 1 n]
 
- have a₁ : n - (k + 1) - 1 + 2 = n - k :=
-    calc n - (k + 1) - 1 + 2 = n - k - 1 - 1 + 2 := by rw[Nat.sub_add_eq]
-          _= n - k - (1 + 1) + 2 := by rw[Nat.sub_add_eq]
-          _= n - k - 2 + 2 := by simp
-          _= n - k := Nat.sub_add_cancel (a₀₁')
+ have a₁ : n - (k + 1) - 1 + 2 = n - k := by
+    rw[Nat.sub_add_eq]
+    rw[← Nat.sub_add_eq]
+    simp
+    exact Nat.sub_add_cancel (a₀₁')
+    --calc n - (k + 1) - 1 + 2 = n - k - 1 - 1 + 2 := by rw[Nat.sub_add_eq]
+    --      _= n - k - (1 + 1) + 2 := by rw[Nat.sub_add_eq]
+    --      _= n - k - 2 + 2 := by simp
+    --      _= n - k := Nat.sub_add_cancel (a₀₁')
 
  have a₂ : n - (k + 1) - 1 + 1 = n - k - 1 :=
     calc n - (k + 1) - 1 + 1 = n - k - 1 - 1 + 1 := by rw[Nat.sub_add_eq n k 1]
