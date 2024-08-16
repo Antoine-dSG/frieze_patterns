@@ -75,38 +75,85 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
  | succ k ih =>
  intro m
 
- have b₁ : k < n-1 := by linarith
- have a₀ : 0 < (n - 1) - k := Nat.zero_lt_sub_of_lt b₁
- have a₀' : 0 ≤ (n - 1) - (k + 1) := by linarith
+ by_cases one_leq_n : 1 ≤ n
 
- have a₁ : n - (k + 1) - 1 + 2 = n - k := by sorry
- have a₂ : n - (k + 1) - 1 + 1 = n - k - 1 := by sorry
- have a₃ : 1 ≤ n - (k + 1) - 1 + 2 ∧ n - (k + 1) - 1 + 2 ≤ n := by sorry
+ have a₀ : 0 < (n - 1) - k := Nat.zero_lt_sub_of_lt (by linarith)
+ have a₀' : 0 ≤ (n - 1) - (k + 1) := by linarith
+ have a₀'' : n - (k + 1) ≤  n := Nat.sub_le n (k + 1)
+
  have a₅ : k ≤ n-1 :=
-    calc k ≤ k+1 := by linarith
-          _≤ n-1 := by linarith
- have a₇ : n - (k + 1) - 1 ≤ n-1 := by sorry
+      calc k ≤ k+1 := by linarith
+            _≤ n-1 := by linarith
+
+ have a₇ : n - (k + 1) - 1 ≤ n - 1 :=
+      calc  n - (k + 1) - 1 ≤ n - (k + 1 + 1) := by rw[Nat.sub_sub n (k+1) 1]
+          _ ≤ n - (1 + k + 1) := by rw[add_comm k]
+          _ ≤ n - (1 + (k + 1)) := by rw[add_assoc]
+          _ ≤ n - 1 - (k + 1) := by rw[← Nat.sub_sub n 1 (k+1)]
+          _ ≤ n - 1 := Nat.sub_le (n-1) (k + 1)
+
+
+ have a₀₁ : 1 ≤ n - k - 1 :=
+    calc 1 ≤ 1 + 0 := by simp
+          _≤ 1 + ((n - 1) - (k + 1)) := Nat.add_le_add_left (a₀') (1)
+          _≤ 1 + (n - 1) - (k + 1) := by rw[Nat.add_sub_assoc h]
+          _≤ 1 + n - 1 - (k + 1) := by rw[Nat.add_sub_assoc one_leq_n] -- USES 1 ≤ n
+          _≤ n - (k + 1) := by rw[Nat.add_sub_cancel_left 1 n]
+          _≤ n - k - 1 := by rw[Nat.sub_add_eq]
+
+ have a₀₁' : 2 ≤ n - k :=
+    calc 2 ≤ 2 + 0 := by simp
+          _≤ 2 + ((n - 1) - (k + 1)) := Nat.add_le_add_left (a₀') (2)
+          _≤ 2 + (n - 1) - (k + 1) := by rw[Nat.add_sub_assoc h]
+          _≤ 1 + 1 + (n - 1) - (k + 1) := by simp
+          _≤ 1 + (1 + (n - 1)) - (1 + k) := by rw[add_comm k, add_assoc]
+          _≤ 1 + n - 1 - k := by rw[Nat.sub_add_eq, Nat.add_sub_of_le one_leq_n]
+          _≤ n - k := by rw[Nat.add_sub_cancel_left 1 n]
+
+
+ have a₁₁ : n - (k + 1) - 1 + 1 = n - (k + 1) := Nat.sub_add_cancel (a₀₁)
+ have a₁₂ : n - (k + 1) - 1 + 2 = n - (k + 1) + 1 :=
+    calc n - (k + 1) - 1 + 2 = n - (k + 1) - 1 + 1 + 1 := by simp
+          _= n - (k + 1) + 1 := by rw[a₁₁]
+
+
+ have a₁ : n - (k + 1) - 1 + 2 = n - k :=
+    calc n - (k + 1) - 1 + 2 = n - k - 1 - 1 + 2 := by rw[Nat.sub_add_eq]
+          _= n - k - (1 + 1) + 2 := by rw[Nat.sub_add_eq]
+          _= n - k - 2 + 2 := by simp
+          _= n - k := Nat.sub_add_cancel (a₀₁')
+
+ have a₃ : 1 ≤ n - (k + 1) - 1 + 2 ∧ n - (k + 1) - 1 + 2 ≤ n := by
+    refine {
+      left := by linarith
+      right := by sorry
+        --calc n - (k + 1) - 1 + 2 ≤ n - k := by rw[a₁]
+        --  _ ≤ n := Nat.sub_le (n) (k)
+    }
+
+ have a₂ : n - (k + 1) - 1 + 1 = n - k - 1 :=
+    calc n - (k + 1) - 1 + 1 = n - k - 1 - 1 + 1 := by rw[Nat.sub_add_eq n k 1]
+          _= n - k - 1 := by rw[Nat.sub_add_cancel (by linarith)]
+
+
  have a₉ : n - (k + 1) - 1 + 1 + 2 = n - k + 1 := by sorry
- have a₁₀ : n - (k + 1) - 1 + 1 ≤ n-1 := by sorry
- have a₁₁ : n - (k + 1) - 1 + 1 = n -(k+1) := by sorry
- have a₁₂ : n - (k + 1) - 1 + 2 = n - k := by sorry
- have a₁₃ : n - (k + 1) - 1 + 2 = n - (k + 1) + 1 := by sorry
+ have a₁₀ : n - (k + 1) - 1 + 1 ≤ n - 1 := by sorry
 
  have h₂ : f (n - (k + 1) - 1 + 2, m + 1) ≠ 0 := by exact nzPattern_n.non_zero (n - (k + 1) - 1 + 2) (m + 1) a₃
 
  calc f (n - (k + 1) - 1, m + 2) =  f (n - (k + 1) - 1, m+2) * f (n - (k + 1) - 1 + 2, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw [mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1, m+2))]
-  _= f (n - (k + 1) - 1 + 2, m + 1) * f (n - (k + 1) - 1, (m + 1) + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by ring
-  _= ( f (n - (k + 1) - 1 + 1, m + 1) * f (n - (k + 1) - 1 + 1, (m + 1) + 1) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[pattern_n.diamond (n - (k + 1) - 1) (m+1) a₇]
-  _= ( f (n - (k + 1) - 1 + 1, m + 1) * f (n - (k + 1) - 1 + 1, m + 2) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by simp
-  _= ( f (n - (k + 1) - 1 + 1, m + 1) * f (n - k - 1, m + 2) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[a₂]
-  _= ( f (n - (k + 1) - 1 + 1, m + 1) * (f (n - 1, m + 2) * f (n - k, m + 1) - f (n - k + 1, m)) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[← ih a₅]
-  _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - f (n - k + 1, m) * f (n - (k + 1) - 1 + 1, m + 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by ring
-  _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - f (n - (k + 1) - 1 + 1 + 2, m) * f (n - (k + 1) - 1 + 1, m + 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[a₉]
-  _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - (f (n - (k + 1) - 1 + 1+1,m) * f (n - (k + 1) - 1 + 1 + 1, m + 1) - 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[pattern_n.diamond (n - (k + 1) - 1 + 1) (m) a₁₀]
-  _= f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2,m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by ring
-  _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) * f (n - (k + 1) - 1 + 2, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2, m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by rw[a₁₁, a₁₂]
-  _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) - 1 + 2, m) := by rw[mul_inv_cancel_right₀ h₂ (f (n - 1, m + 2) * f (n - (k + 1), m + 1)), mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1 + 2, m))]
-  _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) + 1, m) := by rw[a₁₃]
+          _= f (n - (k + 1) - 1 + 2, m + 1) * f (n - (k + 1) - 1, (m + 1) + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by ring
+          _= ( f (n - (k + 1) - 1 + 1, m + 1) * f (n - (k + 1) - 1 + 1, (m + 1) + 1) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[pattern_n.diamond (n - (k + 1) - 1) (m+1) a₇]
+          _= ( f (n - (k + 1) - 1 + 1, m + 1) * f (n - (k + 1) - 1 + 1, m + 2) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by simp
+          _= ( f (n - (k + 1) - 1 + 1, m + 1) * f (n - k - 1, m + 2) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[a₂]
+          _= ( f (n - (k + 1) - 1 + 1, m + 1) * (f (n - 1, m + 2) * f (n - k, m + 1) - f (n - k + 1, m)) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[← ih a₅]
+          _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - f (n - k + 1, m) * f (n - (k + 1) - 1 + 1, m + 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by ring
+          _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - f (n - (k + 1) - 1 + 1 + 2, m) * f (n - (k + 1) - 1 + 1, m + 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[a₉]
+          _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - (f (n - (k + 1) - 1 + 1+1,m) * f (n - (k + 1) - 1 + 1 + 1, m + 1) - 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[pattern_n.diamond (n - (k + 1) - 1 + 1) (m) a₁₀]
+          _= f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2,m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by ring
+          _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) * f (n - (k + 1) - 1 + 2, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2, m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by rw[a₁₁, a₁]
+          _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) - 1 + 2, m) := by rw[mul_inv_cancel_right₀ h₂ (f (n - 1, m + 2) * f (n - (k + 1), m + 1)), mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1 + 2, m))]
+          _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) + 1, m) := by rw[a₁₂]
 
 
 
