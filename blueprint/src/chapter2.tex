@@ -1,9 +1,9 @@
 
 \chapter{Pandean sequences, flutes and the Fibonacci sequence}
 \begin{definition}
-    \label{def:pandean}
-   % \lean{pandean}
-    A sequence $(a_k)_{k \in \mathbb{N}^*}$ of positive integers is called pandean if $a_1 = 1$ and 
+    \label{def:flute}
+    \lean{flute}
+    A sequence $(a_k)$, indexed by $\mathbb{N}^*$ and consisting of positive integers is called pandean if $a_1 = 1$ and 
     if, for every $k > 1$, we have
     \[
         a_k \mid a_{k-1} + a_{k+1}.
@@ -16,9 +16,9 @@ Note that in a flute of height $n$, the first and last entries are equal to $1$.
 entirely of ones is pandean, and such a pandean sequence gives rise to a flute of height $n$ for any $n$.
 In other words, we have the following.
 \begin{lemma}
-    \label{l:kFluteNonEmpty}
-   % \lean{nDiagNonEmpty}
-    \uses{def:pandean}
+    \label{l:nFluteNonEmpty}
+    \lean{nFluteNonEmpty}
+    \uses{def:flute}
     For any positive integer $n$, the set Flute$(n)$ is non-empty.
 \end{lemma}
 Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
@@ -29,8 +29,8 @@ Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0
 
 \begin{lemma}
     \label{l:FibFlute}
-   % \lean{FibDiag}
-    \uses{def:pandean}
+    \lean{fib_flute_even,fib_flute_odd}
+    \uses{def:flute}
     1) If $n$ is odd, the $n$-tuple 
     \[
         (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
@@ -48,23 +48,61 @@ Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0
 \end{proof}
 
 \begin{lemma}
-    \uses{def:pandean}
+    \uses{def:flute}
     \label{lem:FluteReduction}
-  %  \lean{nDiagReduction}
-    In a flute $(a_1, \ldots, a_n)$, there exists an index $i \in \{2,\ldots, n-1\}$ 
-    such that $a_i = a_{i-1} + a_{i+1}$.
+    \lean{FluteReduction}
+    In a flute $(a_1, \ldots, a_n)$, one of the following two statements holds.
+    
+    1) $a_2 = 1$ or $a_{n-1} =1$.
+    
+    2) There exists an index $i \in \{2,\ldots, n-1\}$ such that $a_i = a_{i-1} + a_{i+1}$.
 \end{lemma}
 \begin{proof}
-
+    Suppose that 1) does not hold. In particular, $a_2 - a_1 > 0$ and $a_n - a_{n-1} < 0$. We prove that statement 2) holds by 
+    contradiction. Thus, assume that for all $i \in \{2,\ldots, n-1\}$, we have $a_i \neq a_{i-1} + a_{i+1}$. Since the $a_i$ are positive integers,
+    we necessarily have $a_{i-1} + a_{i+1} \geq 2 a_i$ for all $i \in \{2,\ldots, n-1\}$. Thus, for a given $i$, we have 
+    \[
+        a_{i+1} - a_i = a_{i+1} + a_{i-1} - a_{i-1} - a_i \geq 2 a_i - a_{i-1} - a_i = a_i - a_{i-1}.
+    \]
+    Gathering these inequalities, we obtain
+    \[
+        a_n - a_{n-1} \geq a_{n-1} - a_{n-2} \geq \ldots \geq a_2 - a_1 > 0,
+    \]
+    which contradicts the fact that $a_n - a_{n-1} < 0$.
 \end{proof}
 
 \begin{proposition}
-    \uses{def:pandean,lem:FluteReduction}
+    \uses{def:flute,lem:FluteReduction}
     \label{prop:FluteBounded}
-  %  \lean{nDiagBounded}
+    \lean{FluteBounded}
     Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Flute}(n)$. 
     For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
 \end{proposition}
 \begin{proof}
-   By induction on $n$, and using Lemma \ref{lem:nDiagReduction}.
+   Consider the statement 
+   \[
+    P_n: \text{If }(a_1, \ldots, a_n) \in {\rm Flute}(n) \text{, then }a_i \leq F_n \text{ for all }i \in \{1,\ldots, n\}.
+   \]
+   The proposition claims that $P_n$ holds for all $n \in \mathbb{N}^*$. We prove this by induction on $n$. 
+   The base case $n = 1$ is clear, since the only flute of height $1$ is $(1)$, and $F_1 = 1$. 
+   Similarly, the case $n = 2$ is clear, since the only flute of height $2$ is $(1,1)$, and $F_2 = 1$.
+    Now, assume that $P_k$ holds for all $k$ up to and including a fixed $n \in \mathbb{N}^*$. Let $(a_1, \ldots, a_{n+1}) \in {\rm Flute}(n+1)$.
+    By Lemma \ref{lem:FluteReduction}, we have either $a_2 = 1$ or $a_n = 1$, or there exists an index $i \in \{2,\ldots, n\}$ such that
+    $a_i = a_{i-1} + a_{i+1}$. Suppose that $a_2 = 1$. Then $(a_1, a_3, \ldots, a_{n+1}) \in {\rm Flute}(n)$, and so by the induction hypothesis, 
+    $a_i \leq F_n$ for all $i \in \{1,\ldots, n\}$. Since $F_n \leq F_{n+1}$, we have $a_i \leq F_{n+1}$ for all $i \in \{1,\ldots, n\}$. 
+    A similar argument applies if $a_n = 1$. Now, suppose that there exists an index $i \in \{2,\ldots, n\}$ such that 
+    \begin{equation}\label{eq:ai}
+        a_i = a_{i-1} + a_{i+1}.
+    \end{equation} 
+    We claim that $(a_1, a_2, \ldots , a_{i-1}, \widehat{a_i}, a_{i+1}, \ldots, a_{n+1}) \in {\rm Flute}(n)$, where $\widehat{a_i}$ means we omit $a_i$.
+    Again by the induction hypothesis, we have that 
+    \begin{equation}\label{eq:ajs}
+        a_j \leq F_n, \qquad j \neq i.
+    \end{equation} 
+    It remains to show that $a_i \leq F_{n+1}$. 
+    To see this, note that \eqref{eq:ai} and \eqref{eq:ajs} together imply it is sufficient to show that either $a_{i-1}$ or $a_{i+1}$ is bounded 
+    above by $F_{n-1}$. But recall that $a_{i-1}$ and $a_{i+1}$ both belong to the flute 
+    $(a_1, a_2, \ldots , a_{i-1}, \widehat{a_i}, a_{i+1}, \ldots, a_{n+1}) $ of height $n$. Thus, the conditions of Lemma \ref{lem:FluteReduction} apply
+    to this flute, so that by a reduction argument identical to the one above, there exists a flute of height $n-1$ containing either $a_{i-1}$ or $a_{i+1}$ (or both !), 
+    whereby at least one of the two is bounded above by $F_{n-1}$. This completes the induction step, and the proposition follows.
 \end{proof}

@@ -1,7 +1,7 @@
 import FriezePatterns.chapter1
 ---- n-Diagonals ----
 
-class nDiag (n : ℕ) where
+class flute (n : ℕ) where
   a : Fin (n + 1) → ℕ
   pos : ∀ i, a i > 0
   hteq : a 0 = a n -- head-tail equality
@@ -12,13 +12,13 @@ Mathlib recommends using Fin n → α to define n-tuples.
 
 Choice of index: Using Fin (n+1) and indexing from 0 to n is probably more convenient: we want to have a coercion from ℕ to Fin _, but it doesn't work if we use Fin n, since Fin 0 is empty.
 
-Problem: the indices in Proposition 3.2 will no longer match, since nDiag(n) would be an (n+1)-tuple.
+Problem: the indices in Proposition 3.2 will no longer match, since flute(n) would be an (n+1)-tuple.
 
 Alternatively, can use functions ℕ → ℕ?
 
 -/
 
-lemma nDiagNonEmpty (n : ℕ) : Nonempty (nDiag n) := by
+lemma nFluteNonEmpty (n : ℕ) : Nonempty (flute n) := by
   let a : Fin (n + 1) → ℕ := λ _ => 1
   have pos : ∀ i, a i > 0 := λ _ => by simp
   have hteq : a 0 = a n := by rfl
@@ -29,7 +29,7 @@ lemma nDiagNonEmpty (n : ℕ) : Nonempty (nDiag n) := by
 
 -- this case corresponds to n=2k+1 in the LaTeX version, I am using k+k instead of 2k because Mathlib doesn't have many theorems about multiplication of coercions from ℕ to Fin _.
 
-def fib_diag_even (k : ℕ) : nDiag (k+k) := by
+def fib_flute_even (k : ℕ) : flute (k+k) := by
   let a : Fin (k+k+1) → ℕ := by
     intro i
     induction' i with i ih
@@ -82,10 +82,10 @@ def fib_diag_even (k : ℕ) : nDiag (k+k) := by
     · sorry -- there are ~5 more cases to consider
   exact ⟨a, pos, hteq, div⟩
 
-#eval (fib_diag_even 5).1 -- check the definition is correct
+#eval (fib_flute_even 5).1 -- check the definition is correct
 
 -- this case corresponds to n=2k in the LaTeX version
-def fib_diag_odd (k : ℕ) : nDiag (k+k+1) := by
+def fib_flute_odd (k : ℕ) : flute (k+k+1) := by
   let a : Fin (k+k+1+1) → ℕ := by
     intro i
     induction' i with i ih
@@ -95,11 +95,9 @@ def fib_diag_odd (k : ℕ) : nDiag (k+k+1) := by
   have div : ∀ i, i ≤ k+k+1-2 → a (i+1) ∣ (a i + a (i+2)) := sorry
   exact ⟨a, pos, hteq, div⟩
 
-#eval (fib_diag_odd 5).1
-
-lemma FibDiag : 1+1 = 2:= by sorry
+#eval (fib_flute_odd 5).1
 
 
-lemma nDiagReduction : 2^2 = 4 := by sorry
+lemma FluteReduction : 2^2 = 4 := by linarith
 
-theorem nDiagBounded : 2^3 = 8 := by sorry
+theorem FluteBounded : 2^3 = 8 := by linarith
