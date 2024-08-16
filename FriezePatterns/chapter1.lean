@@ -54,7 +54,7 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 -- The second continuant lemma is proved like the first
 lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i,m+2) = f (n-1,m+2)*f (i+1,m+1) - f (i+2,m) := by
 
-
+by_cases one_leq_n : 1 ≤ n
 suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) = f (n-1,m+2)*f (n-i,m+1) - f (n-i+1,m)
 -- Flip i to n-i so we can induct forwards
 ·intro i h m
@@ -62,9 +62,21 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
     calc n - i - 1 ≤ n - 1 - i := by rw[Nat.sub_sub, add_comm, Nat.sub_sub]
           _≤ n - 1 := Nat.sub_le (n-1) i
 
- have key2 : n - (n - i - 1) - 1 = i := by sorry
+ have i_plus_one_leq_n : i + 1 ≤ n :=
+    calc i + 1 ≤ 1 + i := by rw[add_comm]
+          _≤ 1 + (n - 1) := Nat.add_le_add_left (by linarith) (1)
+          _≤ n := by rw[Nat.add_sub_of_le one_leq_n]
 
- have key3 : n - (n - i - 1) = i + 1 := by sorry
+ have key2 : n - (n - i - 1) - 1 = i :=
+    calc n - (n - i - 1) - 1 = (i + 1) + (n - (i + 1)) - (n - i - 1) - 1 := by rw[Nat.add_sub_of_le i_plus_one_leq_n]
+          _= (i + 1) + (n - i - 1) - (n - i - 1) - 1 := by rw[Nat.sub_sub n]
+          _= i + 1 - 1 := by rw[Nat.add_sub_self_right (i + 1) (n - i - 1)]
+          _= i := by rw[Nat.add_sub_self_right (i) (1)]
+
+ have key3 : n - (n - i - 1) = i + 1 :=
+    calc n - (n - i - 1) = (i + 1) + (n - (i + 1)) - (n - i - 1) := by rw[Nat.add_sub_of_le i_plus_one_leq_n]
+          _= (i + 1) + (n - i - 1) - (n - i - 1) := by rw[Nat.sub_sub n]
+          _= i + 1 := by rw[Nat.add_sub_self_right (i + 1) (n - i - 1)]
 
  calc f (i, m + 2) = f (n - (n - i - 1) - 1, m + 2) := by rw[key2]
           _= f (n-1,m+2)*f (n-(n - i - 1),m+1) - f (n-(n - i - 1) + 1,m) := by rw[pattern_nContinuant2flipped (n - i - 1) key]
@@ -81,8 +93,6 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
  rw[hₙ.2,hₙ.1,sub_zero,mul_one]
  | succ k ih =>
  intro m
-
- by_cases one_leq_n : 1 ≤ n
 
  have a₀₁ : 1 ≤ n - k - 1 :=
     calc 1 ≤ 1 + 0 := by simp
@@ -167,8 +177,21 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) - 1 + 2, m) := by rw[mul_inv_cancel_right₀ h₂ (f (n - 1, m + 2) * f (n - (k + 1), m + 1)), mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1 + 2, m))]
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) + 1, m) := by rw[a₁₂]
 
+--Have proved it in the case 1 ≤ n
 
+have n_eq_zero : n = 0 := by linarith
+intro i h m
+have i_leq_zero : i ≤ 0 :=
+    calc i ≤ n - 1 := by exact h
+          _≤ 0 - 1 := by rw[n_eq_zero]
+          _≤ 0 := by simp
+have i_eq_zero : i = 0 := by linarith
 
+rw[i_eq_zero, n_eq_zero]
+simp
+rw[@pattern_n.topBordZeros F _ f n _ (m+2), @pattern_n.botBordZeros_n F _ f n _ (2) m (by linarith),zero_mul, sub_zero]
+
+--End of proof of pattern_nContinuant2
 
 
 
