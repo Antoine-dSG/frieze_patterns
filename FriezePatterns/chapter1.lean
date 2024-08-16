@@ -177,7 +177,32 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
                 _ = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by rw [h₂, h₃, h₄]
                 _ = f (n-i-1,m+i+2) := by rw [h₅]
 
-lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : (Set.range f).Finite := by sorry
+
+lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : Finite (Set.range f) := by
+-- We use i ≤ n instead of 1 ≤ i ≤ n to simplify the induction. Lean also automatically infers that {i : ℕ | i ≤ n} is finite.
+  have key : Set.range f = f '' ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) := by
+    apply Set.ext_iff.mpr
+    -- the hard part: L.H.S. is a subset of R.H.S.
+    intro x ; apply Iff.intro
+    intro hx ; unfold Set.range at hx
+    rcases hx with ⟨⟨i, m⟩, hx⟩
+    by_cases hi : i ≤ n
+    · induction' m using Nat.strong_induction_on with m ih
+      by_cases hm : m ≤ n
+      · exact ⟨⟨i, m⟩, ⟨⟨hi, hm⟩, hx⟩⟩ -- we can just use (i,m) if m ≤ n
+      · simp at hm
+        specialize ih (m-(n+1)) (@Nat.sub_lt m (n+1) (by linarith) (by linarith))
+        have key := trsltInv F f n i (by linarith) (m - (n + 1))
+        have : m - (n+1) + n + 1 = m - (n+1) + (n+1) := by linarith
+        rw [this, Nat.sub_add_cancel hm, hx] at key
+        exact ih key
+    · use ⟨0, 0⟩ ; apply And.intro (by simp) -- if i > n, then f(i,n) = 0, so we can use (0,0)
+      rw [@pattern_n.topBordZeros F _ f n _ 0, ← hx, @pattern_n.botBordZeros_n F _ f n _ i m (by linarith)]
+    -- now the trivial part
+    intro hx ; rcases hx with ⟨y, hy⟩ ; exact ⟨y, hy.2⟩
+  rw [key]
+  have : Finite ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) := by apply Finite.Set.finite_prod
+  exact Finite.Set.finite_image ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) f
 
 /- We don't need this lemma anymore -/
 lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := sorry
