@@ -26,15 +26,8 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
   | succ k ih =>
   intro h m
 
-  have h' : 1 ≤ k+1 ∧ k+1 ≤ n := by
-    refine {
-      left := by linarith
-      right := by
-        calc k+1 ≤ n-1 := by exact h
-        _ ≤ n := by exact Nat.sub_le n 1
-    }
-  have hh' : k ≤ n-1 := by calc k ≤ k+1 := by linarith
-    _ ≤ n-1 := by exact h
+  have h' : 1 ≤ k+1 ∧ k+1 ≤ n := by omega
+  have hh' : k ≤ n-1 := by omega
   have ih₁ : f (k + 2, m + 1) = f (2, m + 1 + k) * f (k + 1, m + 1) - f (k, m + 1) := by exact ih hh' (m+1)
   have h₂ : f (k + 1, m + 1) ≠ 0 := by exact nzPattern_n.non_zero (k+1) (m+1) h'
   have h₃ : f (k + 3, m) * f (k + 1, m + 1) = (f (k + 2, m) * f (2, m + k + 1) - f (k + 1, m)) * f (k + 1, m + 1) :=
@@ -204,10 +197,7 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
       simp at *
       intro m
       rw [Nat.sub_add_eq, ← add_assoc m i 2]
-      have h₁ : i ≤ n-1 := by
-        match n with
-        | 0 => linarith
-        | n+1 => linarith [Nat.add_sub_cancel n 1]
+      have h₁ : i ≤ n-1 := by omega
       have h₂ : f (2,m+i) = f (n-1,m+i+2) := by -- we first prove P₂
         have key := pattern_nContinuant2 F f n 0 (by linarith) (m+i+2)
         simp at key
@@ -223,7 +213,7 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
         simp at this
         rw [← this]
       have h₅ : f (n-i-1,m+i+2) = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by
-        have key := pattern_nContinuant2 F f n (n-i-1) (by rw [Nat.sub_sub, add_comm i 1, ← Nat.sub_sub]; exact Nat.sub_le (n-1) i) (m+i+2)
+        have key := pattern_nContinuant2 F f n (n-i-1) (by omega) (m+i+2)
         rw [key, Nat.sub_sub n i 1, ← Nat.sub_add_comm ileq, ← Nat.sub_add_comm ileq]
         simp
       symm
@@ -249,7 +239,7 @@ lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern
         specialize ih (m-(n+1)) (@Nat.sub_lt m (n+1) (by linarith) (by linarith))
         have key := trsltInv F f n i (by linarith) (m - (n + 1))
         have : m - (n+1) + n + 1 = m - (n+1) + (n+1) := by linarith
-        rw [this, Nat.sub_add_cancel hm, hx] at key
+        simp [this, Nat.sub_add_cancel hm, hx] at key
         exact ih key
     · use ⟨0, 0⟩ ; apply And.intro (by simp) -- if i > n, then f(i,n) = 0, so we can use (0,0)
       rw [@pattern_n.topBordZeros F _ f n _ 0, ← hx, @pattern_n.botBordZeros_n F _ f n _ i m (by linarith)]
