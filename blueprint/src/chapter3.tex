@@ -3,7 +3,8 @@
     \label{def:arith_fp}
     \uses{def:pattern_n} 
     \lean{arith_fp}
-        A $\mathbb{Q}$-valued pattern of height $n$ is said to be an \textit{arithmetic frieze pattern} (of height $n$) if it takes values in $\mathbb{Z}_{>0}$. 
+        A $\mathbb{Q}$-valued pattern of height $n$ is said to be an \textit{arithmetic frieze pattern} (of height $n$) if it takes 
+        values in $\mathbb{Z}_{>0}$. 
         We denote by Frieze$(n)$ the set of arithmetic frieze patterns of height $n$. 
 \end{definition}
 
@@ -16,11 +17,11 @@ The following proposition is a key result connecting arithmetic frieze patterns 
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
 \]
-is a flute (of height $n-1$).
+is a flute of height $n$.
 
-2) Given a flute $(a_0, \ldots, a_n)$, there exists a arithmetic frieze pattern $f$ of height $n+1$ such that
+2) Given a flute $(a_1, \ldots, a_n)$, there exists a arithmetic frieze pattern $f$ of height $n$ such that
 \[
-    (f (1,0), \ldots, f (n,0)) = (a_0, \ldots, a_n).
+    (f (1,0), \ldots, f (n,0)) = (a_1, \ldots, a_n).
 \]
 \end{proposition}
 \begin{proof}

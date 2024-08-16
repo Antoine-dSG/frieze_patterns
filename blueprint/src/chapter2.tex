@@ -3,31 +3,29 @@
 \begin{definition}
     \label{def:pandean}
    % \lean{pandean}
-    A sequence $(a_n)_{n \in \mathbb{N}}$ of positive integers is called pandean if $a_0 = 1$ and 
-    if, for every $n \geq 1$, we have
+    A sequence $(a_k)_{k \in \mathbb{N}^*}$ of positive integers is called pandean if $a_1 = 1$ and 
+    if, for every $k > 1$, we have
     \[
-        a_n \mid a_{n-1} + a_{n+1}.
+        a_k \mid a_{k-1} + a_{k+1}.
     \]
-    Given a pandean sequence $(a_n)$, if there exists a positive integer $k$ such that $a_n = a_{n+k}$ for all $n\in \mathbb{N}$, 
-    the tuple $(a_0, a_1, \ldots, a_k)$ is called a Pan flute, or simply a flute, of height $k$. The set of all flutes of a given height $k$ 
-    is denoted Flute$(k)$.
+    Given a pandean sequence $(a_k)$, if there exists a positive integer $n$ such that $a_k = a_{k+n-1}$ for all $k\in \mathbb{N}$, 
+    the tuple $(a_1, \ldots, a_n)$ is called a Pan flute, or simply a flute, of height $n$. The set of all flutes of a given height $n$ 
+    is denoted Flute$(n)$.
 \end{definition}
-It is clear that the constant sequence consisting entirely of ones is pandean, and such a pandean sequence gives rise to a flutes of height $k$ for any $k$.
+Note that in a flute of height $n$, the first and last entries are equal to $1$. It is clear that the constant sequence consisting 
+entirely of ones is pandean, and such a pandean sequence gives rise to a flute of height $n$ for any $n$.
 In other words, we have the following.
 \begin{lemma}
     \label{l:kFluteNonEmpty}
    % \lean{nDiagNonEmpty}
     \uses{def:pandean}
-    For any positive integer $k$, the set Flute$(k)$ is non-empty.
+    For any positive integer $n$, the set Flute$(n)$ is non-empty.
 \end{lemma}
-
-\begin{definition}
-    \label{def:fib}
-    The Fibonacci sequence $(F_n)_{n \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
+Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
     \[
-        F_n = F_{n-1} + F_{n-2}.
+        F_k = F_{k-1} + F_{k-2}.
     \]
-\end{definition}
+
 
 \begin{lemma}
     \label{l:FibFlute}
@@ -37,13 +35,13 @@ In other words, we have the following.
     \[
         (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
     \]
-    is a Pan flute of height $n-1$.
+    is a Pan flute of height $n$.
 
     2) If $n$ is even, the $n$-tuple 
     \[
         (F_2, F_4, F_6, \ldots, F_{n-2}, F_{n}, F_{n-1}, F_{n-3}, \ldots, F_5, F_3,F_1),
     \]
-    is a Pan flute of height $n-1$. 
+    is a Pan flute of height $n$. 
 \end{lemma}
 \begin{proof}
     These are a tedious but straightforward calculation.
@@ -53,7 +51,7 @@ In other words, we have the following.
     \uses{def:pandean}
     \label{lem:FluteReduction}
   %  \lean{nDiagReduction}
-    In a flute $(a_0, \ldots, a_n)$, there exists an index $i \in \{1,\ldots, n-1\}$ 
+    In a flute $(a_1, \ldots, a_n)$, there exists an index $i \in \{2,\ldots, n-1\}$ 
     such that $a_i = a_{i-1} + a_{i+1}$.
 \end{lemma}
 \begin{proof}
@@ -64,8 +62,8 @@ In other words, we have the following.
     \uses{def:pandean,lem:FluteReduction}
     \label{prop:FluteBounded}
   %  \lean{nDiagBounded}
-    Fix a positive integer $n$, and let $(a_0, \ldots, a_n) \in {\rm Flute}(n)$. 
-    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_{n+1}$. 
+    Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Flute}(n)$. 
+    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
 \end{proposition}
 \begin{proof}
    By induction on $n$, and using Lemma \ref{lem:nDiagReduction}.
