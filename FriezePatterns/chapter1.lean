@@ -25,7 +25,6 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
   simp
   | succ k ih =>
   intro h m
-
   have h' : 1 ≤ k+1 ∧ k+1 ≤ n := by omega
   have hh' : k ≤ n-1 := by omega
   have ih₁ : f (k + 2, m + 1) = f (2, m + 1 + k) * f (k + 1, m + 1) - f (k, m + 1) := by exact ih hh' (m+1)
@@ -58,13 +57,16 @@ lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) = f (n-1,m+2)*f (n-i,m+1) - f (n-i+1,m)
 -- Flip i to n-i so we can induct forwards
 ·intro i h m
- have key : n - i - 1 ≤ n - 1 :=
-    calc n - i - 1 ≤ n - 1 - i := by rw[Nat.sub_sub, add_comm, Nat.sub_sub]
-          _≤ n - 1 := Nat.sub_le (n-1) i
-
- have key2 : n - (n - i - 1) - 1 = i := by sorry
-
- have key3 : n - (n - i - 1) = i + 1 := by sorry
+ have key : n - i - 1 ≤ n - 1 := by omega
+ have key2 : n - (n - i - 1) - 1 = i := by omega
+ have key3 : n - (n - i - 1) = i + 1 := by
+  by_cases one_leq_n : 1 ≤ n
+  omega
+  have n_eq_zero : n = 0 := by omega
+  have H₀ := @pattern_n.topBordZeros F _ f n _ 0
+  have H₁ := @pattern_n.botBordOnes_n F _ f n _ 0
+  rw [n_eq_zero, H₀] at H₁
+  exact False.elim (zero_ne_one H₁)
 
  calc f (i, m + 2) = f (n - (n - i - 1) - 1, m + 2) := by rw[key2]
           _= f (n-1,m+2)*f (n-(n - i - 1),m+1) - f (n-(n - i - 1) + 1,m) := by rw[pattern_nContinuant2flipped (n - i - 1) key]
@@ -84,72 +86,27 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
 
  by_cases one_leq_n : 1 ≤ n
 
- have a₀₁ : 1 ≤ n - k - 1 :=
-    calc 1 ≤ 1 + 0 := by simp
-          _≤ 1 + ((n - 1) - (k + 1)) := Nat.add_le_add_left (by linarith) (1)
-          _≤ 1 + (n - 1) - (k + 1) := by rw[Nat.add_sub_assoc h]
-          _≤ 1 + n - 1 - (k + 1) := by rw[Nat.add_sub_assoc one_leq_n] -- USES 1 ≤ n
-          _≤ n - (k + 1) := by rw[Nat.add_sub_cancel_left 1 n]
-          _≤ n - k - 1 := by rw[Nat.sub_add_eq]
+ have a₀₁ : 1 ≤ n - k - 1 := by omega
 
- have a₀₁' : 2 ≤ n - k :=
-    calc 2 ≤ 2 + 0 := by simp
-          _≤ 2 + ((n - 1) - (k + 1)) := Nat.add_le_add_left (by linarith) (2)
-          _≤ 2 + (n - 1) - (k + 1) := by rw[Nat.add_sub_assoc h]
-          _≤ 1 + 1 + (n - 1) - (k + 1) := by simp
-          _≤ 1 + (1 + (n - 1)) - (1 + k) := by rw[add_comm k, add_assoc]
-          _≤ 1 + n - 1 - k := by rw[Nat.sub_add_eq, Nat.add_sub_of_le one_leq_n]
-          _≤ n - k := by rw[Nat.add_sub_cancel_left 1 n]
+ have a₀₁' : 2 ≤ n - k := by omega
 
- have a₁ : n - (k + 1) - 1 + 2 = n - k :=
-    calc n - (k + 1) - 1 + 2 = n - k - 1 - 1 + 2 := by rw[Nat.sub_add_eq]
-          _= n - k - (1 + 1) + 2 := by rw[Nat.sub_add_eq]
-          _= n - k - 2 + 2 := by simp
-          _= n - k := Nat.sub_add_cancel (a₀₁')
+ have a₁ : n - (k + 1) - 1 + 2 = n - k := by omega
 
- have a₂ : n - (k + 1) - 1 + 1 = n - k - 1 :=
-    calc n - (k + 1) - 1 + 1 = n - k - 1 - 1 + 1 := by rw[Nat.sub_add_eq n k 1]
-          _= n - k - 1 := by rw[Nat.sub_add_cancel (by linarith)]
+ have a₂ : n - (k + 1) - 1 + 1 = n - k - 1 := by omega
 
- have a₃ : 1 ≤ n - (k + 1) - 1 + 2 ∧ n - (k + 1) - 1 + 2 ≤ n := by
-  refine {
-    left := by linarith
-    right := by
-      calc n - (k + 1) - 1 + 2 ≤ n - k := by rw[a₁]
-        _ ≤ n := Nat.sub_le (n) (k)
-  }
+ have a₃ : 1 ≤ n - (k + 1) - 1 + 2 ∧ n - (k + 1) - 1 + 2 ≤ n := by omega
 
- have a₅ : k ≤ n-1 :=
-      calc k ≤ k+1 := by linarith
-            _≤ n-1 := by linarith
+ have a₅ : k ≤ n-1 := by omega
 
- have a₇ : n - (k + 1) - 1 ≤ n - 1 :=
-      calc  n - (k + 1) - 1 ≤ n - (k + 1 + 1) := by rw[Nat.sub_sub n (k+1) 1]
-          _ ≤ n - (1 + k + 1) := by rw[add_comm k]
-          _ ≤ n - (1 + (k + 1)) := by rw[add_assoc]
-          _ ≤ n - 1 - (k + 1) := by rw[← Nat.sub_sub n 1 (k+1)]
-          _ ≤ n - 1 := Nat.sub_le (n-1) (k + 1)
-
+ have a₇ : n - (k + 1) - 1 ≤ n - 1 := by omega
 
  have a₁₁ : n - (k + 1) - 1 + 1 = n - (k + 1) := Nat.sub_add_cancel (a₀₁)
 
- have a₁₂ : n - (k + 1) - 1 + 2 = n - (k + 1) + 1 :=
-    calc n - (k + 1) - 1 + 2 = n - (k + 1) - 1 + 1 + 1 := by simp
-          _= n - (k + 1) + 1 := by rw[a₁₁]
+ have a₁₂ : n - (k + 1) - 1 + 2 = n - (k + 1) + 1 := by omega
 
- have a₉ : n - (k + 1) - 1 + 1 + 2 = n - k + 1 :=
-    calc n - (k + 1) - 1 + 1 + 2 = n - (k + 1) + 2 := by rw[a₁₁]
-          _= n - k - 1 + 2 := by rw[Nat.sub_sub]
-          _= n - k - 1 + 1 + 1 := by simp
-          _= 1 + (n - k - 1 + 1) := by rw[add_comm (1)]
-          _= 1 + (n - k - 1) + 1 := by rw[add_assoc]
-          _= n - k + 1 := by rw [Nat.add_sub_of_le (by linarith)]
+ have a₉ : n - (k + 1) - 1 + 1 + 2 = n - k + 1 := by omega
 
- have a₁₀ : n - (k + 1) - 1 + 1 ≤ n - 1 :=
-    calc n - (k + 1) - 1 + 1 ≤ n - (k + 1) := by rw[a₁₁]
-          _≤ n - (1 + k) := by rw[add_comm k]
-          _≤ n - 1 - k := by rw[Nat.sub_sub]
-          _≤ n - 1 := Nat.sub_le (n-1) k
+ have a₁₀ : n - (k + 1) - 1 + 1 ≤ n - 1 := by omega
 
  have h₂ : f (n - (k + 1) - 1 + 2, m + 1) ≠ 0 := by exact nzPattern_n.non_zero (n - (k + 1) - 1 + 2) (m + 1) a₃
 
@@ -161,16 +118,16 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
           _= ( f (n - (k + 1) - 1 + 1, m + 1) * (f (n - 1, m + 2) * f (n - k, m + 1) - f (n - k + 1, m)) - 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ := by rw[← ih a₅]
           _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - f (n - k + 1, m) * f (n - (k + 1) - 1 + 1, m + 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by ring
           _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - f (n - (k + 1) - 1 + 1 + 2, m) * f (n - (k + 1) - 1 + 1, m + 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[a₉]
-          _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - (f (n - (k + 1) - 1 + 1+1,m) * f (n - (k + 1) - 1 + 1 + 1, m + 1) - 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[pattern_n.diamond (n - (k + 1) - 1 + 1) (m) a₁₀]
+          _= (f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) - (f (n - (k + 1) - 1 + 1+1,m) * f (n - (k + 1) - 1 + 1 + 1, m + 1) - 1) - 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹ := by rw[pattern_n.diamond (n - (k + 1) - 1 + 1) (m) (a₁₀)]
           _= f (n - 1, m + 2) * f (n - (k + 1) - 1 + 1, m + 1) * f (n - k, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2,m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by ring
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) * f (n - (k + 1) - 1 + 2, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2, m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by rw[a₁₁, a₁]
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) - 1 + 2, m) := by rw[mul_inv_cancel_right₀ h₂ (f (n - 1, m + 2) * f (n - (k + 1), m + 1)), mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1 + 2, m))]
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) + 1, m) := by rw[a₁₂]
-
-
-
-
-
+ have n_eq_zero : n = 0 := by omega
+ have H₀ := @pattern_n.topBordZeros F _ f n _ 0
+ have H₁ := @pattern_n.botBordOnes_n F _ f n _ 0
+ rw [n_eq_zero, H₀] at H₁
+ omega
 
 theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by
   -- it suffices to prove glide symmetry
@@ -199,7 +156,7 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
       rw [Nat.sub_add_eq, ← add_assoc m i 2]
       have h₁ : i ≤ n-1 := by omega
       have h₂ : f (2,m+i) = f (n-1,m+i+2) := by -- we first prove P₂
-        have key := pattern_nContinuant2 F f n 0 (by linarith) (m+i+2)
+        have key := pattern_nContinuant2 F f n 0 (by linarith) (m+i)
         simp at key
         rw [@pattern_n.topBordZeros F _ f n _ (m+i+2), @pattern_n.topBordOnes F _ f n _ (m+i+1)] at key
         simp at key
@@ -213,7 +170,7 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
         simp at this
         rw [← this]
       have h₅ : f (n-i-1,m+i+2) = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by
-        have key := pattern_nContinuant2 F f n (n-i-1) (by omega) (m+i+2)
+        have key := pattern_nContinuant2 F f n (n-i-1) (by omega) (m+i)
         rw [key, Nat.sub_sub n i 1, ← Nat.sub_add_comm ileq, ← Nat.sub_add_comm ileq]
         simp
       symm
