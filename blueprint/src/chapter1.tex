@@ -34,7 +34,7 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
         f (i,m) &= f (n-1,m) f (i+1,m-1) - f(i+2,m-2), \qquad i \in \{0,n-1\}. 
     \end{align*}
 \end{lemma}
-\begin{proof}
+\begin{proof} \leanok
     We begin by proving the first statement. That is, we prove
     \[
         P_i : \forall m \in \mathbb{Z},  f(i+2,m) = f(2,m+i+1) f(i+1,m) - f(i,m),
@@ -116,10 +116,12 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
     \label{cor:imageFinite}
     \lean{imageFinite}
     \uses{prop:trsltInv}
+    \leanok
     Let $f$ be a nowhere-zero $F$-valued pattern of height $n$. Then, ${\rm Im}(f) := \{f (i,m) : i \in \{1,\ldots, n\}, m \in \mathbb{Z}\}$ is
     a finite set. 
 \end{corollary}
 \begin{proof}
+    \leanok
     Consider the finite set $\mathcal{D} = \{(i,m) : i \in \{1,\ldots, n\}, m \in \{0,\ldots, n\}\}$. By Proposition \ref{prop:trsltInv}, 
     \[
         {\rm Im}(f) = \{f (i,m) : (i,m) \in \mathcal{D}\},
