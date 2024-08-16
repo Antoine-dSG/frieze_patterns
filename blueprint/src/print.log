@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  15 AUG 2024 13:47
+This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2024.7.10)  16 AUG 2024 17:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -686,7 +686,7 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 4.99947pt on input line 5.
 
-Overfull \hbox (16.35776pt too wide) detected at line 51
+Overfull \hbox (16.35776pt too wide) detected at line 52
 []
  []
 
@@ -695,7 +695,7 @@ Overfull \hbox (16.35776pt too wide) detected at line 51
 [1
 
 ]
-Overfull \hbox (36.13258pt too wide) detected at line 68
+Overfull \hbox (36.13258pt too wide) detected at line 69
 []
  []
 
@@ -703,12 +703,20 @@ Overfull \hbox (36.13258pt too wide) detected at line 68
 
 [2]
 Chapter 2.
+
+LaTeX Warning: Reference `lem:nDiagReduction' on page 3 undefined on input line
+ 71.
+
 ) (chapter3.tex
 
 [3
 
 ]
 Chapter 3.
+
+LaTeX Warning: Reference `prop:friezeToDiag' on page 4 undefined on input line 
+43.
+
 ))
 
 [4
@@ -718,14 +726,18 @@ Chapter 3.
 LaTeX2e <2024-06-01>
 L3 programming layer <2024-05-08>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `print.out' has not changed.
-(rerunfilecheck)             Checksum: 466846A5EF4AE3DAB56A13B882079B95;527.
+(rerunfilecheck)             Checksum: 49855A4C928407527D7389AF67A839E0;750.
  ) 
 Here is how much of TeX's memory you used:
- 16777 strings out of 409032
- 302288 string characters out of 5762627
+ 16779 strings out of 409032
+ 302332 string characters out of 5762627
  1946545 words of memory out of 5000000
- 39248 multiletter control sequences out of 15000+600000
+ 39250 multiletter control sequences out of 15000+600000
  563424 words of font info for 83 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  90i,8n,116p,544b,438s stack positions out of 10000i,1000n,20000p,200000b,200000s

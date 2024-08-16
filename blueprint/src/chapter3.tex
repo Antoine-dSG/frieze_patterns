@@ -9,18 +9,18 @@
 
 The following proposition is a key result connecting arithmetic frieze patterns to $n$-diagonals.
 \begin{proposition}
-    \uses{def:nDiag,def:arith_fp}
-    \label{prop:friezeToDiag}
-    \lean{friezeToDiag}
+    \uses{def:pandean,def:arith_fp}
+    \label{prop:friezeToFlute}
+   % \lean{friezeToDiag}
 1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
 \]
-is an $n$-diagonal.
+is a flute (of height $n-1$).
 
-2) Given an $n$-diagonal $(a_1, \ldots, a_n)$, there exists a arithmetic frieze pattern $f$ of height $n$ such that
+2) Given a flute $(a_0, \ldots, a_n)$, there exists a arithmetic frieze pattern $f$ of height $n+1$ such that
 \[
-    (f (1,0), \ldots, f (n,0)) = (a_1, \ldots, a_n).
+    (f (1,0), \ldots, f (n,0)) = (a_0, \ldots, a_n).
 \]
 \end{proposition}
 \begin{proof}
@@ -30,12 +30,12 @@ is an $n$-diagonal.
 \begin{corollary}
     \label{c:friezeNonEmpty}
     \lean{friezeNonEmpty}
-    \uses{l:nDiagNonEmpty, prop:friezeToDiag}
+    \uses{l:kFluteNonEmpty, prop:friezeToFlute}
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{corollary}
 \begin{proof}
-    The proof of Lemma \ref{l:nDiagNonEmpty} showed that $(1,1,\ldots, 1)$ is an $n$-diagonal. 
-    The claim then follows from 2) of Proposition \ref{prop:friezeToDiag}.
+    The proof of Lemma \ref{l:kFluteNonEmpty} showed that $(1,1,\ldots, 1)$ is a flute. 
+    The claim then follows from 2) of Proposition \ref{prop:friezeToFlute}.
 \end{proof}
 
 \begin{corollary}
@@ -63,8 +63,8 @@ We are now able to formulate and prove the main theorem of this section.
     \]    
 \end{theorem}
 \begin{proof}
-By Propositions \ref{prop:friezeToDiag} and \ref{prop:nDiagBounded}, $u_n \leq F_n$ for all $n$. 
-On the other hand, Lemma \ref{l:FibDiag} and 2) of Proposition \ref{prop:friezeToDiag} show that 
+By Propositions \ref{prop:friezeToFlute} and \ref{prop:FluteBounded}, $u_n \leq F_n$ for all $n$. 
+On the other hand, Lemma \ref{l:FibFlute} and 2) of Proposition \ref{prop:friezeToFlute} show that 
 there exists an arithmetic frieze pattern of height $n$ containing $F_n$ as a value.
 \end{proof}
 

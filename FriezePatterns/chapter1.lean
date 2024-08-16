@@ -53,10 +53,11 @@ lemma pattern_nContinuant1 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [
 -- The second continuant lemma is proved like the first
 lemma pattern_nContinuant2 (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n-1 → ∀m, f (i,m+2) = f (n-1,m+2)*f (i+1,m+1) - f (i+2,m) := by
 
-
+by_cases one_leq_n : 1 ≤ n
 suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) = f (n-1,m+2)*f (n-i,m+1) - f (n-i+1,m)
 -- Flip i to n-i so we can induct forwards
 ·intro i h m
+
  have key : n - i - 1 ≤ n - 1 := by omega
  have key2 : n - (n - i - 1) - 1 = i := by omega
  have key3 : n - (n - i - 1) = i + 1 := by
@@ -67,6 +68,7 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
   have H₁ := @pattern_n.botBordOnes_n F _ f n _ 0
   rw [n_eq_zero, H₀] at H₁
   exact False.elim (zero_ne_one H₁)
+
 
  calc f (i, m + 2) = f (n - (n - i - 1) - 1, m + 2) := by rw[key2]
           _= f (n-1,m+2)*f (n-(n - i - 1),m+1) - f (n-(n - i - 1) + 1,m) := by rw[pattern_nContinuant2flipped (n - i - 1) key]
@@ -96,6 +98,7 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
 
  have a₃ : 1 ≤ n - (k + 1) - 1 + 2 ∧ n - (k + 1) - 1 + 2 ≤ n := by omega
 
+
  have a₅ : k ≤ n-1 := by omega
 
  have a₇ : n - (k + 1) - 1 ≤ n - 1 := by omega
@@ -123,11 +126,13 @@ suffices pattern_nContinuant2flipped : ∀ i, i ≤ n-1 → ∀m, f (n-i-1,m+2) 
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) * f (n - (k + 1) - 1 + 2, m + 1) * (f (n - (k + 1) - 1 + 2, m + 1))⁻¹ - f (n - (k + 1) - 1 + 2, m) * f (n - (k + 1) - 1 + 2 , m + 1) * (f (n - (k + 1) - 1 + 2 , m + 1))⁻¹  := by rw[a₁₁, a₁]
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) - 1 + 2, m) := by rw[mul_inv_cancel_right₀ h₂ (f (n - 1, m + 2) * f (n - (k + 1), m + 1)), mul_inv_cancel_right₀ h₂ (f (n - (k + 1) - 1 + 2, m))]
           _= f (n - 1, m + 2) * f (n - (k + 1), m + 1) - f (n - (k + 1) + 1, m) := by rw[a₁₂]
+
  have n_eq_zero : n = 0 := by omega
  have H₀ := @pattern_n.topBordZeros F _ f n _ 0
  have H₁ := @pattern_n.botBordOnes_n F _ f n _ 0
  rw [n_eq_zero, H₀] at H₁
  omega
+
 
 theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by
   -- it suffices to prove glide symmetry

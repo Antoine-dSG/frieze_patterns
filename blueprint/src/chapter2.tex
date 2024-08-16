@@ -1,26 +1,25 @@
 
-\chapter{n-Diagonals}
+\chapter{Pandean sequences, flutes and the Fibonacci sequence}
 \begin{definition}
-    \label{def:nDiag}
-    \lean{nDiag}
-    Let $n$ be a positive integer. By an $n$-diagonal, we mean any $n$-tuple $(a_1,\ldots, a_n)$ of positive integers 
-    such that $a_1 = a_n$ and 
+    \label{def:pandean}
+   % \lean{pandean}
+    A sequence $(a_n)_{n \in \mathbb{N}}$ of positive integers is called pandean if $a_0 = 1$ and 
+    if, for every $n \geq 1$, we have
     \[
-        a_i \mid a_{i-1} + a_{i+1}, \qquad i \in \{2, \ldots, n-1\}.
+        a_n \mid a_{n-1} + a_{n+1}.
     \]
-    We denote by ${\rm Diag}(n)$ the set of $n$-diagonals.
+    Given a pandean sequence $(a_n)$, if there exists a positive integer $k$ such that $a_n = a_{n+k}$ for all $n\in \mathbb{N}$, 
+    the tuple $(a_0, a_1, \ldots, a_k)$ is called a Pan flute, or simply a flute, of height $k$. The set of all flutes of a given height $k$ 
+    is denoted Flute$(k)$.
 \end{definition}
-
-We prove a couple of key properties about $n$-diagonals. 
+It is clear that the constant sequence consisting entirely of ones is pandean, and such a pandean sequence gives rise to a flutes of height $k$ for any $k$.
+In other words, we have the following.
 \begin{lemma}
-    \label{l:nDiagNonEmpty}
-    \lean{nDiagNonEmpty}
-    \uses{def:nDiag}
-    Fix a positive integer $n$. The set Diag$(n)$ is non-empty.
+    \label{l:kFluteNonEmpty}
+   % \lean{nDiagNonEmpty}
+    \uses{def:pandean}
+    For any positive integer $k$, the set Flute$(k)$ is non-empty.
 \end{lemma}
-\begin{proof}
-    The $n$-tuple $(1,1,\ldots, 1)$ consisting entirely of $1$s is clearly an $n$-diagonal.
-\end{proof}
 
 \begin{definition}
     \label{def:fib}
@@ -30,32 +29,31 @@ We prove a couple of key properties about $n$-diagonals.
     \]
 \end{definition}
 
-The following $n$-diagonals will play an important role for us.
 \begin{lemma}
-    \label{l:FibDiag}
-    \lean{FibDiag}
-    \uses{def:nDiag}
+    \label{l:FibFlute}
+   % \lean{FibDiag}
+    \uses{def:pandean}
     1) If $n$ is odd, the $n$-tuple 
     \[
         (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
     \]
-    is an $n$-diagonal.
+    is a Pan flute of height $n-1$.
 
     2) If $n$ is even, the $n$-tuple 
     \[
         (F_2, F_4, F_6, \ldots, F_{n-2}, F_{n}, F_{n-1}, F_{n-3}, \ldots, F_5, F_3,F_1),
     \]
-    is an $n$-diagonal. 
+    is a Pan flute of height $n-1$. 
 \end{lemma}
 \begin{proof}
     These are a tedious but straightforward calculation.
 \end{proof}
 
 \begin{lemma}
-    \uses{def:nDiag}
-    \label{lem:nDiagReduction}
-    \lean{nDiagReduction}
-    In an $n$-diagonal $(a_1, \ldots, a_n)$, there exists an index $i \in \{2,\ldots, n-1\}$ 
+    \uses{def:pandean}
+    \label{lem:FluteReduction}
+  %  \lean{nDiagReduction}
+    In a flute $(a_0, \ldots, a_n)$, there exists an index $i \in \{1,\ldots, n-1\}$ 
     such that $a_i = a_{i-1} + a_{i+1}$.
 \end{lemma}
 \begin{proof}
@@ -63,11 +61,11 @@ The following $n$-diagonals will play an important role for us.
 \end{proof}
 
 \begin{proposition}
-    \uses{def:nDiag,lem:nDiagReduction}
-    \label{prop:nDiagBounded}
-    \lean{nDiagBounded}
-    Fix a positive integer $n$, and let $(a_1, \ldots, a_n) \in {\rm Diag}(n)$. 
-    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_n$. 
+    \uses{def:pandean,lem:FluteReduction}
+    \label{prop:FluteBounded}
+  %  \lean{nDiagBounded}
+    Fix a positive integer $n$, and let $(a_0, \ldots, a_n) \in {\rm Flute}(n)$. 
+    For any $i \in \{1,\ldots, n\}$, we have $a_i \leq F_{n+1}$. 
 \end{proposition}
 \begin{proof}
    By induction on $n$, and using Lemma \ref{lem:nDiagReduction}.
