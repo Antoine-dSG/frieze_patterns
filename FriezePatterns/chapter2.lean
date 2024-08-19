@@ -16,6 +16,7 @@ def nFluteNonEmpty (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probabl
   have div : ∀ k, a (k+1) ∣ (a k + a (k+2)) := λ k => by simp
   exact ⟨a, pos, hd, period, div⟩
 
+
 def a_odd (k i : ℕ) : ℕ :=
   if k = 0 then
     1
@@ -153,7 +154,6 @@ def fib_flute_even (k : ℕ) : flute (2*k+2) := by
   have period : ∀ i, a_even k i = a_even k (i+(2*k+2)-1) := by sorry
   have div : ∀ i, a_even k (i+1) ∣ (a_even k i + a_even k (i+2)) := by sorry
   exact ⟨a_even k, pos, hd, period, div⟩
-
 
 -- In its current formulation it is probably incorrect (in the edge cases...)
 lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-1) = 1)) ∨ (∃ i, i ≥ 1 → i ≤ n-2 → f.a (i+1) = f.a i + f.a (i+2)) := by sorry
