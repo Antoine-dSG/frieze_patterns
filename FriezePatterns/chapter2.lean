@@ -16,6 +16,17 @@ def csteFlute (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probably bet
   have div : ∀ k, a (k+1) ∣ (a k + a (k+2)) := λ k => by simp
   exact ⟨a, pos, hd, period, div⟩
 
+-- Set of all flutes of height n.
+def fluteSet (n : ℕ) : Set (flute n) :=
+  { f | true }
+
+-- The set of all flutes of height n is nonempty. We might need this in Chapter 3.
+lemma fluteSetNonEmpty (n : ℕ) : Nonempty (fluteSet n) := by
+  have h : Inhabited (flute n) := csteFlute n
+  rcases h with ⟨f⟩
+  use f
+  rfl
+
 
 def a_odd (k i : ℕ) : ℕ :=
   if k = 0 then
@@ -203,4 +214,39 @@ lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-2) = 1)) �
     specialize key₂ n (by omega)
     linarith
 
-theorem FluteBounded (n : ℕ)(f : flute n) : ∀ i, f.a i ≤ Nat.fib n := by sorry
+theorem FluteBounded (n : ℕ) (hn: n>0) (f : flute n) : ∀ i ≤ n-1, f.a i ≤ Nat.fib n := by
+  -- note the statement is false without hn
+  induction' n using Nat.strong_induction_on with n ih
+  match n with
+  | 0 => linarith
+  | 1 =>
+    intro i hi
+    simp at hi
+    simp [hi, f.hd]
+  | 2 =>
+    intro i hi
+    have h₀ := f.hd
+    have h₁ : f.a 1 = 1 := by
+      have := f.period 0
+      simp [f.hd] at this
+      rw [←this]
+    match i with
+    | 0 => simp [h₀]
+    | 1 => simp [h₁]
+    | i+2 => linarith
+  | n+3 =>
+    intro i hi
+    have h₁ := ih (n+2) (by linarith) (by linarith)
+    simp at *
+    rcases FluteReduction _ f with (h₂ | h₂) | h₂
+    let g : flute (n+2) := by
+      let rec a (i : ℕ) : ℕ :=
+        if i ≥ n+1 then
+          a (i-(n+1))
+        else if i = 0 then
+          f.a 0
+        else f.a (i-1)
+      have hd : a 0 = 1 := by
+        sorry -- the definition of a is missing from the ctx for some reason (cf. https://leanprover.zulipchat.com/#narrow/stream/113489-new-members/topic/Let.20rec.20missing.20from.20context/near/394483002). Maybe we have to define global auxiliary functions?
+      sorry
+    sorry
