@@ -16,7 +16,6 @@ def nFluteNonEmpty (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probabl
   have div : ∀ k, a (k+1) ∣ (a k + a (k+2)) := λ k => by simp
   exact ⟨a, pos, hd, period, div⟩
 
-
 def a_odd (k i : ℕ) : ℕ :=
   if k = 0 then
     1
@@ -155,8 +154,51 @@ def fib_flute_even (k : ℕ) : flute (2*k+2) := by
   have div : ∀ i, a_even k (i+1) ∣ (a_even k i + a_even k (i+2)) := by sorry
   exact ⟨a_even k, pos, hd, period, div⟩
 
-
--- In its current formulation it is probably incorrect (in the edge cases...)
-lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-1) = 1)) ∨ (∃ i, i ≥ 1 → i ≤ n-2 → f.a (i+1) = f.a i + f.a (i+2)) := by sorry
+lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-2) = 1)) ∨ (∃ i ≤ n-3, f.a (i+1) = f.a i + f.a (i+2)) := by
+  by_contra! H
+  rcases H with ⟨⟨h₁, h₂⟩, h₃⟩
+  have ha₁ : (↑ (f.a 1) : ℤ) - f.a 0 > 0 := by
+    have := f.pos 1
+    have := f.hd
+    omega
+  have ha₂ : (↑ (f.a (n-1)) : ℤ) - f.a (n-2) < 0 := by
+    have := f.pos (n-2)
+    have := f.period 0
+    simp [f.hd] at this
+    rw [←this]
+    omega
+  have key : ∀ i ≤ n-3, (↑(f.a i):ℤ) + f.a (i+2) ≥ (f.a (i+1))*2 := by
+    intro i hi
+    rcases f.div i with ⟨k, hk⟩
+    match k with
+    | 0 =>
+      simp at hk
+      have := f.pos i
+      omega
+    | 1 =>
+      specialize h₃ i hi
+      omega
+    | k+2 =>
+      nlinarith
+  have key₂ : ∀ i ≤ n-3, (↑ (f.a (i+2)) : ℤ) - f.a (i+1) ≥ f.a 1 - f.a 0 := by
+    intro i hi
+    induction' i with i ih
+    specialize key 0 hi
+    linarith
+    specialize key (i+1) hi
+    specialize ih (by omega)
+    linarith
+  have key₃ : f.a (n-1) = 1 := by
+    have := f.period 0
+    simp [f.hd] at this
+    rw [←this]
+  match n with -- n ≤ 2 contradicts with h₁ and h₂
+  | 0 => linarith
+  | 1 => linarith
+  | 2 => linarith
+  | n+3 =>
+    simp_all
+    specialize key₂ n (by omega)
+    linarith
 
 theorem FluteBounded (n : ℕ)(f : flute n) : ∀ i, f.a i ≤ Nat.fib n := by sorry
