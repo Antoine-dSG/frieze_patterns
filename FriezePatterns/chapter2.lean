@@ -1,78 +1,69 @@
 import FriezePatterns.chapter1
----- n-Diagonals ----
+---- n-Flutes ----
 
 class flute (n : ℕ) where
-  a : Fin (n + 1) → ℕ
+  a : ℕ → ℕ
   pos : ∀ i, a i > 0
-  hd : a 0 =1
-  hteq : a 0 = a n -- head-tail equality
-  div : ∀ i, i ≤ n-2 → a (i+1) ∣ (a i + a (i+2))
-/-
-Mathlib recommends using Fin n → α to define n-tuples.
+  hd : a 0 = 1
+  period : ∀ k, a k = a (k+n-1)
+  div : ∀ k, a (k+1) ∣ (a k + a (k+2))
 
-Choice of index: Using Fin (n+1) and indexing from 0 to n is probably more convenient: we want to have a coercion from ℕ to Fin _, but it doesn't work if we use Fin n, since Fin 0 is empty.
-
-Warning: flute of height n has n+1 entries
-Compare with pattern_n.
--/
-
-lemma nFluteNonEmpty (n : ℕ) : Nonempty (flute n) := by
-  let a : Fin (n + 1) → ℕ := λ _ => 1
+def nFluteNonEmpty (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probably better than Nonempty here, as we actually construct an inhabitant of flute n, so Lean lets us extract *the* inhabitant
+  let a : ℕ → ℕ := λ _ => 1
   have pos : ∀ i, a i > 0 := λ _ => by simp
   have hd : a 0 = 1 := by rfl
-  have hteq : a 0 = a n := by rfl
-  have div : ∀ i, i ≤ n-2 → a (i+1) ∣ (a i + a (i+2)) := λ i _ => by simp
-  exact ⟨a,pos,hd, hteq, div⟩
+  have period : ∀ k, a k = a (k+n-1) := λ k => by rfl
+  have div : ∀ k, a (k+1) ∣ (a k + a (k+2)) := λ k => by simp
+  exact ⟨a, pos, hd, period, div⟩
 
 
--- Note the parity of the indices in the definitions below are different from the LaTeX version, since we are using Fin (n+1) instead of Fin n.
+def a_odd (k i : ℕ) : ℕ :=
+  if k = 0 then
+    1
+  else if i ≥ 2*k then
+    a_odd k (i-2*k) -- this does not terminate when k=0
+    else
+    if i < k then
+      Nat.fib (2*i+2)
+    else
+      Nat.fib (1+4*k-2*i)
 
--- this case corresponds to n=2k+1 in the LaTeX version, I am using k+k instead of 2k because Mathlib doesn't have many theorems about multiplication of coercions from ℕ to Fin _.
-
-def fib_flute_even (k : ℕ) : flute (k+k) := by
-  let a : Fin (k+k+1) → ℕ := by
+def fib_flute_odd (k : ℕ) : flute (2*k+1) := by
+  by_cases hk : k = 0
+  exact ⟨a_odd k 0, λ i => by simp [hk, a_odd], by simp [hk, a_odd], by simp [hk, a_odd], λ _ => by simp⟩
+  have pos : ∀ i, a_odd k i > 0 := by
     intro i
-    induction' i with i ih
-    use ite (i < k) (Nat.fib (i+i+2)) (Nat.fib (1+k+k+k+k-i-i))
-  have pos : ∀ i, a i > 0 := by
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ 2*k
+    unfold a_odd ; simp [hi, hk]
+    exact ih (i-(2*k)) (by omega)
+    by_cases hi₂ : i < k
+    simp [a_odd, hk, hi, hi₂]
+    simp [a_odd, hk, hi, hi₂] ; omega
+  have hd : a_odd k 0 = 1 := by
+    simp [hk, a_odd]
+  have period : ∀ i, a_odd k i = a_odd k (i+(2*k+1)-1) := by
     intro i
-    induction' i with i ih
-    simp [a]
-    split
-    next h => simp_all only [Nat.fib_pos, lt_add_iff_pos_left, add_pos_iff, pos_add_self_iff, Nat.ofNat_pos, or_true] -- proof term provided by aesop
-    next h =>
-      simp_all only [not_lt, Nat.fib_pos, tsub_pos_iff_lt] -- aesop
-      omega
-  have hd : a 0 = 1 := by
-    simp [a]; intro h;
-    rw [h]
-    repeat' rw [add_zero]
-    simp
-  have hteq : a 0 = a ↑(k+k) := by
-    by_cases hk : k > 0
-    · simp [a, hk]
-      have key : ↑((k : Fin (k+k+1)) + k) = k+k := by
-        rw [Fin.val_add_eq_ite, Fin.val_cast_of_lt (by linarith)]
-        simp_all only [gt_iff_lt, add_le_iff_nonpos_right, nonpos_iff_eq_zero, one_ne_zero, ↓reduceIte] -- aesop
-      simp_all only [gt_iff_lt, add_lt_iff_neg_left, not_lt_zero', ↓reduceIte] -- aesop
-      rw [← Nat.sub_sub _ k k, ← Nat.sub_sub _ k k]
-      simp_all only [add_tsub_cancel_right, Nat.fib_one] -- aesop
-    · simp at hk ; simp [hk]
-  have div : ∀ i, i ≤ k+k-2 → a (i+1) ∣ (a i + a (i+2)) := by
-    intro i hi
-    by_cases hi₂ : i+2 < k
-    · simp [a, hi₂]
-      norm_cast ; rw [Fin.val_cast_of_lt (by linarith), Fin.val_cast_of_lt (by linarith)]
-      -- Most of the following steps are just if-then-else reductions. These are still required even if we define a : ℕ → ℕ.
-      have key1 : (if i + 1 < k then Nat.fib (i + 1 + (i + 1) + 2) else Nat.fib (1 + k + k + k + k - (i + 1) - (i + 1))) = Nat.fib (i + 1 + (i + 1) + 2) := by simp [↓reduceIte] ; intros ; linarith
-      have : i % (k+k+1) = i := Nat.mod_eq_of_lt (by linarith)
-      have key2 : (if i % (k + k + 1) < k then Nat.fib (i % (k + k + 1) + i % (k + k + 1) + 2)
-      else Nat.fib (1 + k + k + k + k - i % (k + k + 1) - i % (k + k + 1))) = Nat.fib (i + i + 2) := by
-        rw [this]
-        simp [↓reduceIte]
-        intros ; linarith
-      have key3 : (if i + 2 < k then Nat.fib (i + 2 + (i + 2) + 2) else Nat.fib (1 + k + k + k + k - (i + 2) - (i + 2))) = Nat.fib (i + 2 + (i + 2) + 2) := by simp [↓reduceIte] ; intros ; linarith
-      rw [key1, key2, key3]
+    nth_rw 2 [a_odd]
+    simp [hk]
+  have div : ∀ i, a_odd k (i+1) ∣ (a_odd k i + a_odd k (i+2)) := by
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ 2*k
+    · have hi₂ : 2*k ≤ i+1 := by omega
+      have hi₃ : 2*k ≤ i+2 := by omega
+      unfold a_odd ; simp [hk, hi, hi₂, hi₃]
+      specialize ih (i-(2*k)) (by omega)
+      have hi₄ : i - 2 * k + 1 = i + 1 - 2 * k := by omega
+      have hi₅ : i - 2 * k + 2 = i + 2 - 2 * k := by omega
+      rw [hi₄, hi₅] at ih
+      exact ih
+    · by_cases hi₂ : i+2<k
+      have hi₃ : i+1 < k := by omega
+      have hi₄ : i < k := by omega
+      have hi₅ : ¬ 2*k ≤ i+1 := by omega
+      have hi₆ : ¬ 2*k ≤ i+2 := by omega
+      unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆]
       ring_nf
       have : 6 + i*2 = (2*i+3)+2+1 := by omega
       rw [this, Nat.fib_add (2*i+3) 2]
@@ -82,28 +73,89 @@ def fib_flute_even (k : ℕ) : flute (k+k) := by
         _ = Nat.fib ((i*2+2)+2) := by rw [←Nat.fib_add_two]
         _ = Nat.fib (4+i*2) := by ring_nf
       rw [h]
-      use 3
-      omega
-    · sorry -- there are ~5 more cases to consider
-  exact ⟨a, pos,hd, hteq, div⟩
+      use 3 ; omega
+      by_cases hi₃ : i+1 < k
+      have hi₄ : ¬ 2*k ≤ i+1 := by omega
+      have hi₅ : ¬ 2*k ≤ i+2 := by omega
+      have hi₆ : i < k := by omega
+      have hi₇ : 2 * (i+1)+2 = 2*k := by omega
+      have hi₈ : 2 * i+2 = 2*k-2 := by omega
+      have hi₉ : 1+4*k-2*(i+2) = (2*k-1)+2 := by omega
+      unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₈, hi₉]
+      simp [Nat.fib_add_two, ←add_assoc]
+      have : Nat.fib (2*k-2) + Nat.fib (2*k-1) = Nat.fib (2*k) := by
+        have : 2*k = (2*k-2)+2 := by omega
+        nth_rw 3 [this]
+        rw [Nat.fib_add_two]
+        have : 2*k-2+1=2*k-1 := by omega
+        rw [this]
+      rw [this]
+      have : 2*k-1+1=2*k := by omega
+      rw [this]
+      use 2 ; omega
+      · by_cases hi₄ : i < k
+        have hi₅ : ¬ 2*k ≤ i+1 := by omega
+        unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅]
+        by_cases hk₁ : k = 1
+        have hi₀ : i = 0 := by omega
+        simp [hk₁, hi₀]
+        use 1 ; rfl
+        have hi₆ : ¬ 2*k ≤ i+2 := by omega
+        simp [hi₆]
+        have hi₇ : 1+4*k-2*(i+1) = (2*k-1)+2 := by omega
+        have hi₈ : 2*i+2 = (2*k-1)+1 := by omega
+        have hi₉ : 1+4*k-2*(i+2) = 2*k-1 := by omega
+        rw [hi₇, hi₈, hi₉]
+        use 1; simp [Nat.fib_add_two] ; omega
+        by_cases hi₅ : ¬ 2*k ≤ i+2
+        have hi₆ : ¬ 2*k ≤ i+1 := by omega
+        unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆]
+        have hi₇ : 1+4*k-2*(i+1) = 4*k-2*i-1 := by omega
+        have hi₈ : 1+4*k-2*i = 4*k-2*i-2+2+1 := by omega
+        have hi₉ : 1+4*k-2*(i+2) = 4*k-2*i-3 := by omega
+        rw [hi₇, hi₈, hi₉, Nat.fib_add]
+        simp [Nat.fib_add_two]
+        use 3
+        rw [add_assoc, add_comm, add_assoc]
+        have hi₁₀ : 4*k-2*i-2 = (4*k-2*i-3)+1 := by omega
+        have hi₁₁ : 4*k-2*i-3+1+1 = 4*k-2*i-1 := by omega
+        rw [hi₁₀, ← Nat.fib_add_two, hi₁₁]
+        omega
+        · push_neg at hi₅
+          by_cases hi₆ : ¬ 2*k ≤ i+1
+          unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆]
+          have hi₇ : 1+4*k-2*(i+1) = 3 := by omega
+          have hi₈ : 1+4*k-2*i = 5 := by omega
+          have hi₉ : i+2-2*k = 0 := by omega
+          have hk₂ : 0<k := by omega
+          unfold a_odd
+          simp [hi₇, hi₈, hi₉, hk, hk₂]
+          use 3 ; simp [Nat.fib_add_two]
+          push_neg at hi₆
+          have hi₇ : i+1-2*k = 0 := by omega
+          have hi₈ : i+2-2*k = 1 := by omega
+          unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₇, hi₈]
+          unfold a_odd ; simp [hk]
+  exact ⟨a_odd k, pos, hd, period, div⟩
 
-#eval (fib_flute_even 1).1 -- check the definition is correct
+def a_even (k i : ℕ) : ℕ :=
+  if i ≥ 2*k+1 then
+    a_even k (i-2*k-1)
+  else if i < k+1 then
+    Nat.fib (2*i+2)
+    else
+    Nat.fib (3+4*k-2*i)
 
--- this case corresponds to n=2k in the LaTeX version
-def fib_flute_odd (k : ℕ) : flute (k+k+1) := by
-  let a : Fin (k+k+1+1) → ℕ := by
-    intro i
-    induction' i with i ih
-    use ite (i < k+1) (Nat.fib (i+i+2)) (Nat.fib (3+k+k+k+k-i-i))
-  have pos : ∀ i, a i > 0 := sorry
-  have hd : a 0 = 1 := by simp [a]
-  have hteq : a 0 = a ↑(k+k+1) := sorry
-  have div : ∀ i, i ≤ k+k+1-2 → a (i+1) ∣ (a i + a (i+2)) := sorry
-  exact ⟨a, pos,hd, hteq, div⟩
-
-#eval (fib_flute_odd 1).1
+def fib_flute_even (k : ℕ) : flute (2*k+2) := by
+  -- flute 0 is inhabited under our definition, but it is trivial (and there are no frieze patterns of height 0 anyways)
+  -- the proof should be similar to the odd case, maybe we don't even have to by cases on k=0 here?
+  have pos : ∀ i, a_even k i > 0 := by sorry
+  have hd : a_even k 0 = 1 := by sorry
+  have period : ∀ i, a_even k i = a_even k (i+(2*k+2)-1) := by sorry
+  have div : ∀ i, a_even k (i+1) ∣ (a_even k i + a_even k (i+2)) := by sorry
+  exact ⟨a_even k, pos, hd, period, div⟩
 
 -- In its current formulation it is probably incorrect (in the edge cases...)
 lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-1) = 1)) ∨ (∃ i, i ≥ 1 → i ≤ n-2 → f.a (i+1) = f.a i + f.a (i+2)) := by sorry
 
-theorem FluteBounded (n : ℕ)(f : flute n) : ∀ i, f.a i ≤ Nat.fib (n+1) := by sorry
+theorem FluteBounded (n : ℕ)(f : flute n) : ∀ i, f.a i ≤ Nat.fib n := by sorry
