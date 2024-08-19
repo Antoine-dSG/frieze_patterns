@@ -22,10 +22,38 @@ def fluteSet (n : ℕ) : Set (flute n) :=
 
 -- The set of all flutes of height n is nonempty. We might need this in Chapter 3.
 lemma fluteSetNonEmpty (n : ℕ) : Nonempty (fluteSet n) := by
-  have h : Inhabited (flute n) := csteFlute n
-  rcases h with ⟨f⟩
+  rcases csteFlute n with ⟨f⟩
   use f
   rfl
+
+
+
+-- Might not be useful
+def FibFluteEven (n k : ℕ) : ℕ :=
+  if n = 0 then
+    1
+  else if n = 1 then
+    1
+  else if k ≥ n-1 then
+      FibFluteEven n (k-(n-1))
+  else if k < n/2 then -- careful of the inequality here
+        Nat.fib (2*k+1)
+  else
+        Nat.fib (2*(n-k))
+
+def FibFluteOdd (n k : ℕ) : ℕ :=
+  if n = 0 then
+    1
+  else if n = 1 then
+    1
+  else
+    if k ≥ n-1 then
+      FibFluteOdd n (k-(n-1))
+    else
+      if k ≤ n/2 then -- careful of the inequality here
+        Nat.fib (2*k+1)
+      else
+        Nat.fib (2*(n-k))
 
 
 def a_odd (k i : ℕ) : ℕ :=
@@ -246,7 +274,9 @@ theorem FluteBounded (n : ℕ) (hn: n>0) (f : flute n) : ∀ i ≤ n-1, f.a i �
         else if i = 0 then
           f.a 0
         else f.a (i-1)
-      have hd : a 0 = 1 := by
-        sorry -- the definition of a is missing from the ctx for some reason (cf. https://leanprover.zulipchat.com/#narrow/stream/113489-new-members/topic/Let.20rec.20missing.20from.20context/near/394483002). Maybe we have to define global auxiliary functions?
+      have hd : a 0 = 1 := by sorry
+         -- the definition of a is missing from the ctx for some reason (cf. https://leanprover.zulipchat.com/#narrow/stream/113489-new-members/topic/Let.20rec.20missing.20from.20context/near/394483002). Maybe we have to define global auxiliary functions?
       sorry
+    sorry
+    sorry
     sorry
