@@ -22,7 +22,7 @@ lemma nFluteNonEmpty (n : ℕ) : Nonempty (flute n) := by
   have hd : a 0 = 1 := by rfl
   have hteq : a 0 = a n := by rfl
   have div : ∀ i, i ≤ n-2 → a (i+1) ∣ (a i + a (i+2)) := λ i _ => by simp
-  exact ⟨⟨a,pos,hd, hteq, div⟩⟩
+  exact ⟨a,pos,hd, hteq, div⟩
 
 
 -- Note the parity of the indices in the definitions below are different from the LaTeX version, since we are using Fin (n+1) instead of Fin n.
@@ -44,7 +44,10 @@ def fib_flute_even (k : ℕ) : flute (k+k) := by
       simp_all only [not_lt, Nat.fib_pos, tsub_pos_iff_lt] -- aesop
       omega
   have hd : a 0 = 1 := by
-    simp [a]; intro h; rw [h,add_zero,add_zero,add_zero]; simp
+    simp [a]; intro h;
+    rw [h]
+    repeat' rw [add_zero]
+    simp
   have hteq : a 0 = a ↑(k+k) := by
     by_cases hk : k > 0
     · simp [a, hk]
@@ -84,7 +87,7 @@ def fib_flute_even (k : ℕ) : flute (k+k) := by
     · sorry -- there are ~5 more cases to consider
   exact ⟨a, pos,hd, hteq, div⟩
 
-#eval (fib_flute_even 5).1 -- check the definition is correct
+#eval (fib_flute_even 1).1 -- check the definition is correct
 
 -- this case corresponds to n=2k in the LaTeX version
 def fib_flute_odd (k : ℕ) : flute (k+k+1) := by
@@ -93,12 +96,12 @@ def fib_flute_odd (k : ℕ) : flute (k+k+1) := by
     induction' i with i ih
     use ite (i < k+1) (Nat.fib (i+i+2)) (Nat.fib (3+k+k+k+k-i-i))
   have pos : ∀ i, a i > 0 := sorry
-  have hd : a 0 = 1 := sorry
+  have hd : a 0 = 1 := by simp [a]
   have hteq : a 0 = a ↑(k+k+1) := sorry
   have div : ∀ i, i ≤ k+k+1-2 → a (i+1) ∣ (a i + a (i+2)) := sorry
   exact ⟨a, pos,hd, hteq, div⟩
 
-#eval (fib_flute_odd 5).1
+#eval (fib_flute_odd 1).1
 
 -- In its current formulation it is probably incorrect (in the edge cases...)
 lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-1) = 1)) ∨ (∃ i, i ≥ 1 → i ≤ n-2 → f.a (i+1) = f.a i + f.a (i+2)) := by sorry
