@@ -100,7 +100,7 @@ def fib_flute_odd (k : ℕ) : flute (k+k+1) := by
 
 #eval (fib_flute_odd 5).1
 
-
+-- In its current formulation it is probably incorrect (in the edge cases...)
 lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-1) = 1)) ∨ (∃ i, i ≥ 1 → i ≤ n-2 → f.a (i+1) = f.a i + f.a (i+2)) := by sorry
 
-theorem FluteBounded : 2^3 = 8 := by linarith
+theorem FluteBounded (n : ℕ)(f : flute n) : ∀ i, f.a i ≤ Nat.fib (n+1) := by sorry
