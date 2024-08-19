@@ -8,13 +8,24 @@ class flute (n : ℕ) where
   period : ∀ k, a k = a (k+n-1)
   div : ∀ k, a (k+1) ∣ (a k + a (k+2))
 
-def nFluteNonEmpty (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probably better than Nonempty here, as we actually construct an inhabitant of flute n, so Lean lets us extract *the* inhabitant
+def csteFlute (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probably better than Nonempty here, as we actually construct an inhabitant of flute n, so Lean lets us extract *the* inhabitant
   let a : ℕ → ℕ := λ _ => 1
   have pos : ∀ i, a i > 0 := λ _ => by simp
   have hd : a 0 = 1 := by rfl
   have period : ∀ k, a k = a (k+n-1) := λ k => by rfl
   have div : ∀ k, a (k+1) ∣ (a k + a (k+2)) := λ k => by simp
   exact ⟨a, pos, hd, period, div⟩
+
+-- Set of all flutes of height n.
+def fluteSet (n : ℕ) : Set (flute n) :=
+  { f | true }
+
+-- The set of all flutes of height n is nonempty. We might need this in Chapter 3.
+lemma fluteSetNonEmpty (n : ℕ) : Nonempty (fluteSet n) := by
+  have h : Inhabited (flute n) := csteFlute n
+  rcases h with ⟨f⟩
+  use f
+  rfl
 
 
 def a_odd (k i : ℕ) : ℕ :=
@@ -137,6 +148,7 @@ def fib_flute_odd (k : ℕ) : flute (2*k+1) := by
           unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₇, hi₈]
           unfold a_odd ; simp [hk]
   exact ⟨a_odd k, pos, hd, period, div⟩
+
 
 def a_even (k i : ℕ) : ℕ :=
   if i ≥ 2*k+1 then
