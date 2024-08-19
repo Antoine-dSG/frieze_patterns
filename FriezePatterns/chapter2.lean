@@ -4,26 +4,26 @@ import FriezePatterns.chapter1
 class flute (n : ℕ) where
   a : Fin (n + 1) → ℕ
   pos : ∀ i, a i > 0
+  hd : a 0 =1
   hteq : a 0 = a n -- head-tail equality
   div : ∀ i, i ≤ n-2 → a (i+1) ∣ (a i + a (i+2))
-
 /-
 Mathlib recommends using Fin n → α to define n-tuples.
 
 Choice of index: Using Fin (n+1) and indexing from 0 to n is probably more convenient: we want to have a coercion from ℕ to Fin _, but it doesn't work if we use Fin n, since Fin 0 is empty.
 
-Problem: the indices in Proposition 3.2 will no longer match, since flute(n) would be an (n+1)-tuple.
-
-Alternatively, can use functions ℕ → ℕ?
-
+Warning: flute of height n has n+1 entries
+Compare with pattern_n.
 -/
 
 lemma nFluteNonEmpty (n : ℕ) : Nonempty (flute n) := by
   let a : Fin (n + 1) → ℕ := λ _ => 1
   have pos : ∀ i, a i > 0 := λ _ => by simp
+  have hd : a 0 = 1 := by rfl
   have hteq : a 0 = a n := by rfl
   have div : ∀ i, i ≤ n-2 → a (i+1) ∣ (a i + a (i+2)) := λ i _ => by simp
-  exact ⟨⟨a, pos, hteq, div⟩⟩
+  exact ⟨⟨a,pos,hd, hteq, div⟩⟩
+
 
 -- Note the parity of the indices in the definitions below are different from the LaTeX version, since we are using Fin (n+1) instead of Fin n.
 
