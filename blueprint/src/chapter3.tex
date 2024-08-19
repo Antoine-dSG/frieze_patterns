@@ -3,6 +3,7 @@
     \label{def:arith_fp}
     \uses{def:pattern_n} 
     \lean{arith_fp}
+    \leanok
         A $\mathbb{Q}$-valued pattern of height $n$ is said to be an \textit{arithmetic frieze pattern} if it takes 
         values in $\mathbb{Z}_{>0}$. 
         We denote by Frieze$(n)$ the set of arithmetic frieze patterns of height $n$. 
@@ -12,7 +13,6 @@ The following proposition is a key result connecting arithmetic frieze patterns 
 \begin{proposition}
     \uses{def:flute,def:arith_fp, l:pattern_nContinuant,prop:trsltInv}
     \label{prop:friezeToFlute}
-   % \lean{friezeToDiag}
 1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
@@ -50,9 +50,11 @@ is a flute of height $n$.
 \end{proof}
 
 \begin{corollary}
-    \label{c:friezeNonEmpty}
-    \lean{friezeNonEmpty}
+    \label{c:arithFriezePatSetNonEmpty}
+    \lean{arithFriezePatSetNonEmpty}
     \uses{l:nFluteNonEmpty, prop:friezeToFlute}
+    \lean{arithFriezePatSetNonEmpty}
+    \leanok
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{corollary}
 \begin{proof}
@@ -62,7 +64,7 @@ is a flute of height $n$.
 
 \begin{corollary}
     \label{l:maxDefined}
-    \uses{prop:friezeToFlute, prop:FluteBounded}
+    \uses{prop:friezeToFlute, prop:FluteBounded,c:arithFriezePatSetNonEmpty}
     For each $n$, there is a well-defined
     positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, defined by
     \[
