@@ -3,6 +3,7 @@
 \begin{definition}
     \label{def:flute}
     \lean{flute}
+    \leanok
     A sequence $(a_k)$, indexed by $\mathbb{N}^*$ and consisting of positive integers is called pandean if $a_1 = 1$ and 
     if, for every $k > 1$, we have
     \[
@@ -12,15 +13,19 @@
     the tuple $(a_1, \ldots, a_n)$ is called a Pan flute, or simply a flute, of height $n$. The set of all flutes of a given height $n$ 
     is denoted Flute$(n)$.
 \end{definition}
-Note that in a flute of height $n$, the first and last entries are equal to $1$. It is clear that the constant sequence consisting 
-entirely of ones is pandean, and such a pandean sequence gives rise to a flute of height $n$ for any $n$.
-In other words, we have the following.
+Note that in a flute of height $n$, the first and last entries are equal to $1$. 
 \begin{lemma}
     \label{l:nFluteNonEmpty}
     \lean{nFluteNonEmpty}
     \uses{def:flute}
+    \leanok
     For any positive integer $n$, the set Flute$(n)$ is non-empty.
 \end{lemma}
+\begin{proof}
+    \leanok
+    It is clear that the constant sequence consisting 
+    entirely of ones is pandean, and such a pandean sequence gives rise to a flute of height $n$ for any $n$.
+\end{proof}
 Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0 = 0, F_1 = 1$ and the recursive formula
     \[
         F_k = F_{k-1} + F_{k-2}.
@@ -31,6 +36,7 @@ Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0
     \label{l:FibFlute}
     \lean{fib_flute_even,fib_flute_odd}
     \uses{def:flute}
+    \leanok
     1) If $n$ is odd, the $n$-tuple 
     \[
         (F_2,F_4, F_6, \ldots, F_{n-1}, F_{n}, F_{n-2}, F_{n-4}, \ldots, F_5, F_3, F_1), 
