@@ -25,12 +25,12 @@ is a flute of height $n$.
 \]
 \end{proposition}
 \begin{proof}
-1) Note that we have $f(1,0) = f(n,0) = 1$ by definition. Moreover, $f$ is arithmetic and so the first 
-equation in Lemma \ref{l:pattern_nContinuant} is precisely the divisibility condition defining a flute.
+    1) Note that we have $f(1,0) = f(n,0) = 1$ by definition. Moreover, $f$ is arithmetic and so the first 
+    equation in Lemma \ref{l:pattern_nContinuant} is precisely the divisibility condition defining a flute.
 
-2) By arguing recursively, one can construct a pattern $f$ such that $ (f (1,0), \ldots, f (n,0)) = (a_1, \ldots, a_n)$. 
-Moreover, such a frieze pattern is necessarily positive and $\mathbb{Q}$-valued. It remains to show that $f$ is integer-valued. 
-We begin by showing that $f (2,m) \in \mathbb{Z}$ for all $m \in \mathbb{Z}$. 
+    2) By arguing recursively, one can construct a pattern $f$ such that $ (f (1,0), \ldots, f (n,0)) = (a_1, \ldots, a_n)$. 
+    Moreover, such a frieze pattern is necessarily positive and $\mathbb{Q}$-valued. It remains to show that $f$ is integer-valued. 
+    We begin by showing that $f (2,m) \in \mathbb{Z}$ for all $m \in \mathbb{Z}$. 
     By the definition of a flute, $f (2,0) \in \mathbb{Z}$, and for each 
     $i \in \{1,\ldots, n-2\}$, there exists a positive integer $c_i$ such that
     \[
@@ -62,13 +62,17 @@ We begin by showing that $f (2,m) \in \mathbb{Z}$ for all $m \in \mathbb{Z}$.
 
 \begin{corollary}
     \label{l:maxDefined}
-    \uses{prop:friezeToDiag}
+    \uses{prop:friezeToFlute, prop:FluteBounded}
     For each $n$, there is a well-defined
     positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, defined by
     \[
         u_n := \max ( f (i,m) : f \in  {\rm Frieze}(n), i \in \{1,\ldots, n\}, m \in \mathbb{Z}).
     \]
 \end{corollary}
+\begin{proof}
+    By Proposition \ref{prop:friezeToFlute}, every entry of an arithmetic frieze pattern of height $n$ belongs to a flute of height $n$.
+    By Proposition \ref{prop:FluteBounded}, entries in a flute of height $n$ are bounded above.
+\end{proof}
 
 
 We are now able to formulate and prove the main theorem of this section.
