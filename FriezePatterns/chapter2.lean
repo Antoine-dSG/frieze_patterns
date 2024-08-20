@@ -189,10 +189,38 @@ def a_even (k i : ℕ) : ℕ :=
 def fib_flute_even (k : ℕ) : flute (2*k+2) := by
   -- flute 0 is inhabited under our definition, but it is trivial (and there are no frieze patterns of height 0 anyways)
   -- the proof should be similar to the odd case, maybe we don't even have to by cases on k=0 here?
-  have pos : ∀ i, a_even k i > 0 := by sorry
-  have hd : a_even k 0 = 1 := by sorry
-  have period : ∀ i, a_even k i = a_even k (i+(2*k+2)-1) := by sorry
-  have div : ∀ i, a_even k (i+1) ∣ (a_even k i + a_even k (i+2)) := by sorry
+  have pos : ∀ i, a_even k i > 0 := by
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ 2*k+1
+    unfold a_even ; simp [hi]
+    exact ih (i-(2*k)-1) (by omega)
+    by_cases hi₂ : i < k+1
+    simp [a_even, hi, hi₂]
+    simp [a_even, hi, hi₂] ; omega
+  have hd : a_even k 0 = 1 := by
+    simp [a_even]
+  have period : ∀ i, a_even k i = a_even k (i+(2*k+2)-1) := by
+    intro i
+    nth_rw 2 [a_even]
+    simp
+    have hj : i + (2 * k + 1) - 2 * k - 1 = i := by omega
+    simp [hj]
+  have div : ∀ i, a_even k (i+1) ∣ (a_even k i + a_even k (i+2)) := by
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ 2*k + 1
+    have hi₂ : i + 1 ≥ 2 * k + 1 := by omega
+    have hi₃ : 2 * k ≤ i + 1 := by omega
+    unfold a_even
+    simp [hi₂, hi, hi₃]
+    have hi₄ : i + 1 - 2 * k - 1 = (i - 2 * k - 1) + 1 := by omega
+    have hi₅ : i + 2 - 2 * k - 1 = (i - 2 * k - 1) + 2 := by omega
+    have hi₆ : (i - 2 * k - 1) < i := by omega
+    rw [hi₄, hi₅]
+    -- exact ih (i - 2 * k - 1)
+    sorry
+    sorry
   exact ⟨a_even k, pos, hd, period, div⟩
 
 lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-2) = 1)) ∨ (∃ i ≤ n-3, f.a (i+1) = f.a i + f.a (i+2)) := by
