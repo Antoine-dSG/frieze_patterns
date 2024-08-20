@@ -5,7 +5,7 @@ class flute (n : ℕ) where
   a : ℕ → ℕ
   pos : ∀ i, a i > 0
   hd : a 0 = 1
-  period : ∀ k, a k = a (k+n-1)
+  period : ∀ k, a k = a (k+(n-1))
   div : ∀ k, a (k+1) ∣ (a k + a (k+2))
 
 def csteFlute (n : ℕ) : Inhabited (flute n) := by -- Inhabited is probably better than Nonempty here, as we actually construct an inhabitant of flute n, so Lean lets us extract *the* inhabitant
@@ -26,35 +26,47 @@ lemma fluteSetNonEmpty (n : ℕ) : Nonempty (fluteSet n) := by
   use f
   rfl
 
-
-
--- Might not be useful
-def FibFluteEven (n k : ℕ) : ℕ :=
-  if n = 0 then
-    1
-  else if n = 1 then
-    1
-  else if k ≥ n-1 then
-      FibFluteEven n (k-(n-1))
-  else if k < n/2 then -- careful of the inequality here
-        Nat.fib (2*k+1)
+/- Alternative definition of the Fibonacci flute. Not sure it'll be useful -/
+def fibEven (n : ℕ) : ℕ  → ℕ :=
+  λ i =>
+  if i%(n-1) < n/2 then
+    Nat.fib (2*(i%(n-1))+1)
   else
-        Nat.fib (2*(n-k))
+    Nat.fib (2*(n-i%(n-1)))
 
-def FibFluteOdd (n k : ℕ) : ℕ :=
-  if n = 0 then
-    1
-  else if n = 1 then
-    1
-  else
-    if k ≥ n-1 then
-      FibFluteOdd n (k-(n-1))
-    else
-      if k ≤ n/2 then -- careful of the inequality here
-        Nat.fib (2*k+1)
-      else
-        Nat.fib (2*(n-k))
+lemma fibPos (n : ℕ) (hn : n >1) : ∀ i, fibEven n i > 0 := by
+  intro i
+  unfold fibEven
+  let  k := i%(n-1)
+  have : k = i%(n-1) := by rfl
+  rw [← this]
+  split_ifs with h₁
+  have : Nat.fib (2*k+1) > 0 := by simp [Nat.fib_pos]
+  exact this
+  push_neg at h₁
+  have h₂ : k < (n-1) := by apply Nat.mod_lt; omega
+  have h₃ : 2* (n-k) > 0 := by omega
+  exact Nat.fib_pos.mpr h₃
 
+lemma fibRoot  (n : ℕ) (hn : n >1) : fibEven n 0 = 1 := by
+  unfold fibEven
+  have h : n/2 ≥ 1 := by omega
+  simp [h, Nat.fib]
+  intro h₃
+  linarith
+
+lemma fibPeriod (n : ℕ) : ∀ k, fibEven n k = fibEven n (k + (n-1)) := by
+  intro k
+  have h : k%(n-1) = (k+(n-1))%(n-1) := by simp
+  unfold fibEven
+  rw [h]
+
+
+lemma fibDiv (n : ℕ) (hn : n >1) : ∀k, fibEven n (k+1) ∣ (fibEven n k + fibEven n (k+2)) := by sorry
+
+def fibFluteEven (n : ℕ) (hn: n > 1) : flute (n) := by
+  exact ⟨fibEven n,fibPos n hn,fibRoot n hn,fibPeriod n,fibDiv n hn⟩
+/- End of alternative definition -/
 
 def a_odd (k i : ℕ) : ℕ :=
   if k = 0 then
