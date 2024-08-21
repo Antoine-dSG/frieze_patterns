@@ -39,7 +39,7 @@ def flute_f' (f : ℕ×ℕ → ℚ) (n m: ℕ) [arith_fp f n] (i:ℕ) : ℕ :=  
 
 
 
-def friezeToFlute1_ngeq2 (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n] : flute n := by
+def friezeToFlute1 (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n] : flute n := by
   have pos : ∀ i, flute_f f n m (i) > 0 := by
     intro i
 
