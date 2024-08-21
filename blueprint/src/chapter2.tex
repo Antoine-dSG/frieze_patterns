@@ -49,7 +49,7 @@ Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0
     \]
     is a Pan flute of height $n$. 
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     These are a tedious but straightforward calculation.
 \end{proof}
 
@@ -64,7 +64,7 @@ Recall that the Fibonacci sequence $(F_k)_{k \in \mathbb{N}}$ is defined by $F_0
     
     2) There exists an index $i \in \{2,\ldots, n-1\}$ such that $a_i = a_{i-1} + a_{i+1}$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Suppose that 1) does not hold. In particular, $a_2 - a_1 > 0$ and $a_n - a_{n-1} < 0$. We prove that statement 2) holds by 
     contradiction. Thus, assume that for all $i \in \{2,\ldots, n-1\}$, we have $a_i \neq a_{i-1} + a_{i+1}$. Since the $a_i$ are positive integers,
     we necessarily have $a_{i-1} + a_{i+1} \geq 2 a_i$ for all $i \in \{2,\ldots, n-1\}$. Thus, for a given $i$, we have 

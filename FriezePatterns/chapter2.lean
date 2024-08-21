@@ -200,8 +200,6 @@ def a_even (k i : ℕ) : ℕ :=
 
 
 def fib_flute_even (k : ℕ) : flute (2*k+2) := by
-  -- flute 0 is inhabited under our definition, but it is trivial (and there are no frieze patterns of height 0 anyways)
-  -- the proof should be similar to the odd case, maybe we don't even have to by cases on k=0 here?
   have pos : ∀ i, a_even k i > 0 := by
     intro i
     induction' i using Nat.strong_induction_on with i ih
@@ -280,7 +278,6 @@ def fib_flute_even (k : ℕ) : flute (2*k+2) := by
     rw [this]
     use (1 + a_even 0 1); omega
     -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ pos + by_cases hk₀ neg
-    have hk₁ : 0 < k := by omega
     have hi₇ : ¬ 2 * k ≤ k := by omega
     simp [hi₇]
     -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ pos + by_cases hk₀ neg + by_cases hk₁ pos
@@ -302,8 +299,42 @@ def fib_flute_even (k : ℕ) : flute (2*k+2) := by
     rw [Nat.fib_add_one]
     use 2; omega; linarith
     -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ neg
-    -- There should be a couple of cases left
-    sorry
+    have h₅ : ¬ i+1 < k+1 := by omega
+    have h₆ : ¬ i ≥ 2*k+1 := by omega
+    have h₇ : ¬ i < k+1 := by omega
+    have h₈ : ¬ i+2 < k+1 := by omega
+    unfold a_even ; simp [hi, hi₂, hi₃, hi₄, h₅, h₆, h₇, h₈]
+    -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ neg + by_cases hi₅ pos
+    by_cases hi₅ :2*k ≤ i
+    have h₉ : i = 2*k := by omega
+    rw [h₉]; simp; rw [hd]
+    use (Nat.fib (3 + 4 * k - 2 * (2 * k)) + a_even k 1); omega
+    -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ neg + by_cases hi₅ neg
+    simp [hi, hi₂, hi₃, hi₄, hi₅]
+    -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ neg + by_cases hi₅ neg + by_cases hi₆ pos
+    by_cases hi₆ : 2*k ≤ i+1
+    have h₁ : i+1 = 2*k := by omega
+    rw [h₁] ; simp
+    have h₂ : 3 + 4 * k - 2 * (2 * k) = 3 := by omega
+    have h₃ : 3 + 4 * k - 2 * i = 5 := by omega
+    have h₄ : i + 2 - 2 * k - 1 = 0 := by omega
+    have f₃ : Nat.fib 3 = 2 := by simp [Nat.fib]
+    have f₅ : Nat.fib 5 = 5 := by simp [Nat.fib]
+    rw [h₂,h₃,h₄,hd,f₃,f₅]
+    use 3;
+    -- by_cases hi neg + by_cases hi₂ neg + by_cases hi₃ neg + by_cases hi₄ neg + by_cases hi₅ neg + by_cases hi₆ neg
+    simp [hi, hi₂, hi₃, hi₄, hi₅, hi₆]
+    have h₁: 3 + 4 * k - 2 * (i + 1) = 4*k -2*i +1 := by omega
+    have h₂ : 3 + 4 * k - 2 * i = 4*k -2*i + 1 + 2 :=by omega
+    have h₃ : 4 * k - 2 * i + 1 + 1 = 4 * k - 2 * i + 2 := by omega
+    have h₄ : 3 + 4 * k - 2 * (i + 2) = 4 * k - 2 * i - 1 := by omega
+    rw [h₁, h₂, Nat.fib_add_two, h₃, Nat.fib_add_two,h₄,add_assoc,add_comm (Nat.fib (4 * k - 2 * i)), add_assoc, add_comm (Nat.fib (4 * k - 2 * i))]
+    rw [← Nat.fib_add_one]
+    have h : Nat.fib (4 * k - 2 * i + 1) + (Nat.fib (4 * k - 2 * i + 1) + Nat.fib (4 * k - 2 * i + 1)) =  Nat.fib (4 * k - 2 * i + 1)*3 := by omega
+    rw [h]
+    use 3;
+    have h₃ : ¬ 4*k = 2*i := by omega
+    omega
   exact ⟨a_even k, pos, hd, period, div⟩
 
 lemma FluteReduction (n : ℕ)(f : flute n) : ((f.a 1 =1) ∨ (f.a (n-2) = 1)) ∨ (∃ i ≤ n-3, f.a (i+1) = f.a i + f.a (i+2)) := by
