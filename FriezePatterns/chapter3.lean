@@ -23,42 +23,58 @@ instance [arith_fp f n] : nzPattern_n ℚ f n := {
 
 
 
-def flute_f (f : ℕ×ℕ → ℚ) (n m i: ℕ) [arith_fp f n] : ℕ :=
+def flute_f (f : ℕ×ℕ → ℚ) (n m: ℕ) [arith_fp f n] (i:ℕ) : ℕ :=        -- alternative definition only good when n ≥ 2, as otherwise i%0 = i for all i
   if i%(n-1)=0 then
     1
   else
     ((f (i%(n-1), m)).num).toNat
 
-def friezeToFlute1 (f : ℕ×ℕ → ℚ) (n: ℕ) [arith_fp f n] : flute m := by
+/--/
+def flute_f' (f : ℕ×ℕ → ℚ) (n m: ℕ) [arith_fp f n] (i:ℕ) : ℕ :=        --definition only good when n ≥ 2, as otherwise i%0 = i for all i
+  if i ≥ n then
+    flute_f n m (i - (n-1))
+  else
+    ((f (i, m)).num).toNat
+-/
+
+
+
+def friezeToFlute1_ngeq2 (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n] : flute n := by
   have pos : ∀ i, flute_f f n m (i) > 0 := by
     intro i
 
-    by_cases zero_lt_n_sub_one : 0 < (n-1)
+    have zero_lt_n_sub_one : 0 < n - 1 :=
+        calc 0 < 1 := by simp
+            _≤ 2 - 1 := by simp
+            _≤  n - 1 := Nat.sub_le_sub_right hn 1
+
     by_cases n_sub_one_div_i : i%(n-1) = 0
     unfold flute_f
-    simp [n_sub_one_div_i]                      --done if 0 < (n-1) and i%(n-1) = 0
+    simp [n_sub_one_div_i]                      --finish if 1 < (n-1) and i%(n-1) = 0
     unfold flute_f
     simp [n_sub_one_div_i]
-    have a₁ : 1 ≤ i%(n-1) := by sorry
-    have a₂ : i%(n-1) ≤ n := by sorry
-    exact arith_fp.positive (i%(n-1)) m a₁ a₂   --done if 0 < (n-1) and i%(n-1) ≠ 0
+    have a₁ : 1 ≤ i%(n-1) := by omega
+    have a₂ : i%(n-1) ≤ n :=
+        calc i%(n-1) ≤ (n - 1) := Nat.le_of_lt (Nat.mod_lt i zero_lt_n_sub_one)
+            _≤ n := by simp
 
-    have n_sub_one_le_zero : n - 1 ≤ 0 := by linarith
-    by_cases n_eq_zero : n = 0
-    unfold flute_f
-    simp [n_eq_zero]
-    sorry
-    sorry
+    exact arith_fp.positive (i%(n-1)) m a₁ a₂   --finish if 1 < (n-1) and i%(n-1) ≠ 0
 
   have hd : flute_f f n m 0 = 1 := by
-    unfold flute_f
-    simp
+    simp [flute_f]
 
-  have period : ∀ i, flute_f f n m 0 = flute_f f n m (i + (n-1)) := by sorry
+  have period : ∀ i, flute_f f n m i = flute_f f n m (i + (n-1)) := by
+    intro i
+
+    by_cases n_sub_one_div_i : i%(n-1) = 0
+    unfold flute_f
+    simp [n_sub_one_div_i]                      --finish if i%(n-1) = 0
+    unfold flute_f
+    simp [n_sub_one_div_i]                      --finish if i%(n-1) ≠ 0
 
   have div : ∀ i, flute_f f n m (i + 1) ∣ (flute_f f n m (i) + flute_f f n m (i + 2)) := by sorry
 
-  exact ⟨a_even k, pos, hd, period, div⟩
+  exact ⟨flute_f f n m, pos, hd, period, div⟩
 
 
 
