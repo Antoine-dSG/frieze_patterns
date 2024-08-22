@@ -166,6 +166,22 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
                 _ = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by rw [h₂, h₃, h₄]
                 _ = f (n-i-1,m+i+2) := by rw [h₅]
 
+-- A stronger version of the translation invariance - may be useful
+lemma strongTrsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m%(n+1)) := by
+  intros i ileq m
+  induction' m using Nat.strong_induction_on with m ih
+  by_cases hm : m < n+1
+  rw [Nat.mod_eq_of_lt hm]
+  simp at hm
+  have h₁ : m  ≥  (n+1) := by omega
+  have h₂ : m - (n+1) < m := by omega
+  have key : f (i, m - (n + 1)) = f (i, m) := by
+    calc f (i,m - (n+1)) = f (i, m - (n+1) + (n+1)) := by exact trsltInv F f n i (by linarith) (m - (n + 1))
+    _= f (i,m) := by rw [Nat.sub_add_cancel hm]
+  rw [← key]
+  specialize ih (m - (n+1)) h₂
+  have h₃ : m % (n + 1) = (m - (n + 1)) % (n + 1) := by apply Nat.mod_eq_sub_mod h₁
+  rw [h₃, ih]
 
 lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : Finite (Set.range f) := by
 -- We use i ≤ n instead of 1 ≤ i ≤ n to simplify the induction. Lean also automatically infers that {i : ℕ | i ≤ n} is finite.
@@ -193,8 +209,33 @@ lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern
   have : Finite ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) := by apply Finite.Set.finite_prod
   exact Finite.Set.finite_image ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) f
 
+
+/-    apply Set.ext_iff.mpr
+    -- the hard part: L.H.S. is a subset of R.H.S.
+    intro x ; apply Iff.intro
+    intro hx ; unfold Set.range at hx
+    rcases hx with ⟨⟨i, m⟩, hx⟩
+    by_cases hi : i ≤ n
+    · induction' m using Nat.strong_induction_on with m ih
+      by_cases hm : m ≤ n
+      · exact ⟨⟨i, m⟩, ⟨⟨hi, hm⟩, hx⟩⟩ -- we can just use (i,m) if m ≤ n
+      · simp at hm
+        specialize ih (m-(n+1)) (@Nat.sub_lt m (n+1) (by linarith) (by linarith))
+        have key := trsltInv F f n i (by linarith) (m - (n + 1))
+        have : m - (n+1) + n + 1 = m - (n+1) + (n+1) := by linarith
+        simp [this, Nat.sub_add_cancel hm, hx] at key
+        exact ih key
+    · use ⟨0, 0⟩ ; apply And.intro (by simp) -- if i > n, then f(i,n) = 0, so we can use (0,0)
+      rw [@pattern_n.topBordZeros F _ f n _ 0, ← hx, @pattern_n.botBordZeros_n F _ f n _ i m (by linarith)]
+    -- now the trivial part
+    intro hx ; rcases hx with ⟨y, hy⟩ ; exact ⟨y, hy.2⟩
+  rw [key]
+  have : Finite ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) := by apply Finite.Set.finite_prod
+  exact Finite.Set.finite_image ({i : ℕ | i ≤ n} ×ˢ {m : ℕ | m ≤ n}) f
+
+-/
 /- We don't need this lemma anymore -/
-lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := sorry
+-- lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := sorry
 /- Antoine: I have put the proof in comments for the moment to avoids bugs during compilation on GitHub pages
 lemma testEqualPattern (F : Type*) [Field F] (f g : ℕ×ℕ → F) (n: ℕ) (hf : nzPattern_n F f n) (hg : nzPattern_n F g n) (h : ∀ i, i ≤ n → f (i,0) = g (i,0)) : f = g := by
   funext ⟨i, m⟩

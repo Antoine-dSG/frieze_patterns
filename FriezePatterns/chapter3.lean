@@ -1,6 +1,7 @@
 import FriezePatterns.chapter1
 import FriezePatterns.chapter2
 
+
 class arith_fp (f : ℕ × ℕ → ℚ) (n : ℕ) : Prop where
   topBordZeros : ∀ m, f (0,m) = 0
   topBordOnes : ∀ m, f (1,m) = 1
@@ -16,7 +17,7 @@ instance [arith_fp f n] : nzPattern_n ℚ f n := {
   botBordOnes_n := arith_fp.botBordOnes_n,
   botBordZeros_n := arith_fp.botBordZeros_n,
   diamond := arith_fp.diamond,
-  non_zero := λ i m ⟨hi1, hi2⟩ => by linarith [@arith_fp.positive f n _ i m hi1 hi2]
+  non_zero := λ i m ⟨hi1, hi2⟩ => by linarith [@arith_fp.positive f n _ i m hi1 hi2]
 }
 
 def flute_f (f : ℕ×ℕ → ℚ) (n m: ℕ) [arith_fp f n] (i:ℕ) : ℕ :=        -- alternative definition only good when n ≥ 2, as otherwise i%0 = i for all i
@@ -33,9 +34,7 @@ def flute_f' (f : ℕ×ℕ → ℚ) (n m: ℕ) [arith_fp f n] (i:ℕ) : ℕ :=  
     ((f (i, m)).num).toNat
 -/
 
-
-
-def friezeToFlute1 (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n] : flute n := by
+def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n] : flute n := by
   have pos : ∀ i, flute_f f n m (i) > 0 := by
     intro i
 
@@ -113,13 +112,7 @@ def friezeToFlute1 (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f 
     sorry
 
     sorry
-
-
   exact ⟨flute_f f n m, pos, hd, period, div⟩
-
-
-def arithFriezePatSet (n: ℕ) : Set (ℕ × ℕ → ℚ) :=
-  { f | arith_fp f n}
 
 -- The following two definitions turn a flute to a frieze.
 def f {n : ℕ} (g : flute n): ℕ × ℕ → ℚ :=
@@ -133,24 +126,35 @@ def f {n : ℕ} (g : flute n): ℕ × ℕ → ℚ :=
 
 def fluteToFrieze {n : ℕ} (g : flute n) (h: n ≠ 0): arith_fp (f g) n := by sorry
 
+def arithFriezePatSet (n: ℕ) : Set (ℕ × ℕ → ℚ) :=
+  { f | arith_fp f n}
+
+
 -- Now we can use the nonemptyness of Flute n to prove the nonemptyness of arithFriezePatSet n.
-lemma arithFriezePatSetNonEmpty {n : ℕ} (h : n ≠ 0) : Nonempty (arithFriezePatSet n) := by
+lemma arithFriezePatSetNonEmpty {n : ℕ} (h : n ≠ 0) : (arithFriezePatSet n).Nonempty  := by
   rcases csteFlute n with ⟨a⟩
   exact ⟨f a, fluteToFrieze a h⟩
 
 
-lemma arithFrPatImageFinite (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n] : Finite (Set.range f) := by
-  exact imageFinite ℚ f n
 
-variable (s : Set (ℕ × ℕ)) -- using this definition apparently we can apply Set.Finite.exists_maximal_wrt', with the tradeoff of more complicated definitions.
--- Step 1: define u_n(f) = max (f (i,m), i ∈ ℕ , m ∈ ℕ )
-lemma unFDefined (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n] : ∃ a ∈ s, ∀ a' ∈ s, f a ≤ f a' → f a = f a' := by
-  refine Set.Finite.exists_maximal_wrt' f s ?h ?hs
-  have h : (f '' s).Finite := by sorry
-  exact h
-  have hs : s.Nonempty := by sorry
-  exact hs
--- Step 2: define the set of all u_n(f) for f in arithFriezePatSet n
--- Step 3: define u_n as the max of this set
+def fHasMax (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n]  : Prop :=
+  ∃ a ∈ Set.univ, ∀ a' ∈ Set.univ, f a ≤ f a' → f a = f a'
+
+lemma unf (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n] : fHasMax n f := by
+  let domain : Set (ℕ × ℕ) := Set.univ
+  have h₁ : domain.Nonempty := by apply Set.univ_nonempty
+  have h₂ : (f '' domain).Finite := by
+    have h : (Set.range f).Finite := by exact imageFinite ℚ f n
+    have h' : f '' Set.univ = Set.range f := by apply Set.image_univ
+    rw [h']
+    exact h
+  exact Set.Finite.exists_maximal_wrt' f domain h₂ h₁
+
+def FriezeHasMax (n : ℕ) : Prop :=
+  ∃ f ∈ arithFriezePatSet n, ∃ a ∈ Set.univ,
+  ∀ f' ∈ arithFriezePatSet n, ∀ a' ∈ Set.univ, f a ≤ f' a' → f a = f' a'
+
+lemma maxDefined (n : ℕ) (hn : n ≠ 0) : FriezeHasMax n := by sorry
+
 
 theorem mainTheorem : 2^3 ≤ 8 := by linarith

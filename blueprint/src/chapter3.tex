@@ -12,7 +12,8 @@
 The following proposition is a key result connecting arithmetic frieze patterns to flutes.
 \begin{proposition}
     \uses{def:flute,def:arith_fp, l:pattern_nContinuant,prop:trsltInv}
-    \label{prop:friezeToFlute}
+    \label{prop:friezeIffFlute}
+    \lean{friezeToFlute,fluteToFrieze}
 1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
@@ -64,6 +65,8 @@ is a flute of height $n$.
 
 \begin{corollary}
     \label{l:maxDefined}
+    \lean{maxDefined}
+    \leanok
     \uses{prop:friezeToFlute, prop:FluteBounded,c:arithFriezePatSetNonEmpty}
     For each $n$, there is a well-defined
     positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, defined by
