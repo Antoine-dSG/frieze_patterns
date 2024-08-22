@@ -140,6 +140,7 @@ lemma arithFriezePatSetNonEmpty {n : ℕ} (h : n ≠ 0) : (arithFriezePatSet n).
 def fHasMax (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n]  : Prop :=
   ∃ a ∈ Set.univ, ∀ a' ∈ Set.univ, f a ≤ f a' → f a = f a'
 
+-- proof that the maximum of a frieze pattern exists
 lemma unf (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n] : fHasMax n f := by
   let domain : Set (ℕ × ℕ) := Set.univ
   have h₁ : domain.Nonempty := by apply Set.univ_nonempty
@@ -150,9 +151,18 @@ lemma unf (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n] : fHasMax n f := by
     exact h
   exact Set.Finite.exists_maximal_wrt' f domain h₂ h₁
 
+-- definition to extract the maximum value of a frieze pattern
+noncomputable def FriezeToFMax (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n] : ℚ := by
+  have h : fHasMax n f := unf n f
+  unfold fHasMax at h
+  choose a₁ a₂ a₃ using h
+  exact f a₁
+
+
 def FriezeHasMax (n : ℕ) : Prop :=
   ∃ f ∈ arithFriezePatSet n, ∃ a ∈ Set.univ,
   ∀ f' ∈ arithFriezePatSet n, ∀ a' ∈ Set.univ, f a ≤ f' a' → f a = f' a'
+
 
 lemma maxDefined (n : ℕ) (hn : n ≠ 0) : FriezeHasMax n := by sorry
 
