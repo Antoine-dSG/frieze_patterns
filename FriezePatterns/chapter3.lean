@@ -55,12 +55,69 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
   have div : ∀ i, flute_f f n m (i + 1) ∣ (flute_f f n m (i) + flute_f f n m (i + 2)) := by
     intro i
     unfold flute_f
+
+    by_cases n_eq_two : n=2
+    simp [n_eq_two]
+    simp [Nat.mod_one]                             --finish if n=2
+
+    by_cases n_eq_three : n=3
+
+    by_cases i_even : i%2 = 0
+    have i_plus_one_odd : (i+1)%2 = 1 := by omega
+    have i_plus_two_even : (i+2)%2 = 0 := by rw[Nat.add_mod_right i 2, i_even]
+
+    simp [n_eq_three]
+    simp [i_even, i_plus_one_odd, i_plus_two_even]
+    rw[@pattern_n.topBordOnes ℚ _ f n _ m]
+    simp
+    have this : f (2, m) * f (2, m + 1) = 2 :=
+        calc f (2, m) * f (2, m + 1) = f (2, m) * f (2, m + 1) - 1 + 1 := by simp
+              _= f (3, m)*f (1, m + 1) + 1 := by rw[@pattern_n.diamond ℚ _ f n _ 1 (m) (by omega)]
+              _= f (3, m) * 1 + 1 := by rw[@pattern_n.topBordOnes ℚ _ f n _ (m+1)]
+              _= f (n, m) * 1 + 1 := by rw[n_eq_three]
+              _= 1 * 1 + 1 := by rw[@pattern_n.botBordOnes_n ℚ _ f n _ (m)]
+              _= 2 := by ring
+
+    have this.num : (f (2, m)).num * (f (2, m + 1)).num = 2 := by sorry
+    --use theorem Rat.mul_num (q₁ : ℚ) (q₂ : ℚ) : (q₁ * q₂).num = q₁.num * q₂.num / ↑(Nat.gcd (Int.natAbs (q₁.num * q₂.num)) (q₁.den * q₂.den))
+
+
+    have this.num.toNat : (f (2, m)).num.toNat * (f (2, m + 1)).num.toNat = 2 := by sorry
+
+    nth_rewrite 2 [← this.num.toNat]
+    simp                                              --finish if n=3, i_even
+
+    have i_plus_one_even : (i+1)%2 = 0 := by omega
+    simp [n_eq_three, i_plus_one_even]
+    rw[@pattern_n.topBordOnes ℚ _ f n _ m]
+    simp                                          --finish if n=3, i_odd
+
+    --now do 4 ≤ n
+    have four_le_n : 4 ≤ n := by omega
+
     by_cases boundary : (i + 1) % (n - 1) = 0
-    simp[boundary, arith_fp.topBordOnes n m]
+    simp[boundary, arith_fp.topBordOnes n m]            --finish boundary case if (i + 1) % (n - 1) = 0
 
-    have a₁ : (i + 1) % (n - 1) = (i) % (n - 1) + 1 := by sorry
+
+    by_cases boundary' : (i + 2) % (n - 1) = 0
+    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 := by sorry
+    have i_plus_one_mod_n_sub_one_eq_n_sub_two : (i + 1) % (n - 1) = n - 2 := by sorry
+
+    sorry                                               --finish boundary' case if (i + 2) % (n - 1) = 0
+
+    have i_plus_one_mod_n_sub_one_bd_below : 1 ≤ (i + 1) % (n - 1) := by
+        rw[Nat.one_le_iff_ne_zero]
+        simp[boundary]
+
+    have i_plus_one_mod_n_sub_one_bd_above : (i + 1) % (n - 1) < (n - 1) := Nat.mod_lt (i+1) (by omega)
+
+    have a₀ : (i) % (n - 1) + (1) % (n - 1) < n - 1 := by sorry
+
+    have a₁ : (i + 1) % (n - 1) = (i) % (n - 1) + 1 := by
+        rw[Nat.add_mod_of_add_mod_lt a₀]
+        simp
+        rw[Nat.mod_eq_of_lt (by linarith)]
     have a₂ : (i + 2) % (n - 1) = (i) % (n - 1) + 2 := by sorry
-
 
     rw[a₁,a₂, add_right_comm]
 
@@ -73,6 +130,7 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
     have continuant.num : (f (i % (n - 1) + 1, m)).num + (f (i % (n - 1) + 1 + 1 + 1, m)).num = (f (2, m + (i % (n - 1) + 1))).num * (f (i % (n - 1) + 1 + 1,m)).num := by sorry
 
     have continuant.num.toNat : (f (i % (n - 1) + 1, m)).num.toNat + (f (i % (n - 1) + 1 + 1 + 1, m)).num.toNat = (f (2, m + (i % (n - 1) + 1))).num.toNat * (f (i % (n - 1) + 1 + 1,m)).num.toNat := by sorry
+    -- Need to use theorem Int.toNat_add {a : Int} {b : Int} (ha : 0 ≤ a) (hb : 0 ≤ b) : Int.toNat (a + b) = Int.toNat a + Int.toNat b
 
     simp[continuant.num.toNat]
 
