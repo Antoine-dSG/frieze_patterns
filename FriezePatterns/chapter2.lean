@@ -173,7 +173,11 @@ def fib_flute_odd (k : ℕ) : flute (2*k+1) := by
         rw [hi₁₀, ← Nat.fib_add_two, hi₁₁]
         omega
         · push_neg at hi₅
-          by_cases hi₆ : ¬ 2*k ≤ i+1
+          by_cases hi₆ : 2*k ≤ i+1
+          have hi₇ : i+1-2*k = 0 := by omega
+          have hi₈ : i+2-2*k = 1 := by omega
+          unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₇, hi₈]
+          unfold a_odd ; simp [hk]
           unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆]
           have hi₇ : 1+4*k-2*(i+1) = 3 := by omega
           have hi₈ : 1+4*k-2*i = 5 := by omega
@@ -182,13 +186,7 @@ def fib_flute_odd (k : ℕ) : flute (2*k+1) := by
           unfold a_odd
           simp [hi₇, hi₈, hi₉, hk, hk₂]
           use 3 ; simp [Nat.fib_add_two]
-          push_neg at hi₆
-          have hi₇ : i+1-2*k = 0 := by omega
-          have hi₈ : i+2-2*k = 1 := by omega
-          unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₇, hi₈]
-          unfold a_odd ; simp [hk]
   exact ⟨a_odd k, pos, hd, period, div⟩
-
 
 def a_even (k i : ℕ) : ℕ :=
   if i ≥ 2*k+1 then
@@ -481,7 +479,7 @@ def aux_2 (n : ℕ) (f : flute (n+3)) (h : f.a (n+1) = 1) : flute (n+2) := by
     simp [a_2, f.hd]
   have period : ∀ i, a_2 n f h i = a_2 n f h (i+(n+2)-1) := by
     intro i
-    nth_rw 2 [a_2]
+    nth_rw 2 [a_2]  
     simp
   have div : ∀ i, a_2 n f h (i+1) ∣ (a_2 n f h i + a_2 n f h (i+2)) := by sorry
   exact ⟨a_2 n f h, pos, hd, period, div⟩
