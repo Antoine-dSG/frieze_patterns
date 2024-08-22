@@ -78,11 +78,15 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
               _= 1 * 1 + 1 := by rw[@pattern_n.botBordOnes_n ℚ _ f n _ (m)]
               _= 2 := by ring
 
-    have this.num : (f (2, m)).num * (f (2, m + 1)).num = 2 := by sorry
-    --use theorem Rat.mul_num (q₁ : ℚ) (q₂ : ℚ) : (q₁ * q₂).num = q₁.num * q₂.num / ↑(Nat.gcd (Int.natAbs (q₁.num * q₂.num)) (q₁.den * q₂.den))
+    have this.num : (f (2, m)).num * (f (2, m + 1)).num = 2 := by
+      have key : (f (2, m)).num * (f (2, m + 1)).num = (f (2, m) * f (2, m + 1)).num := by
+        simp [Rat.mul_num, arith_fp.integral n, arith_fp.integral n]
+      simp [key, this]
 
-
-    have this.num.toNat : (f (2, m)).num.toNat * (f (2, m + 1)).num.toNat = 2 := by sorry
+    have this.num.toNat : (f (2, m)).num.toNat * (f (2, m + 1)).num.toNat = 2 := by
+      have h₃ : 0 ≤ (f (2,m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ 2 m (by omega) (by omega))]
+      have h₄ : 0 ≤ (f (2,m+1)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ 2 (m+1) (by omega) (by omega))]
+      zify ; rw [Int.toNat_of_nonneg h₃, Int.toNat_of_nonneg h₄, this.num]
 
     nth_rewrite 2 [← this.num.toNat]
     simp                                              --finish if n=3, i_even
@@ -100,7 +104,7 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
 
 
     by_cases boundary' : (i + 2) % (n - 1) = 0
-    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 := by sorry
+    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 := by sorry  --this now makes sense as n ≥ 4
     have i_plus_one_mod_n_sub_one_eq_n_sub_two : (i + 1) % (n - 1) = n - 2 := by sorry
 
     sorry                                               --finish boundary' case if (i + 2) % (n - 1) = 0
@@ -127,10 +131,21 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
       rw[pattern_nContinuant1 ℚ f n (i % (n - 1) + 1) h₁ m]
       simp
 
-    have continuant.num : (f (i % (n - 1) + 1, m)).num + (f (i % (n - 1) + 1 + 1 + 1, m)).num = (f (2, m + (i % (n - 1) + 1))).num * (f (i % (n - 1) + 1 + 1,m)).num := by sorry
+    have continuant.num : (f (i % (n - 1) + 1, m)).num + (f (i % (n - 1) + 1 + 1 + 1, m)).num = (f (2, m + (i % (n - 1) + 1))).num * (f (i % (n - 1) + 1 + 1,m)).num := by
+      have key₁ : (f (i % (n - 1) + 1, m)).num + (f (i % (n - 1) + 1 + 1 + 1, m)).num = (f (i % (n - 1) + 1, m) + f (i % (n - 1) + 1 + 1 + 1, m)).num := by
+        simp [Rat.add_num_den, arith_fp.integral n (i % (n - 1) + 1) m]
+        simp [arith_fp.integral n (i % (n - 1) + 1 + 1 + 1) m]
+        norm_cast
+      have key₂ : (f (2, m + (i % (n - 1) + 1))).num * (f (i % (n - 1) + 1 + 1,m)).num = (f (2, m + (i % (n - 1) + 1)) * f (i % (n - 1) + 1 + 1,m)).num := by
+        simp [Rat.mul_num, arith_fp.integral n 2 (m + (i % (n - 1) + 1)), arith_fp.integral n (i % (n - 1) + 1 + 1) m]
+      simp [key₁, key₂, continuant]
 
-    have continuant.num.toNat : (f (i % (n - 1) + 1, m)).num.toNat + (f (i % (n - 1) + 1 + 1 + 1, m)).num.toNat = (f (2, m + (i % (n - 1) + 1))).num.toNat * (f (i % (n - 1) + 1 + 1,m)).num.toNat := by sorry
-    -- Need to use theorem Int.toNat_add {a : Int} {b : Int} (ha : 0 ≤ a) (hb : 0 ≤ b) : Int.toNat (a + b) = Int.toNat a + Int.toNat b
+    have continuant.num.toNat : (f (i % (n - 1) + 1, m)).num.toNat + (f (i % (n - 1) + 1 + 1 + 1, m)).num.toNat = (f (2, m + (i % (n - 1) + 1))).num.toNat * (f (i % (n - 1) + 1 + 1,m)).num.toNat := by
+      have h₂ : 0 ≤ (f (i % (n - 1) + 1, m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ (i % (n - 1) + 1) m (by omega) (by omega))]
+      have h₃ : 0 ≤ (f (i % (n - 1) + 1 + 1 + 1, m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ (i % (n - 1) + 1 + 1 + 1) m (by omega) (by omega))]
+      have h₄ : 0 ≤ (f (2, m + (i % (n - 1) + 1))).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ 2 (m + (i % (n - 1) + 1)) (by omega) (by omega))]
+      have h₅ : 0 ≤ (f (i % (n - 1) + 1 + 1,m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ (i % (n - 1) + 1 + 1) m (by omega) (by omega))]
+      zify ; rw [Int.toNat_of_nonneg h₂, Int.toNat_of_nonneg h₃, Int.toNat_of_nonneg h₄, Int.toNat_of_nonneg h₅, continuant.num]
 
     simp[continuant.num.toNat]
 
