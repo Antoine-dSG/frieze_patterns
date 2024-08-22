@@ -3,7 +3,7 @@ A Latex file with the exact statements is available i) on the blueprint (here: h
 
 Contributions (in alphabetical order) by: <br>
 Akselai <br>
-Bockman Cheung <br>
 Jon Cheah <br> 
+Bockman Cheung <br>
 Eaton Liu <br>
 Antoine de Saint Germain
