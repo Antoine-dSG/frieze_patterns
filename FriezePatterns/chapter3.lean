@@ -166,5 +166,11 @@ def FriezeHasMax (n : ℕ) : Prop :=
 
 lemma maxDefined (n : ℕ) (hn : n ≠ 0) : FriezeHasMax n := by sorry
 
+noncomputable def FriezeMax (n : ℕ) (hn : n ≠ 0) : ℚ := by
+  have h : FriezeHasMax n := maxDefined n hn
+  unfold FriezeHasMax at h
+  choose f hf a ha hf' using h
+  exact f a
 
-theorem mainTheorem : 2^3 ≤ 8 := by linarith
+
+theorem mainTheorem (n : ℕ) (hn : n ≠ 0)  : FriezeMax n hn = Nat.fib n := by sorry

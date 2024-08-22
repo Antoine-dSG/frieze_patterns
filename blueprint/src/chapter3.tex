@@ -13,7 +13,7 @@ The following proposition is a key result connecting arithmetic frieze patterns 
 \begin{proposition}
     \uses{def:flute,def:arith_fp, l:pattern_nContinuant,prop:trsltInv}
     \label{prop:friezeIffFlute}
-    \lean{friezeToFlute,fluteToFrieze}
+    \lean{friezeIffFlute,fluteToFrieze}
 1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
@@ -53,21 +53,21 @@ is a flute of height $n$.
 \begin{corollary}
     \label{c:arithFriezePatSetNonEmpty}
     \lean{arithFriezePatSetNonEmpty}
-    \uses{l:nFluteNonEmpty, prop:friezeToFlute}
+    \uses{l:nFluteNonEmpty, prop:friezeIffFlute}
     \lean{arithFriezePatSetNonEmpty}
     \leanok
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{corollary}
 \begin{proof}
     The proof of Lemma \ref{l:nFluteNonEmpty} showed that $(1,1,\ldots, 1)$ is a flute. 
-    The claim then follows from 2) of Proposition \ref{prop:friezeToFlute}.
+    The claim then follows from 2) of Proposition \ref{prop:friezeIffFlute}.
 \end{proof}
 
 \begin{corollary}
     \label{l:maxDefined}
     \lean{maxDefined}
     \leanok
-    \uses{prop:friezeToFlute, prop:FluteBounded,c:arithFriezePatSetNonEmpty}
+    \uses{prop:friezeIffFlute, prop:FluteBounded,c:arithFriezePatSetNonEmpty}
     For each $n$, there is a well-defined
     positive integer, called the {\it maximum value} among arithmetic frieze patterns of height $n$, defined by
     \[
@@ -75,7 +75,7 @@ is a flute of height $n$.
     \]
 \end{corollary}
 \begin{proof}
-    By Proposition \ref{prop:friezeToFlute}, every entry of an arithmetic frieze pattern of height $n$ belongs to a flute of height $n$.
+    By Proposition \ref{prop:friezeIffFlute}, every entry of an arithmetic frieze pattern of height $n$ belongs to a flute of height $n$.
     By Proposition \ref{prop:FluteBounded}, entries in a flute of height $n$ are bounded above.
 \end{proof}
 
@@ -84,15 +84,16 @@ We are now able to formulate and prove the main theorem of this section.
 \begin{theorem}
     \label{mainTheorem}
     \lean{mainTheorem}
-    \uses{l:maxDefined, prop:FluteBounded, l:FibFlute, prop:friezeToFlute}
+    \leanok
+    \uses{l:maxDefined, prop:FluteBounded, l:FibFlute, prop:friezeIffFlute}
     For all $n \geq 1$, we have 
     \[
         u_n = F_{n}.
     \]    
 \end{theorem}
 \begin{proof}
-    By Proposition \ref{prop:friezeToFlute}, every entry of an arithmetic frieze pattern of height $n$ belongs to a flute of height $n$.
+    By Proposition \ref{prop:friezeIffFlute}, every entry of an arithmetic frieze pattern of height $n$ belongs to a flute of height $n$.
     By Proposition \ref{prop:FluteBounded}, entries in a flute of height $n$ are bounded above by $F_n$. Thus $u_n \leq F_n$ for all $n$. 
-On the other hand, Lemma \ref{l:FibFlute} and 2) of Proposition \ref{prop:friezeToFlute} show that 
+On the other hand, Lemma \ref{l:FibFlute} and 2) of Proposition \ref{prop:friezeIffFlute} show that 
 there exists an arithmetic frieze pattern of height $n$ containing $F_n$ as a value.
 \end{proof}
