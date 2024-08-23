@@ -98,34 +98,106 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
 
     --now do 4 ≤ n
     have four_le_n : 4 ≤ n := by omega
+    have one_lt_n_sub_one : 1 < n - 1 := by omega
+    have two_lt_n_sub_one : 2 < n - 1 := by omega
 
     by_cases boundary : (i + 1) % (n - 1) = 0
     simp[boundary, arith_fp.topBordOnes n m]            --finish boundary case if (i + 1) % (n - 1) = 0
 
 
     by_cases boundary' : (i + 2) % (n - 1) = 0
-    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 := by sorry  --this now makes sense as n ≥ 4
-    have i_plus_one_mod_n_sub_one_eq_n_sub_two : (i + 1) % (n - 1) = n - 2 := by sorry
+    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 :=  --this now makes sense as n ≥ 4
+        calc (i) % (n - 1) = (i + (n - 1)) % (n - 1) :=  by simp
+            _= (i + (n - 1) + 2 - 2) % (n - 1) := by simp
+            _= (i + 2 + (n - 1) - 2) % (n - 1) := by rw[add_right_comm]
+            _= (i + 2 + ((n - 1) - 2)) % (n - 1) := by rw[Nat.add_sub_assoc (Nat.le_of_lt two_lt_n_sub_one) (i+2)]
+            _= ((i + 2) % (n - 1) + ((n - 1) - 2) % (n - 1)) % (n - 1) := by rw[Nat.add_mod]
+            _= (((n - 1) - 2) % (n - 1)) % (n - 1) := by simp [boundary']
+            _= ((n - 1) - 2) % (n - 1) := by rw[Nat.mod_mod]
+            _= (n - 3) % (n - 1) := by rw[Nat.sub_sub n 1 2]
+            _= n - 3 := by rw[Nat.mod_eq_of_lt (by omega)]
 
-    sorry                                               --finish boundary' case if (i + 2) % (n - 1) = 0
+    have i_plus_one_mod_n_sub_one_eq_n_sub_two : (i + 1) % (n - 1) = n - 2 := by
+        rw[Nat.add_mod]
+        rw[i_mod_n_sub_one_eq_n_sub_three, Nat.mod_eq_of_lt (one_lt_n_sub_one)]
+        rw[Nat.mod_eq_of_lt (by omega)]
+        omega
+
+    simp [boundary',i_mod_n_sub_one_eq_n_sub_three,i_plus_one_mod_n_sub_one_eq_n_sub_two]
+    have BordOnes : f (1,m) = f (n,m) := by
+        rw[@pattern_n.topBordOnes ℚ _ f n _ m]
+        rw[@pattern_n.botBordOnes_n ℚ _ f n _ m]
+
+    rw[BordOnes]
+    have a₁ : n - 3 + 1 = n - 2 := by omega
+    have a₂ : n = n - 2 + 2 := by omega
+    rw[a₁]
+    nth_rewrite 3 [a₂]
+
+    have continuant3 : (f ((n-2), m)) + (f ((n-2) + 1 + 1, m)) = (f (2, m + (n-2))) * (f ((n-2)+ 1,m)) := by
+      rw[pattern_nContinuant1 ℚ f n (n-2) (by omega) m]
+      simp
+
+    have continuant3.num : (f ((n - 2), m)).num + (f ((n - 2) + 1 + 1, m)).num = (f (2, m + ((n - 2)))).num * (f ((n - 2) + 1,m)).num := by
+      have key₁ : (f ((n - 2), m)).num + (f ((n - 2) + 1 + 1, m)).num = (f ((n - 2), m) + f ((n - 2) + 1 + 1, m)).num := by
+        simp [Rat.add_num_den, arith_fp.integral n ((n - 2)) m]
+        simp [arith_fp.integral n ((n - 2) + 1 + 1) m]
+        norm_cast
+      have key₂ : (f (2, m + ((n - 2)))).num * (f ((n - 2) + 1,m)).num = (f (2, m + ((n - 2))) * f ((n - 2) + 1,m)).num := by
+        simp [Rat.mul_num, arith_fp.integral n 2 (m + ((n - 2))), arith_fp.integral n ((n - 2) + 1) m]
+      simp [key₁, key₂, continuant3]
+
+    have continuant3.num.toNat : (f ((n - 2), m)).num.toNat + (f ((n - 2) + 1 + 1, m)).num.toNat = (f (2, m + ((n - 2)))).num.toNat * (f ((n - 2) + 1,m)).num.toNat := by
+      have h₂ : 0 ≤ (f ((n - 2), m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ ((n - 2)) m (by omega) (by omega))]
+      have h₃ : 0 ≤ (f ((n - 2) + 1 + 1, m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ ((n - 2) + 1 + 1) m (by omega) (by omega))]
+      have h₄ : 0 ≤ (f (2, m + ((n - 2)))).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ 2 (m + ((n - 2))) (by omega) (by omega))]
+      have h₅ : 0 ≤ (f ((n - 2) + 1,m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ ((n - 2) + 1) m (by omega) (by omega))]
+      zify ; rw [Int.toNat_of_nonneg h₂, Int.toNat_of_nonneg h₃, Int.toNat_of_nonneg h₄, Int.toNat_of_nonneg h₅, continuant3.num]
+
+    simp[continuant3.num.toNat]                                           --finish boundary' case if (i + 2) % (n - 1) = 0
 
     have i_plus_one_mod_n_sub_one_bd_below : 1 ≤ (i + 1) % (n - 1) := by
         rw[Nat.one_le_iff_ne_zero]
         simp[boundary]
 
-    have i_plus_one_mod_n_sub_one_bd_above : (i + 1) % (n - 1) < (n - 1) := Nat.mod_lt (i+1) (by omega)
 
-    have a₀ : (i) % (n - 1) + (1) % (n - 1) < n - 1 := by sorry
+
+    have i_mod_n_sub_one_bd_above : (i) % (n - 1) < (n - 1) := Nat.mod_lt (i) (by omega)
+    have i_plus_one_mod_n_sub_one_bd_above : (i + 1) % (n - 1) < (n - 1) := Nat.mod_lt (i+1) (by omega)
+    have i_plus_two_mod_n_sub_one_bd_above : (i + 2) % (n - 1) < (n - 1) := Nat.mod_lt (i+2) (by omega)     --These three feed some linarith's below, don't delete
+
+    have a₀₁ : (i) % (n - 1) + (1) % (n - 1) < n - 1 := by
+        rw[Nat.mod_eq_of_lt (one_lt_n_sub_one)]
+        contrapose boundary ; simp
+        have this : i % (n - 1) + 1 = n - 1 := by linarith
+        rw[Nat.add_mod, Nat.mod_eq_of_lt (one_lt_n_sub_one), this]
+        simp
 
     have a₁ : (i + 1) % (n - 1) = (i) % (n - 1) + 1 := by
-        rw[Nat.add_mod_of_add_mod_lt a₀]
+        rw[Nat.add_mod_of_add_mod_lt a₀₁]
         simp
         rw[Nat.mod_eq_of_lt (by linarith)]
-    have a₂ : (i + 2) % (n - 1) = (i) % (n - 1) + 2 := by sorry
+
+    have a₀₂ : (i) % (n - 1) + (2) % (n - 1) < n - 1 := by
+        rw[Nat.mod_eq_of_lt (two_lt_n_sub_one)]
+        contrapose boundary'
+        simp
+        have this : n - 1 = i % (n - 1) + 2 := by omega
+        rw[Nat.add_mod]
+        rw[Nat.mod_eq_of_lt (two_lt_n_sub_one)]
+        rw[← this]
+        simp
+
+
+    have a₂ : (i + 2) % (n - 1) = (i) % (n - 1) + 2 := by
+        rw[Nat.add_mod_of_add_mod_lt (a₀₂)]
+        simp
+        rw[Nat.mod_eq_of_lt (by omega)]
 
     rw[a₁,a₂, add_right_comm]
-
-    have h₁ : i % (n - 1) + 1 ≤ n - 1 := by sorry
+    have h₁ : i % (n - 1) + 1 ≤ n - 1 :=
+        calc  i % (n - 1) + 1 ≤ (i) % (n - 1) + (1) % (n - 1) := by rw[Nat.mod_eq_of_lt (one_lt_n_sub_one)]
+              _≤ n - 1 := Nat.le_of_lt (a₀₁)
 
     have continuant : (f (i % (n - 1) + 1, m)) + (f (i % (n - 1) + 1 + 1 + 1, m)) = (f (2, m + (i % (n - 1) + 1))) * (f (i % (n - 1) + 1 + 1,m)) := by
       rw[pattern_nContinuant1 ℚ f n (i % (n - 1) + 1) h₁ m]
