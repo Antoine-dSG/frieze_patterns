@@ -343,4 +343,54 @@ noncomputable def FriezeMax (n : ℕ) (hn : n ≠ 0) : ℚ := by
   exact f a
 
 
-theorem mainTheorem (n : ℕ) (hn : n ≠ 0)  : FriezeMax n hn = Nat.fib n := by sorry
+theorem mainTheorem (n : ℕ) (hn : n ≠ 0)  : FriezeMax n hn = Nat.fib n := by
+  have h := maxDefined n hn
+  rcases h with ⟨f, hf, ⟨i, m⟩, ha, hf'⟩
+  have key₂ : f (i,m) = Nat.fib n := by
+    have key₁ : f (i,m) ≤ Nat.fib n := by
+      by_cases hn₂ : n=1
+      simp [hn₂, Nat.fib_one]
+      match i with
+      | 0 => simp [hn₂, hf.topBordZeros m]
+      | 1 => simp [hn₂, hf.topBordOnes m]
+      | i+2 => simp [hn₂, hf.botBordZeros_n (i+2) m (by omega)]
+      unfold arithFriezePatSet at hf ; simp at hf
+      let g := @friezeToFlute f n m (by omega) hf
+      by_cases hi : i = 0
+      simp [hi, hf.topBordZeros m]
+      by_cases hi₂ : i ≥ n+1
+      simp [hi₂, hf.botBordZeros_n i m hi₂]
+      by_cases hi₃ : i = n
+      have hi₄ : 0 < Nat.fib n := Nat.fib_pos.mpr (by omega)
+      simp [hi₃, hf.botBordOnes_n m]
+      omega
+      have key := FluteBounded n (by omega) g (i-1) (by omega)
+      unfold_let g at key ; unfold friezeToFlute at key ; unfold flute_f at key ; simp at key
+      have hi₆ : (i-1)%(n-1)+1 = i := by rw [Nat.mod_eq_of_lt (by omega)] ; omega
+      rw [hi₆] at key
+      apply Rat.le_def.mpr
+      simp [hf.integral i m] ; norm_cast
+    rcases Nat.even_or_odd n with ⟨k, hk⟩ | ⟨k, hk⟩
+    have hk₂ : k ≥ 1 := by omega
+    rcases Nat.exists_eq_add_of_le' hk₂ with ⟨l, hl⟩
+    rw [hl] at hk ; simp_arith at hk
+    unfold arithFriezePatSet at hf' ; simp at hf'
+    specialize hf' (frieze_f (fib_flute_even l)) (hk ▸ fluteToFrieze (fib_flute_even l) (by omega)) (l+1) 0
+    have hl₂ : ¬ 2*l+2 ≤ l := by omega
+    have hl₃ : ¬ 2*l+1 ≤ l := by omega
+    unfold frieze_f at hf' ; simp [hl₂, hl] at hf' ; unfold fib_flute_even at hf' ; simp at hf' ; unfold a_even at hf' ; simp [hl₃, ←hk] at hf'
+    exact hf' key₁
+    unfold arithFriezePatSet at hf' ; simp at hf'
+    specialize hf' (frieze_f (fib_flute_odd k)) (hk ▸ fluteToFrieze (fib_flute_odd k) (by omega)) (k+1) 0
+    by_cases hk₂ : k = 0
+    unfold frieze_f at hf' ; simp [hk₂] at hf' ; unfold fib_flute_odd at hf' ; simp at hf' ; unfold a_odd at hf' ; simp [hk₂] at hf'
+    simp [hk, hk₂] at *
+    exact hf' key₁
+    have hk₃ : ¬ 2*k ≤ k := by omega
+    have hk₄ : ¬ 2*k+1 ≤ k := by omega
+    unfold frieze_f at hf' ; simp [hk, hk₂, hk₃] at hf' ; unfold fib_flute_odd at hf' ; simp at hf' ; unfold a_odd at hf' ; simp [hk₂, hk₃, hk₄] at hf' ; unfold a_odd at hf' ; simp [hk₂, hk₃, hk₄] at hf'
+    have hk₅ : 1+4*k-2*k = n := by omega
+    rw [hk₅] at hf'
+    exact hf' key₁
+  rw [← key₂]
+  sorry -- I'm not sure how to manipulate the choice functions
