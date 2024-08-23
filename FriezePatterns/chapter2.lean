@@ -26,47 +26,6 @@ lemma fluteSetNonEmpty (n : ℕ) : Nonempty (fluteSet n) := by
   use f
   rfl
 
-/- Alternative definition of the Fibonacci flute. Not sure it'll be useful -/
-def fibEven (n : ℕ) : ℕ  → ℕ :=
-  λ i =>
-  if i%(n-1) < n/2 then
-    Nat.fib (2*(i%(n-1))+1)
-  else
-    Nat.fib (2*(n-i%(n-1)))
-
-lemma fibPos (n : ℕ) (hn : n >1) : ∀ i, fibEven n i > 0 := by
-  intro i
-  unfold fibEven
-  let  k := i%(n-1)
-  have : k = i%(n-1) := by rfl
-  rw [← this]
-  split_ifs with h₁
-  have : Nat.fib (2*k+1) > 0 := by simp [Nat.fib_pos]
-  exact this
-  push_neg at h₁
-  have h₂ : k < (n-1) := by apply Nat.mod_lt; omega
-  have h₃ : 2* (n-k) > 0 := by omega
-  exact Nat.fib_pos.mpr h₃
-
-lemma fibRoot  (n : ℕ) (hn : n >1) : fibEven n 0 = 1 := by
-  unfold fibEven
-  have h : n/2 ≥ 1 := by omega
-  simp [h, Nat.fib]
-  intro h₃
-  linarith
-
-lemma fibPeriod (n : ℕ) : ∀ k, fibEven n k = fibEven n (k + (n-1)) := by
-  intro k
-  have h : k%(n-1) = (k+(n-1))%(n-1) := by simp
-  unfold fibEven
-  rw [h]
-
-
-lemma fibDiv (n : ℕ) (hn : n >1) : ∀k, fibEven n (k+1) ∣ (fibEven n k + fibEven n (k+2)) := by sorry
-
-def fibFluteEven (n : ℕ) (hn: n > 1) : flute (n) := by
-  exact ⟨fibEven n,fibPos n hn,fibRoot n hn,fibPeriod n,fibDiv n hn⟩
-/- End of alternative definition -/
 
 def a_odd (k i : ℕ) : ℕ :=
   if k = 0 then
@@ -624,7 +583,6 @@ def aux_3 (n : ℕ) (f : flute (n+3)) (j : ℕ) (hj : j ≤ n ∧ f.a (j+1) = f.
     by_cases hij₃ : i ≤ j
     have hij₄ : i = j := by omega
     simp [hij, hij₂, hij₃, hij₄]
-    have key := hj.2
     rcases f.div (j+1) with ⟨k, hk⟩
     simp [add_assoc] at hk
     use k-1
@@ -681,7 +639,6 @@ theorem FluteBounded (n : ℕ) (hn: n>0) (f : flute n) : ∀ i ≤ n-1, f.a i �
     have hh : 0 < Nat.fib (n+2) := Nat.fib_pos.mpr (by omega)
     have hh₂ : Nat.fib (n+1) ≤ Nat.fib (n+2) := Nat.fib_mono (by omega)
     have hh₃ : Nat.fib (n+3) = Nat.fib (n+1) + Nat.fib (n+2) := Nat.fib_add_two
-    have hh₄ : 0 < Nat.fib (n+3) := Nat.fib_pos.mpr (by omega)
     rcases FluteReduction _ f with (h₂ | h₂) | h₂
     let g := aux_1 n f h₂ -- case 1: f.a 1 = 1
     use n+3 ; intros i hi

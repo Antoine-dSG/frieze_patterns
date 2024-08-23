@@ -13,7 +13,7 @@ The following proposition is a key result connecting arithmetic frieze patterns 
 \begin{proposition}
     \uses{def:flute,def:arith_fp, l:pattern_nContinuant,prop:trsltInv}
     \label{prop:friezeIffFlute}
-    \lean{friezeToFlute,fluteToFrieze}
+    \lean{friezeToFlute,frieze_f,fluteToFrieze}
 1) Let $f$ be an arithmetic frieze pattern of height $n$. For all $m \in \mathbb{Z}$, the $n$-tuple
 \[
     (f (1,m), f (2,m), \ldots, f (n,m))
@@ -58,7 +58,7 @@ is a flute of height $n$.
     \leanok
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{corollary}
-\begin{proof}
+\begin{proof}\leanok
     The proof of Lemma \ref{l:nFluteNonEmpty} showed that $(1,1,\ldots, 1)$ is a flute. 
     The claim then follows from 2) of Proposition \ref{prop:friezeIffFlute}.
 \end{proof}
