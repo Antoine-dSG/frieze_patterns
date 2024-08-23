@@ -379,6 +379,104 @@ lemma arithFriezePatSetNonEmpty {n : ℕ} (h : n ≠ 0) : (arithFriezePatSet n).
 
 
 
+lemma main1 (n : ℕ) (h : n ≠ 0) : ∀ (f : ℕ × ℕ → ℚ) (_ : arith_fp f n), ∀ (a : ℕ × ℕ), f a ≤ Nat.fib n := by
+  intro f hf ⟨i,m⟩
+  by_cases hn : n=1
+  simp [hn, Nat.fib_one]
+  match i with
+  | 0 => simp [hn, hf.topBordZeros m]
+  | 1 => simp [hn, hf.topBordOnes m]
+  | i+2 => simp [hn, hf.botBordZeros_n (i+2) m (by omega)]
+  have hn' : n > 1 := by omega
+  let g := @friezeToFlute f n m (by omega) hf
+  by_cases hi₀ : i = 0
+  simp [hi₀, hf.topBordZeros m]
+  by_cases hi₁ : i = 1
+  simp [hi₁, hf.topBordOnes m]
+  have hn'' : n >0 := by omega
+  have : Nat.fib n > 0 := Nat.fib_pos.mpr hn''
+  linarith
+  by_cases hi₂ : i ≥ n+1
+  simp [hi₂, hf.botBordZeros_n i m hi₂]
+  by_cases hi₃ : i = n
+  simp [hi₃, hf.botBordOnes_n m]
+  have hi₄ : 0 < Nat.fib n := Nat.fib_pos.mpr (by omega)
+  linarith
+  have key := FluteBounded n (by omega) g (i-1) (by omega)
+  unfold_let g at key ; unfold friezeToFlute at key ; unfold flute_f at key ; simp at key
+  have hi₆ : (i-1)%(n-1)+1 = i := by rw [Nat.mod_eq_of_lt (by omega)] ; omega
+  rw [hi₆] at key
+  apply Rat.le_def.mpr
+  simp [hf.integral i m] ; norm_cast
+
+lemma main2 (n : ℕ) (hn : n ≠ 0) : ∃ (f : ℕ × ℕ → ℚ) (hf : arith_fp f n), ∃ (a : ℕ × ℕ), f a = Nat.fib n := by
+  rcases Nat.even_or_odd n with ⟨k, hk⟩ | ⟨k, hk⟩
+  -- even case
+  · have : k > 0 := by
+      by_contra!
+      simp [hk] at this; rw [this] at hk; simp at hk; omega
+    have : k ≠ 0 := by omega
+    let j := k-1
+    have hj : n = 2*j+2 := by omega
+    use frieze_f (fib_flute_even j)
+    let temp := fluteToFrieze (fib_flute_even j) (by omega)
+    conv at temp =>
+      rhs
+      rw [←hj]
+    use temp
+    have h₁ : ∃ (w : ℕ × ℕ), frieze_f (fib_flute_even j) w = Nat.fib (2*j+2) := by
+      use (j+1, 0)
+      have h₃: ¬2 * j + 2 ≤ j := by omega
+      simp [frieze_f,h₃]
+      unfold fib_flute_even
+      by_cases h₂ : j = 0
+      simp [h₂]
+      unfold a_even; simp [h₂,hj]
+      -- j ≠ 0
+      simp [h₂]
+      have h₄ : ¬ j ≥ 2*j +1 := by omega
+      --have h₅ : 1 + 4 * j - 2 * j = 2*j + 2 := by omega
+      unfold a_even; simp [h₂,hj,h₄]
+    choose w hw using h₁
+    use w
+    rw [hj]
+    assumption
+  -- odd case
+  · use frieze_f (fib_flute_odd k)
+    let temp := fluteToFrieze (fib_flute_odd k) (by omega)
+    conv at temp =>
+      rhs
+      rw [←hk ]
+    use temp
+    have h₁ : ∃ (w : ℕ × ℕ), frieze_f (fib_flute_odd k) w = Nat.fib (2*k+1) := by
+      use (k+1, 0)
+      --have h₂ : ¬ k = 0 := by omega
+      have h₃: ¬2 * k + 1 ≤ k := by omega
+      simp [frieze_f,h₃]
+      unfold fib_flute_odd
+      by_cases h₂ : k = 0
+      simp [h₂]
+      unfold a_odd; simp [h₂,hk]
+      -- k ≠ 0
+      simp [h₂]
+      have h₄ : ¬ 2*k ≤ k := by omega
+      have h₅ : 1 + 4 * k - 2 * k = 2*k + 1 := by omega
+      unfold a_odd; simp [h₂,hk,h₄,h₅]
+    choose w hw using h₁
+    use w
+    rw [hk]
+    assumption
+
+theorem main3 (n : ℕ) (hn: n≠ 0) : ∀ (f : ℕ × ℕ → ℚ) (hf : arith_fp f n), ∀ (a : ℕ × ℕ),
+f a ≥ Nat.fib n → f a = Nat.fib n := by
+  intro f hf ⟨i,m⟩
+  have h : f (i,m) ≤ Nat.fib n := main1 n hn f hf (i,m)
+  intro h'
+  linarith
+
+
+
+/- Old code
 def fHasMax (n : ℕ) (f : ℕ × ℕ → ℚ) [arith_fp f n]  : Prop :=
   ∃ a ∈ Set.univ, ∀ a' ∈ Set.univ, f a ≤ f a' → f a = f a'
 
@@ -413,6 +511,10 @@ noncomputable def FriezeMax (n : ℕ) (hn : n ≠ 0) : ℚ := by
   unfold FriezeHasMax at h
   choose f hf a ha hf' using h
   exact f a
+
+
+
+
 
 
 theorem mainTheorem (n : ℕ) (hn : n ≠ 0)  : FriezeMax n hn = Nat.fib n := by
@@ -466,3 +568,4 @@ theorem mainTheorem (n : ℕ) (hn : n ≠ 0)  : FriezeMax n hn = Nat.fib n := by
     exact hf' key₁
   rw [← key₂]
   sorry -- I'm not sure how to manipulate the choice functions
+-/
