@@ -124,9 +124,37 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
         omega
 
     simp [boundary',i_mod_n_sub_one_eq_n_sub_three,i_plus_one_mod_n_sub_one_eq_n_sub_two]
-    rw[@pattern_n.topBordOnes ℚ _ f n _ m]; simp
+    have BordOnes : f (1,m) = f (n,m) := by
+        rw[@pattern_n.topBordOnes ℚ _ f n _ m]
+        rw[@pattern_n.botBordOnes_n ℚ _ f n _ m]
 
-    sorry                                               --finish boundary' case if (i + 2) % (n - 1) = 0
+    rw[BordOnes]
+    have a₁ : n - 3 + 1 = n - 2 := by omega
+    have a₂ : n = n - 2 + 2 := by omega
+    rw[a₁]
+    nth_rewrite 3 [a₂]
+
+    have continuant3 : (f ((n-2), m)) + (f ((n-2) + 1 + 1, m)) = (f (2, m + (n-2))) * (f ((n-2)+ 1,m)) := by
+      rw[pattern_nContinuant1 ℚ f n (n-2) (by omega) m]
+      simp
+
+    have continuant3.num : (f ((n - 2), m)).num + (f ((n - 2) + 1 + 1, m)).num = (f (2, m + ((n - 2)))).num * (f ((n - 2) + 1,m)).num := by
+      have key₁ : (f ((n - 2), m)).num + (f ((n - 2) + 1 + 1, m)).num = (f ((n - 2), m) + f ((n - 2) + 1 + 1, m)).num := by
+        simp [Rat.add_num_den, arith_fp.integral n ((n - 2)) m]
+        simp [arith_fp.integral n ((n - 2) + 1 + 1) m]
+        norm_cast
+      have key₂ : (f (2, m + ((n - 2)))).num * (f ((n - 2) + 1,m)).num = (f (2, m + ((n - 2))) * f ((n - 2) + 1,m)).num := by
+        simp [Rat.mul_num, arith_fp.integral n 2 (m + ((n - 2))), arith_fp.integral n ((n - 2) + 1) m]
+      simp [key₁, key₂, continuant3]
+
+    have continuant3.num.toNat : (f ((n - 2), m)).num.toNat + (f ((n - 2) + 1 + 1, m)).num.toNat = (f (2, m + ((n - 2)))).num.toNat * (f ((n - 2) + 1,m)).num.toNat := by
+      have h₂ : 0 ≤ (f ((n - 2), m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ ((n - 2)) m (by omega) (by omega))]
+      have h₃ : 0 ≤ (f ((n - 2) + 1 + 1, m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ ((n - 2) + 1 + 1) m (by omega) (by omega))]
+      have h₄ : 0 ≤ (f (2, m + ((n - 2)))).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ 2 (m + ((n - 2))) (by omega) (by omega))]
+      have h₅ : 0 ≤ (f ((n - 2) + 1,m)).num := by linarith [Rat.num_pos.mpr (@arith_fp.positive f n _ ((n - 2) + 1) m (by omega) (by omega))]
+      zify ; rw [Int.toNat_of_nonneg h₂, Int.toNat_of_nonneg h₃, Int.toNat_of_nonneg h₄, Int.toNat_of_nonneg h₅, continuant3.num]
+
+    simp[continuant3.num.toNat]                                           --finish boundary' case if (i + 2) % (n - 1) = 0
 
     have i_plus_one_mod_n_sub_one_bd_below : 1 ≤ (i + 1) % (n - 1) := by
         rw[Nat.one_le_iff_ne_zero]
