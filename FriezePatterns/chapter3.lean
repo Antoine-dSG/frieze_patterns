@@ -98,14 +98,31 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
 
     --now do 4 ≤ n
     have four_le_n : 4 ≤ n := by omega
+    have one_lt_n_sub_one : 1 < n - 1 := by omega
+    have two_lt_n_sub_one : 2 < n - 1 := by omega
 
     by_cases boundary : (i + 1) % (n - 1) = 0
     simp[boundary, arith_fp.topBordOnes n m]            --finish boundary case if (i + 1) % (n - 1) = 0
 
 
     by_cases boundary' : (i + 2) % (n - 1) = 0
-    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 := by sorry  --this now makes sense as n ≥ 4
-    have i_plus_one_mod_n_sub_one_eq_n_sub_two : (i + 1) % (n - 1) = n - 2 := by sorry
+    have i_mod_n_sub_one_eq_n_sub_three : (i) % (n - 1) = n - 3 :=  --this now makes sense as n ≥ 4
+        calc (i) % (n - 1) = (i + (n - 1)) % (n - 1) :=  by simp
+            _= (i + (n - 1) + 2 - 2) % (n - 1) := by simp
+            _= (i + 2 + (n - 1) - 2) % (n - 1) := by rw[add_right_comm]
+            _= (i + 2 + ((n - 1) - 2)) % (n - 1) := by rw[Nat.add_sub_assoc (Nat.le_of_lt two_lt_n_sub_one) (i+2)]
+            _= ((i + 2) % (n - 1) + ((n - 1) - 2) % (n - 1)) % (n - 1) := by rw[Nat.add_mod]
+            _= (((n - 1) - 2) % (n - 1)) % (n - 1) := by simp [boundary']
+            _= ((n - 1) - 2) % (n - 1) := by rw[Nat.mod_mod]
+            _= (n - 3) % (n - 1) := by rw[Nat.sub_sub n 1 2]
+            _= n - 3 := by rw[Nat.mod_eq_of_lt (by omega)]
+
+    have i_plus_one_mod_n_sub_one_eq_n_sub_two : (i + 1) % (n - 1) = n - 2 := by
+        rw[Nat.add_mod]
+        rw[i_mod_n_sub_one_eq_n_sub_three, Nat.mod_eq_of_lt (one_lt_n_sub_one)]
+        rw[Nat.mod_eq_of_lt (by omega)]
+        omega
+
     simp [boundary',i_mod_n_sub_one_eq_n_sub_three,i_plus_one_mod_n_sub_one_eq_n_sub_two]
     rw[@pattern_n.topBordOnes ℚ _ f n _ m]; simp
 
@@ -115,8 +132,7 @@ def friezeToFlute (f : ℕ×ℕ → ℚ) (n m: ℕ) (hn : 2 ≤ n) [arith_fp f n
         rw[Nat.one_le_iff_ne_zero]
         simp[boundary]
 
-    have one_lt_n_sub_one : 1 < n - 1 := by omega
-    have two_lt_n_sub_one : 2 < n - 1 := by omega
+
 
     have i_mod_n_sub_one_bd_above : (i) % (n - 1) < (n - 1) := Nat.mod_lt (i) (by omega)
     have i_plus_one_mod_n_sub_one_bd_above : (i + 1) % (n - 1) < (n - 1) := Nat.mod_lt (i+1) (by omega)
