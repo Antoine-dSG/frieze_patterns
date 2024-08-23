@@ -173,7 +173,11 @@ def fib_flute_odd (k : ℕ) : flute (2*k+1) := by
         rw [hi₁₀, ← Nat.fib_add_two, hi₁₁]
         omega
         · push_neg at hi₅
-          by_cases hi₆ : ¬ 2*k ≤ i+1
+          by_cases hi₆ : 2*k ≤ i+1
+          have hi₇ : i+1-2*k = 0 := by omega
+          have hi₈ : i+2-2*k = 1 := by omega
+          unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₇, hi₈]
+          unfold a_odd ; simp [hk]
           unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆]
           have hi₇ : 1+4*k-2*(i+1) = 3 := by omega
           have hi₈ : 1+4*k-2*i = 5 := by omega
@@ -182,13 +186,7 @@ def fib_flute_odd (k : ℕ) : flute (2*k+1) := by
           unfold a_odd
           simp [hi₇, hi₈, hi₉, hk, hk₂]
           use 3 ; simp [Nat.fib_add_two]
-          push_neg at hi₆
-          have hi₇ : i+1-2*k = 0 := by omega
-          have hi₈ : i+2-2*k = 1 := by omega
-          unfold a_odd ; simp [hk, hi, hi₂, hi₃, hi₄, hi₅, hi₆, hi₇, hi₇, hi₈]
-          unfold a_odd ; simp [hk]
   exact ⟨a_odd k, pos, hd, period, div⟩
-
 
 def a_even (k i : ℕ) : ℕ :=
   if i ≥ 2*k+1 then
@@ -476,14 +474,56 @@ def a_2 (n : ℕ) (f : flute (n+3)) (h : f.a (n+1) = 1) (k : ℕ) : ℕ :=
     f.a k
 
 def aux_2 (n : ℕ) (f : flute (n+3)) (h : f.a (n+1) = 1) : flute (n+2) := by
-  have pos : ∀ i, a_2 n f h i > 0 := by sorry
+  have pos : ∀ i, a_2 n f h i > 0 := by
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ n+1
+    unfold a_2 ; simp [hi]
+    exact ih (i-(n+1)) (by omega)
+    simp [a_2, hi]
+    exact f.pos i
   have hd : a_2 n f h 0 = 1 := by
     simp [a_2, f.hd]
   have period : ∀ i, a_2 n f h i = a_2 n f h (i+(n+2)-1) := by
     intro i
     nth_rw 2 [a_2]
     simp
-  have div : ∀ i, a_2 n f h (i+1) ∣ (a_2 n f h i + a_2 n f h (i+2)) := by sorry
+  have div : ∀ i, a_2 n f h (i+1) ∣ (a_2 n f h i + a_2 n f h (i+2)) := by
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ n+1
+    have hi₂ : n ≤ i := by omega
+    have hi₃ : n ≤ i+1 := by omega
+    unfold a_2 ; simp [hi, hi₂, hi₃]
+    specialize ih (i-(n+1)) (by omega)
+    have hi₄ : i-(n+1)+1 = i-n := by omega
+    have hi₅ : i-(n+1)+2 = i+1-n := by omega
+    rw [hi₄, hi₅] at ih ; exact ih
+    by_cases hi₂ : i = 0
+    unfold a_2 ; simp [hi, hi₂]
+    match n with
+    | 0 => simp [hd]
+    | 1 =>
+      simp ; simp at h
+      rw [hd, f.hd]
+      nth_rw 2 [←h]
+      nth_rw 2 [←f.hd]
+      simp [f.div 0, add_comm]
+    | n+2 =>
+      simp [f.hd]
+      nth_rw 2 [←f.hd]
+      exact f.div 0
+    unfold a_2 ; simp [hi, hi₂]
+    by_cases hi₃ : n ≤ i
+    have hi₄ : i = n := by omega
+    simp [hi₃, hi₄, hd]
+    by_cases hi₄ : n ≤ i+1
+    have hi₅ : i+1 = n := by omega
+    simp [hi₃, hi₄, hi₅, hd]
+    have key := f.div i
+    rw [hi₅, ←one_add_one_eq_two, ←add_assoc, hi₅, h] at key
+    exact key
+    simp [hi₃, hi₄, f.div i]
   exact ⟨a_2 n f h, pos, hd, period, div⟩
 
 def a_3 (n : ℕ) (f : flute (n+3)) (i : ℕ) (hi : i ≤ n ∧ f.a (i+1) = f.a i + f.a (i+2)) (k : ℕ) : ℕ :=
@@ -494,11 +534,104 @@ def a_3 (n : ℕ) (f : flute (n+3)) (i : ℕ) (hi : i ≤ n ∧ f.a (i+1) = f.a 
   else f.a (k+1)
 
 def aux_3 (n : ℕ) (f : flute (n+3)) (j : ℕ) (hj : j ≤ n ∧ f.a (j+1) = f.a j + f.a (j+2)) : flute (n+2) := by
-  -- the proof of this will probably be more complicated than the previous two
-  have pos : ∀ i, a_3 n f j hj i > 0 := by sorry
-  have hd : a_3 n f j hj 0 = 1 := by sorry
-  have period : ∀ i, a_3 n f j hj i = a_3 n f j hj (i+(n+2)-1) := by sorry
-  have div : ∀ i, a_3 n f j hj (i+1) ∣ (a_3 n f j hj i + a_3 n f j hj (i+2)) := by sorry
+  have pos : ∀ i, a_3 n f j hj i > 0 := by
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ n+1
+    unfold a_3 ; simp [hi]
+    exact ih (i-(n+1)) (by omega)
+    by_cases hi₂ : i ≤ j
+    unfold a_3 ; simp [hi, hi₂]
+    exact f.pos i
+    unfold a_3 ; simp [hi, hi₂]
+    exact f.pos (i+1)
+  have hd : a_3 n f j hj 0 = 1 := by simp [a_3, f.hd]
+  have period : ∀ i, a_3 n f j hj i = a_3 n f j hj (i+(n+2)-1) := by
+    intro i
+    nth_rw 2 [a_3]
+    simp
+  have div : ∀ i, a_3 n f j hj (i+1) ∣ (a_3 n f j hj i + a_3 n f j hj (i+2)) := by
+    have f.tl : f.a (n+2) = 1 := by
+      have := f.period 0
+      simpa [f.hd] using this.symm
+    intro i
+    induction' i using Nat.strong_induction_on with i ih
+    by_cases hi : i ≥ n+1
+    have hi₂ : n ≤ i := by omega
+    have hi₃ : n ≤ i+1 := by omega
+    unfold a_3 ; simp [hi, hi₂, hi₃]
+    specialize ih (i-(n+1)) (by omega)
+    have hi₄ : i-(n+1)+1 = i-n := by omega
+    have hi₅ : i-(n+1)+2 = i+1-n := by omega
+    rw [hi₄, hi₅] at ih ; exact ih
+    by_cases hi₂ : n ≤ i
+    have hi₂ : i = n := by omega
+    simp [hi, hi₂, a_3, f.hd]
+    by_cases hi₃ : n ≤ i+1
+    have hi₃ : i = n-1 := by omega
+    have hn : ¬ n ≤ n-1 := by omega
+    have hn₂ : n-1+1 = n := by omega
+    have hn₃ : ¬ n+1 ≤ n-1 := by omega
+    unfold a_3 ; simp [hi, hi₂, hi₃, hn, hn₂, hn₃]
+    simp [hd]
+    by_cases hn₄ : n ≤ j
+    have hn₅ : j = n := by omega
+    simp [hn₄, hn₅]
+    have key := f.div (n-1)
+    have hn₆ : n-1+2 = n+1 := by omega
+    simp [hn₂, hn₆] at key
+    simp [hn₅ ▸ hj.2] at key
+    rw [f.tl] at key
+    rcases key with ⟨k, hk⟩
+    use k-1
+    calc
+      f.a (n-1) +1 = f.a (n-1) + (f.a n +1) - f.a n := by omega
+      _ = f.a n * k - f.a n := by rw [hk]
+      _ = f.a n * (k-1) := by exact (Nat.mul_sub_one (f.a n) k).symm
+    simp [hn₄]
+    by_cases hn₅ : n ≤ j+1
+    have hn₆ : j = n-1 := by omega
+    have hn₇ : n ≤ n-1+1 := by omega
+    simp [hn₄, hn₅, hn₆, hn₇]
+    have key := hn₆ ▸ hj.2
+    have hn₈ : n-1+2 = n+1 := by omega
+    simp [hn₂, hn₈] at key
+    have key₂ := f.div n
+    simp [hn₂, hn₈, f.tl] at key₂
+    rcases key₂ with ⟨k, hk⟩
+    use k-1
+    calc
+      f.a (n-1) + 1 = f.a (n+1)*k - f.a (n+1) := by omega
+      _ = f.a (n+1) * (k-1) := by exact (Nat.mul_sub_one (f.a (n+1)) k).symm
+    simp [hn₅]
+    simpa [f.tl] using f.div n
+    unfold a_3 ; simp [hi, hi₂, hi₃, add_assoc]
+    by_cases hij : i+2 ≤ j
+    have hij₂ : i+1 ≤ j := by omega
+    have hij₃ : i ≤ j := by omega
+    simp [hij, hij₂, hij₃, f.div i]
+    by_cases hij₂ : i+1 ≤ j
+    have hij₃ : i ≤ j := by omega
+    have hij₄ : i+1 = j := by omega
+    simp [hij, hij₂, hij₃, ←hij₄]
+    have key := hij₄ ▸ hj.2
+    simp [add_assoc] at key
+    rcases f.div i with ⟨k, hk⟩
+    use k-1
+    calc
+      f.a i + f.a (i+3) = f.a (i+1) * k - f.a (i+1) := by omega
+      _ = f.a (i+1) * (k-1) := by exact (Nat.mul_sub_one (f.a (i+1)) k).symm
+    by_cases hij₃ : i ≤ j
+    have hij₄ : i = j := by omega
+    simp [hij, hij₂, hij₃, hij₄]
+    have key := hj.2
+    rcases f.div (j+1) with ⟨k, hk⟩
+    simp [add_assoc] at hk
+    use k-1
+    calc
+      f.a j + f.a (j+3) = f.a (j+2) * k - f.a (j+2) := by omega
+      _ = f.a (j+2) * (k-1) := by exact (Nat.mul_sub_one (f.a (j+2)) k).symm
+    simp [hij, hij₂, hij₃, f.div (i+1)]
   exact ⟨a_3 n f j hj, pos, hd, period, div⟩
 
 theorem FluteBounded (n : ℕ) (hn: n>0) (f : flute n) : ∀ i ≤ n-1, f.a i ≤ Nat.fib n := by
