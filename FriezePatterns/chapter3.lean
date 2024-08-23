@@ -203,19 +203,19 @@ def fluteToFrieze {n : ℕ} (g : flute n) (hn : n ≠ 0) : arith_fp (frieze_f g)
     simp [this, hi', botBordOnes_n]
     specialize ih₂ (by omega) (by omega)
     have : ¬ n ≤ i := by omega
-    unfold frieze_f ; simp [this, add_assoc]
+    unfold frieze_f ; simp_arith [this]
     have h₁ := ih₁ (i+1) (by omega) (by omega)
     have h₂ := ih₁ (i+2) (by omega) (by omega)
-    field_simp [h₁, h₂, ih₂]
+    field_simp [h₁]
   have diamond : ∀ i, ∀ m,  i ≤ n-1 → frieze_f g (i+1,m) * frieze_f g (i+1,m+1)-1 = frieze_f g (i+2,m) * frieze_f g (i,m+1) := by
     intro i m hi
     conv =>
       enter [1,1,2]
       unfold frieze_f
     have : ¬ n ≤ i := by omega
-    simp [this, add_assoc]
+    simp_arith [this]
     have : frieze_f g (i+1, m) > 0 := by linarith [positive (i+1) m (by omega) (by omega)]
-    field_simp [this]
+    field_simp
   have non_zero : ∀ i m, 1 ≤ i ∧ i ≤ n → frieze_f g (i,m) ≠ 0 := λ i m ⟨hi₁, hi₂⟩ => by linarith [positive i m hi₁ hi₂]
   have : nzPattern_n ℚ (frieze_f g) n := by
     exact {topBordZeros, topBordOnes, botBordOnes_n, botBordZeros_n, diamond, non_zero}
@@ -263,7 +263,7 @@ def fluteToFrieze {n : ℕ} (g : flute n) (hn : n ≠ 0) : arith_fp (frieze_f g)
       induction' i using Nat.twoStepInduction with i ih₁ ih₂
       simp [frieze_f]
       simp [frieze_f, hn, g.hd]
-      simp [add_assoc] at ih₁ ih₂ hi
+      simp_arith at ih₁ ih₂ hi
       specialize ih₁ (by omega)
       specialize ih₂ (by omega)
       have := pattern_nContinuant1 ℚ (frieze_f g) n i (by omega) 1
@@ -287,7 +287,7 @@ def fluteToFrieze {n : ℕ} (g : flute n) (hn : n ≠ 0) : arith_fp (frieze_f g)
       intro ; simp [botBordZeros_n (i+3) _ (by omega)]
       intro m
       have key₂ := pattern_nContinuant1 ℚ (frieze_f g) n (i+1) (by omega) m
-      simp [add_assoc] at key₂
+      simp_arith at key₂
       rw [key₂]
       have h₁ := key (m+(i+1))
       have h₂ := ih (i+1) (by omega) m
