@@ -146,7 +146,7 @@ theorem glideSymm (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern
               _ = f (n-1,m+i+2) * f (n-i,m+i+1) - f (n+1-i,m+i) := by congr
               _ = f (n-i-1,m+i+2) := by rw [h₅]
 
-theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by
+theorem translationInvariance (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m+n+1) := by
   intro i ileq m
   have key := glideSymm F f n i ileq m
   have key2 := glideSymm F f n (n+1-i) (Nat.sub_le (n+1) i) (m+i)
@@ -155,7 +155,7 @@ theorem trsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_
 
 
 -- A stronger version of the translation invariance - may be useful
-lemma strongTrsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m%(n+1)) := by
+lemma strongTranslationInvariance (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern_n F f n] : ∀ i, i ≤ n+1 → ∀m, f (i,m) = f (i,m%(n+1)) := by
   intro i ileq m
   induction' m using Nat.strong_induction_on with m ih
   by_cases hm : m < n+1
@@ -164,7 +164,7 @@ lemma strongTrsltInv (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPatt
   have h₁ : m ≥ (n+1) := by omega
   have h₂ : m - (n+1) < m := by omega
   have key : f (i, m - (n + 1)) = f (i, m) := by
-    calc f (i,m - (n+1)) = f (i, m - (n+1) + (n+1)) := trsltInv F f n i (by linarith) (m - (n + 1))
+    calc f (i,m - (n+1)) = f (i, m - (n+1) + (n+1)) := translationInvariance F f n i (by linarith) (m - (n + 1))
     _= f (i,m) := by congr ; omega
   rw [← key]
   specialize ih (m - (n+1)) h₂
@@ -185,7 +185,7 @@ lemma imageFinite (F : Type*) [Field F] (f : ℕ×ℕ → F) (n: ℕ) [nzPattern
       · exact ⟨⟨i, m⟩, ⟨⟨hi, hm⟩, hx⟩⟩ -- we can just use (i,m) if m ≤ n
       · simp at hm
         specialize ih (m-(n+1)) (by omega)
-        have key := trsltInv F f n i (by linarith) (m - (n + 1))
+        have key := translationInvariance F f n i (by linarith) (m - (n + 1))
         have : m - (n+1) + n + 1 = m := by omega
         simp [this, hx] at key
         exact ih key
