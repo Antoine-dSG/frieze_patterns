@@ -55,7 +55,6 @@ is a flute of height $n$.
     \label{c:arithFriezePatSetNonEmpty}
     \lean{arithFriezePatSetNonEmpty}
     \uses{l:nFluteNonEmpty, prop:friezeIffFlute}
-    \lean{arithFriezePatSetNonEmpty}
     \leanok
     Fix a positive integer $n$. The set Frieze$(n)$ is non-empty.
 \end{corollary}
@@ -77,7 +76,7 @@ We are now able to formulate and prove the main theorem of this section.
     \label{mainTheorem}
     \lean{main1,main2,main3}
     \leanok
-    \uses{prop:FluteBounded, l:FibFlute, prop:friezeIffFlute}
+    \uses{prop:FluteBounded, l:FibFlute, prop:friezeIffFlute,c:arithFriezePatSetNonEmpty}
     For all $n \geq 1$, we have 
     \[
         u_n = F_{n}.
