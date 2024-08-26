@@ -344,7 +344,7 @@ def fluteToFrieze {n : ℕ} (g : flute n) (hn : n ≠ 0) : arith_fp (frieze_f g)
       -- there should be a tactic to do the following two steps?
       rw [Rat.sub_eq_add_neg, Rat.add_num_den, Rat.neg_den, Rat.mul_den, ih₁, ih₂, this]
       simp ; norm_cast
-      have h := trsltInv ℚ (frieze_f g) n 2 (by omega) (m-(n+1))
+      have h := translationInvariance ℚ (frieze_f g) n 2 (by omega) (m-(n+1))
       have : m-(n+1)+n+1 = m := by omega
       rw [this] at h
       exact h ▸ ih (m-(n+1)) (by omega)
