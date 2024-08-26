@@ -71,8 +71,8 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
 \end{proof}
 
 \begin{proposition}
-    \label{prop:trsltInv}
-    \lean{trsltInv}
+    \label{prop:translationInvariance}
+    \lean{translationInvariance}
     \uses{def:pattern_n, l:pattern_nContinuant}
     \leanok
     Let $f$ be a nowhere-zero $F$-valued pattern of height $n$. Then, for all $m \in \mathbb{Z}$ and all $i \in \{0,\ldots, n+1\}$, we have
@@ -115,14 +115,14 @@ An $F$-valued pattern $f$ of height $n$ is said to be {\it nowhere zero} if $f(i
 \begin{corollary}
     \label{cor:imageFinite}
     \lean{imageFinite}
-    \uses{prop:trsltInv}
+    \uses{prop:translationInvariance}
     \leanok
     Let $f$ be a nowhere-zero $F$-valued pattern of height $n$. Then, ${\rm Im}(f) := \{f (i,m) : i \in \{1,\ldots, n\}, m \in \mathbb{Z}\}$ is
     a finite set. 
 \end{corollary}
 \begin{proof}
     \leanok
-    Consider the finite set $\mathcal{D} = \{(i,m) : i \in \{1,\ldots, n\}, m \in \{0,\ldots, n\}\}$. By Proposition \ref{prop:trsltInv}, 
+    Consider the finite set $\mathcal{D} = \{(i,m) : i \in \{1,\ldots, n\}, m \in \{0,\ldots, n\}\}$. By Proposition \ref{prop:translationInvariance}, 
     \[
         {\rm Im}(f) = \{f (i,m) : (i,m) \in \mathcal{D}\},
     \]
